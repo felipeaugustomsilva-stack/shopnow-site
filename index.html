@@ -94,6 +94,19 @@
   .prose { max-width: 640px; font-size: 1.05rem; }
   .prose p + p { margin-top: 1rem; }
 
+  /* Capturas de tela */
+  .shots {
+    list-style: none; margin-top: 2.5rem;
+    display: grid; gap: 1.5rem; grid-template-columns: repeat(3, 1fr);
+  }
+  .shots figure { text-align: center; }
+  .shots img {
+    display: block; width: 100%; height: auto;
+    border-radius: 26px; border: 1px solid var(--border);
+    box-shadow: 0 12px 32px rgba(22, 21, 42, 0.12);
+  }
+  .shots figcaption { margin-top: 0.9rem; font-size: 0.92rem; color: var(--text-2); }
+
   /* Como funciona */
   .steps {
     list-style: none; margin-top: 2rem;
@@ -138,6 +151,8 @@
   @media (max-width: 720px) {
     .hero { padding: 3rem 0 2.5rem; }
     .steps { grid-template-columns: 1fr; }
+    .shots { grid-template-columns: repeat(3, 68%); overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -1.5rem; padding: 0 1.5rem 0.5rem; scroll-padding-inline: 1.5rem; }
+    .shots li { scroll-snap-align: start; }
     .compare { padding: 1.5rem 1.25rem 1.6rem; }
     section { padding: 2.75rem 0; }
   }
@@ -167,6 +182,20 @@
       <div class="prose">
         <p>O ShopNow é um app gratuito para organizar as compras da sua casa — do mercado à farmácia. Cadastre os itens que você compra com frequência, convide quem mora com você, e deixe o agente de IA do ShopNow cuidar da parte chata: buscar, comparar e montar o carrinho nos sites parceiros.</p>
       </div>
+      <ul class="shots">
+        <li><figure>
+          <img src="img/listas.png" width="600" height="1304" loading="lazy" alt="Tela de listas de compra do ShopNow, com três listas abertas e a barra de progresso de cada uma">
+          <figcaption>Todas as listas da casa em um lugar</figcaption>
+        </figure></li>
+        <li><figure>
+          <img src="img/lista.png" width="600" height="1304" loading="lazy" alt="Lista de compra aberta no ShopNow, com itens, quantidades e o botão Solicitar compra">
+          <figcaption>Cada pessoa adiciona o que falta</figcaption>
+        </figure></li>
+        <li><figure>
+          <img src="img/catalogo.png" width="600" height="1304" loading="lazy" alt="Catálogo de produtos da casa no ShopNow, organizado por categoria">
+          <figcaption>Catálogo com o que a casa sempre compra</figcaption>
+        </figure></li>
+      </ul>
     </div>
   </section>
 
