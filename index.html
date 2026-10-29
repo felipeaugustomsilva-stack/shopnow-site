@@ -171,8 +171,8 @@
     <h1>ShopNow</h1>
     <p class="tagline">Sua lista de compras, no piloto automático.</p>
     <p class="lead">Monte sua lista, deixe o agente de IA comparar preços entre os principais mercados e montar o carrinho pra você. Grátis.</p>
-    <a class="cta" href="https://apps.apple.com/us/app/shopnow/id6802871488">Baixar na App Store</a>
-    <a class="cta" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras">Baixar no Google Play</a>
+    <a class="cta" data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
+    <a class="cta" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
   </div>
 </header>
 
@@ -239,8 +239,8 @@
       <div class="prose">
         <p>Famílias que fazem compras recorrentes de supermercado, farmácia e itens do dia a dia — e querem gastar menos tempo pesquisando preço e mais tempo com o que importa.</p>
       </div>
-      <a class="cta" href="https://apps.apple.com/us/app/shopnow/id6802871488">Baixar na App Store</a>
-      <a class="cta" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras">Baixar no Google Play</a>
+      <a class="cta" data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
+      <a class="cta" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
     </div>
   </section>
 </main>
@@ -249,8 +249,8 @@
   <div class="wrap">
     <p>ShopNow — shopnowapp.com.br</p>
     <nav aria-label="Rodapé">
-      <a href="https://apps.apple.com/us/app/shopnow/id6802871488">Baixar na App Store</a>
-      <a href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras">Baixar no Google Play</a>
+      <a data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
+      <a data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
       <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/">Política de privacidade</a>
       <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/excluir-conta/">Excluir conta</a>
       <a href="mailto:contato@shopnowapp.com.br">contato@shopnowapp.com.br</a>
@@ -258,5 +258,30 @@
   </div>
 </footer>
 
+<script>
+(function () {
+  try {
+    var canais = {
+      instagram: { ct: 'instagram', medium: 'social' },
+      facebook: { ct: 'Facebook', medium: 'social' },
+      status: { ct: 'status-whatsapp', medium: 'whatsapp' },
+      crm: { ct: 'crm', medium: 'crm' }
+    };
+    var c = new URLSearchParams(window.location.search).get('c');
+    c = c ? c.trim().toLowerCase() : '';
+    if (!Object.prototype.hasOwnProperty.call(canais, c)) return;
+    var d = canais[c];
+    var ios = 'https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&ct=' + d.ct + '&mt=8';
+    var android = 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=' +
+      'utm_source%3D' + c + '%26utm_medium%3D' + d.medium + '%26utm_campaign%3Dpresentes';
+    var links = document.querySelectorAll('a[data-loja]');
+    for (var i = 0; i < links.length; i++) {
+      var loja = links[i].getAttribute('data-loja');
+      if (loja === 'ios') links[i].setAttribute('href', ios);
+      else if (loja === 'android') links[i].setAttribute('href', android);
+    }
+  } catch (e) {}
+})();
+</script>
 </body>
 </html>
