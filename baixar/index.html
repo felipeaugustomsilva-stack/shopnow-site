@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Baixe o ShopNow</title>
+<meta name="description" content="Baixe o ShopNow na App Store ou no Google Play: a lista de compras da casa e a lista de presentes, no mesmo app.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta name="theme-color" content="#4F46E5">
+
+<style>
+  :root {
+    --bg: #F7F7FC;
+    --surface: #FFFFFF;
+    --border: #E3E3EE;
+    --text: #16152A;
+    --text-2: #64648A;
+    --accent: #4F46E5;
+    --accent-hover: #4338CA;
+    --on-accent: #FFFFFF;
+    --accent-dim: #EEEEFF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0D0D1A;
+      --surface: #16162A;
+      --border: #28284A;
+      --text: #E6E6F6;
+      --text-2: #9494BA;
+      --accent: #6366F1;
+      --accent-hover: #7577F5;
+      --accent-dim: #1A1A3A;
+    }
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 1.5rem; width: 100%; }
+  main { flex: 1; }
+
+  .hero { text-align: center; padding: 2.5rem 0 1.5rem; }
+  .logo {
+    width: 84px; height: 84px; border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, 0.28);
+    margin-bottom: 1.25rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 8vw, 2.6rem);
+    letter-spacing: -0.035em; line-height: 1.1; font-weight: 800;
+  }
+  .lead { margin-top: 0.75rem; font-size: 1.05rem; color: var(--text-2); }
+
+  .acoes { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.75rem; }
+  .btn {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 56px; padding: 0.9rem 1.5rem; border-radius: 14px;
+    background: var(--accent); color: var(--on-accent);
+    font-weight: 600; font-size: 1.1rem; text-decoration: none; text-align: center;
+    border: 2px solid var(--accent);
+  }
+  .btn:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+  .btn:focus-visible { outline: 3px solid var(--accent-dim); outline-offset: 3px; }
+  /* Com JS: o aparelho define quem fica em destaque; o outro desce e encolhe. */
+  .btn.menor {
+    order: 4; min-height: 48px; font-size: 0.98rem;
+    background: var(--surface); color: var(--accent); border-color: var(--border);
+  }
+  .btn.menor:hover { border-color: var(--accent); background: var(--accent-dim); }
+  .btn.maior { order: 1; }
+
+  .copiar { text-align: center; font-size: 0.9rem; margin-top: 0.25rem; order: 3; }
+  .copiar button {
+    background: none; border: 0; font: inherit; color: var(--accent);
+    text-decoration: underline; cursor: pointer; padding: 0.6rem 0.5rem; min-height: 44px;
+  }
+  .copiar-msg { display: block; min-height: 1.4em; color: var(--text-2); }
+  .copiar input {
+    width: 100%; margin-top: 0.4rem; padding: 0.6rem; font: inherit; font-size: 0.85rem;
+    color: var(--text); background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  }
+  .copiar input[hidden], .nav-aviso[hidden] { display: none; }
+  .nav-aviso { text-align: center; font-size: 0.88rem; color: var(--text-2); margin-top: 1rem; }
+
+  .pontos { list-style: none; margin-top: 2rem; display: grid; gap: 0.75rem; }
+  .pontos li {
+    display: flex; align-items: center; gap: 0.9rem;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 16px; padding: 0.9rem 1.1rem;
+  }
+  .pontos .ico {
+    flex: none; display: inline-flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 12px;
+    background: var(--accent-dim); color: var(--accent);
+  }
+  .pontos svg { width: 22px; height: 22px; }
+
+  footer { border-top: 1px solid var(--border); padding: 2.5rem 0 3.5rem; margin-top: 2.5rem; text-align: center; font-size: 0.92rem; color: var(--text-2); }
+  footer nav { margin-top: 0.6rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.4rem 1.4rem; }
+</style>
+</head>
+<body>
+
+<main>
+  <header class="hero">
+    <div class="wrap">
+      <img class="logo" src="/icon.png" width="84" height="84" alt="Ícone do ShopNow">
+      <h1>Baixe o ShopNow</h1>
+      <p class="lead">A lista de compras da casa e a lista de presentes, no mesmo app.</p>
+
+      <div class="acoes" id="acoes">
+        <a class="btn" id="btn-ios" data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
+        <a class="btn" id="btn-android" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
+        <div class="copiar" id="copiar" hidden>
+          <button type="button" id="btn-copiar">Não abriu? Copiar link</button>
+          <span class="copiar-msg" id="copiar-msg" role="status" aria-live="polite"></span>
+          <input type="text" id="copiar-campo" readonly hidden aria-label="Link do Google Play">
+        </div>
+      </div>
+      <p class="nav-aviso" id="nav-aviso" hidden>Se o botão não abrir, toque nos três pontinhos e escolha Abrir no navegador.</p>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <ul class="pontos">
+      <li>
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg></span>
+        <span>Lista da casa que todo mundo vê</span>
+      </li>
+      <li>
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+        <span>Busque em várias lojas</span>
+      </li>
+      <li>
+        <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg></span>
+        <span>Cole o link de um produto</span>
+      </li>
+    </ul>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>ShopNow — shopnowapp.com.br</p>
+    <nav aria-label="Rodapé">
+      <a data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
+      <a data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
+      <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/">Política de privacidade</a>
+      <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/excluir-conta/">Excluir conta</a>
+      <a href="mailto:contato@shopnowapp.com.br">contato@shopnowapp.com.br</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+/* DETECCAO-INICIO */
+var ShopNowBaixar = (function () {
+  var CANAIS = {
+    instagram: { ct: 'instagram', src: 'instagram', med: 'social' },
+    facebook: { ct: 'Facebook', src: 'facebook', med: 'social' },
+    'status-whatsapp': { ct: 'status-whatsapp', src: 'status-whatsapp', med: 'whatsapp' },
+    crm: { ct: 'crm', src: 'crm', med: 'crm' },
+    site: { ct: 'site', src: 'site', med: 'site' }
+  };
+
+  function canal(search) {
+    var c = new URLSearchParams(search).get('c');
+    c = c ? c.trim().toLowerCase() : '';
+    return Object.prototype.hasOwnProperty.call(CANAIS, c) ? c : 'site';
+  }
+
+  function links(c) {
+    var d = CANAIS[c];
+    return {
+      ios: 'https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&ct=' + d.ct + '&mt=8',
+      android: 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=' +
+        'utm_source%3D' + d.src + '%26utm_medium%3D' + d.med + '%26utm_campaign%3Dpresentes'
+    };
+  }
+
+  // destaque: 'ios' | 'android' | 'ambos'; navegador interno: Instagram ou Facebook
+  function detectar(ua, toques) {
+    ua = ua || '';
+    var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && toques > 1);
+    var android = !ios && /Android/.test(ua);
+    return {
+      destaque: ios ? 'ios' : (android ? 'android' : 'ambos'),
+      interno: /Instagram|FBAN|FBAV/.test(ua)
+    };
+  }
+
+  // Resolve true so se a copia aconteceu de fato.
+  function copiar(texto) {
+    function viaTextarea() {
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = texto;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '0';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        ta.setSelectionRange(0, texto.length);
+        var ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return ok === true;
+      } catch (e) { return false; }
+    }
+    var moderna = null;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) moderna = navigator.clipboard.writeText(texto);
+    } catch (e) { moderna = null; }
+    if (!moderna) return Promise.resolve(viaTextarea());
+    return moderna.then(function () { return true; }, function () { return viaTextarea(); });
+  }
+
+  return { canal: canal, links: links, detectar: detectar, copiar: copiar };
+})();
+/* DETECCAO-FIM */
+
+(function () {
+  try {
+    var c = ShopNowBaixar.canal(window.location.search);
+    var url = ShopNowBaixar.links(c);
+    var todos = document.querySelectorAll('a[data-loja]');
+    for (var i = 0; i < todos.length; i++) {
+      todos[i].setAttribute('href', todos[i].getAttribute('data-loja') === 'ios' ? url.ios : url.android);
+    }
+
+    var det = ShopNowBaixar.detectar(navigator.userAgent, navigator.maxTouchPoints || 0);
+    var bIos = document.getElementById('btn-ios');
+    var bAnd = document.getElementById('btn-android');
+    if (det.destaque === 'ios') { bIos.className = 'btn maior'; bAnd.className = 'btn menor'; }
+    else if (det.destaque === 'android') { bAnd.className = 'btn maior'; bIos.className = 'btn menor'; }
+    if (det.interno) document.getElementById('nav-aviso').hidden = false;
+
+    // "Copiar link" so onde a pessoa pode cair no Play: Android e computador
+    if (det.destaque !== 'ios') {
+      var area = document.getElementById('copiar');
+      var msg = document.getElementById('copiar-msg');
+      var campo = document.getElementById('copiar-campo');
+      area.hidden = false;
+      document.getElementById('btn-copiar').addEventListener('click', function () {
+        msg.textContent = '';
+        campo.hidden = true;
+        ShopNowBaixar.copiar(url.android).then(function (ok) {
+          if (ok) {
+            msg.textContent = 'Link copiado';
+          } else {
+            msg.textContent = 'Toque e segure para copiar';
+            campo.value = url.android;
+            campo.hidden = false;
+            campo.focus();
+            campo.select();
+            try { campo.setSelectionRange(0, campo.value.length); } catch (e) {}
+          }
+        });
+      });
+    }
+  } catch (e) {}
+})();
+</script>
+<noscript><style>.copiar{display:none}</style></noscript>
+</body>
+</html>
