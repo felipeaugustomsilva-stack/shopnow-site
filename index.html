@@ -3,16 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ShopNow — Sua lista de compras, no piloto automático</title>
-<meta name="description" content="Monte sua lista e deixe o agente de IA do ShopNow comparar preços entre varejistas parceiros e montar o carrinho pra você. Grátis.">
+<title>ShopNow — A lista da casa para o mercado e para os presentes</title>
+<meta name="description" content="A lista da casa para o mercado e para os presentes. Busque o produto pelo nome e adicione à sua lista com um toque. Grátis, no iPhone e no Android.">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
 <link rel="canonical" href="https://shopnowapp.com.br/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ShopNow — Sua lista de compras, no piloto automático">
-<meta property="og:description" content="Um agente de IA compara preços entre varejistas parceiros e monta o carrinho pra você. Grátis.">
+<meta property="og:title" content="ShopNow — A lista da casa para o mercado e para os presentes">
+<meta property="og:description" content="A lista da casa para o mercado e para os presentes. Grátis, no iPhone e no Android.">
 <meta property="og:url" content="https://shopnowapp.com.br/">
 <meta property="og:image" content="https://shopnowapp.com.br/icon.png">
+<meta property="og:image:alt" content="Ícone do ShopNow">
 <meta name="theme-color" content="#4F46E5">
 
 <style>
@@ -92,58 +93,22 @@
     letter-spacing: -0.025em; line-height: 1.2; font-weight: 700;
     margin-bottom: 1rem;
   }
-  .prose { max-width: 640px; font-size: 1.05rem; }
-  .prose p + p { margin-top: 1rem; }
 
-  /* Capturas de tela */
+  /* Seções de recurso */
+  .feature { text-align: center; }
+  .feature h2 { max-width: 640px; margin-inline: auto; font-size: clamp(1.35rem, 4.2vw, 1.75rem); }
   .shots {
-    list-style: none; margin-top: 2.5rem;
-    display: grid; gap: 1.5rem; grid-template-columns: repeat(3, 1fr);
+    list-style: none; margin-top: 2rem;
+    display: flex; justify-content: center; gap: 1.25rem;
   }
-  .shots figure { text-align: center; }
+  .shots li { flex: 0 1 260px; min-width: 0; }
   .shots img {
     display: block; width: 100%; height: auto;
     border-radius: 26px; border: 1px solid var(--border);
     box-shadow: 0 12px 32px rgba(22, 21, 42, 0.12);
+    background: var(--surface);
   }
-  .shots figcaption { margin-top: 0.9rem; font-size: 0.92rem; color: var(--text-2); }
-
-  /* Como funciona */
-  .steps {
-    list-style: none; margin-top: 2rem;
-    display: grid; gap: 1rem;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .steps li {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 18px; padding: 1.5rem;
-  }
-  .steps .n {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--accent-dim); color: var(--accent);
-    font-weight: 700; margin-bottom: 0.9rem;
-  }
-  .steps strong { display: block; font-size: 1.1rem; margin-bottom: 0.35rem; }
-  .steps span { color: var(--text-2); font-size: 0.97rem; display: block; }
-
-  /* Mecanismo de comparação — destaque */
-  .compare-band {
-    background: var(--accent-dim);
-    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-  }
-  section.compare-band + section { border-top: 0; }
-  .compare {
-    background: var(--surface); border: 2px solid var(--accent);
-    border-radius: 22px; padding: 2rem 2rem 2.1rem;
-  }
-  .compare .tag {
-    display: inline-block; font-size: 0.72rem; font-weight: 700;
-    letter-spacing: 0.07em; text-transform: uppercase;
-    background: var(--accent-dim); color: var(--accent);
-    padding: 4px 12px; border-radius: 999px; margin-bottom: 0.9rem;
-  }
-  .compare p { font-size: 1.05rem; max-width: 640px; }
+  .baixar { text-align: center; }
 
   /* Footer */
   footer { border-top: 1px solid var(--border); padding: 2.5rem 0 3.5rem; text-align: center; font-size: 0.92rem; color: var(--text-2); }
@@ -151,11 +116,9 @@
 
   @media (max-width: 720px) {
     .hero { padding: 3rem 0 2.5rem; }
-    .steps { grid-template-columns: 1fr; }
-    .shots { grid-template-columns: repeat(3, 68%); overflow-x: auto; scroll-snap-type: x mandatory; margin-inline: -1.5rem; padding: 0 1.5rem 0.5rem; scroll-padding-inline: 1.5rem; }
-    .shots li { scroll-snap-align: start; }
-    .compare { padding: 1.5rem 1.25rem 1.6rem; }
     section { padding: 2.75rem 0; }
+    .shots { gap: 0.9rem; }
+    .shots li { flex-basis: 220px; }
   }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
@@ -169,76 +132,58 @@
   <div class="wrap">
     <img class="logo" src="icon.png" width="84" height="84" alt="Ícone do ShopNow">
     <h1>ShopNow</h1>
-    <p class="tagline">Sua lista de compras, no piloto automático.</p>
-    <p class="lead">Monte sua lista, deixe o agente de IA comparar preços entre os principais mercados e montar o carrinho pra você. Grátis.</p>
+    <p class="tagline">A lista da casa para o mercado e para os presentes. Grátis, no iPhone e no Android.</p>
     <a class="cta" data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
     <a class="cta" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
   </div>
 </header>
 
 <main>
-  <section id="o-que-e">
+  <section id="lista-da-casa" class="feature">
     <div class="wrap">
-      <h2>Compras de casa sem perder tempo comparando preço</h2>
-      <div class="prose">
-        <p>O ShopNow é um app gratuito para organizar as compras da sua casa — do mercado à farmácia. Cadastre os itens que você compra com frequência, convide quem mora com você, e deixe o agente de IA do ShopNow cuidar da parte chata: buscar, comparar e montar o carrinho nos sites parceiros.</p>
-      </div>
+      <h2>Quem da casa vê cada lista, e todo mundo vê a mesma.</h2>
       <ul class="shots">
-        <li><figure>
-          <img src="img/listas.png" width="600" height="1304" loading="lazy" alt="Tela de listas de compra do ShopNow, com três listas abertas e a barra de progresso de cada uma">
-          <figcaption>Todas as listas da casa em um lugar</figcaption>
-        </figure></li>
-        <li><figure>
-          <img src="img/lista.png" width="600" height="1304" loading="lazy" alt="Lista de compra aberta no ShopNow, com itens, quantidades e o botão Solicitar compra">
-          <figcaption>Cada pessoa adiciona o que falta</figcaption>
-        </figure></li>
-        <li><figure>
-          <img src="img/catalogo.png" width="600" height="1304" loading="lazy" alt="Catálogo de produtos da casa no ShopNow, organizado por categoria">
-          <figcaption>Catálogo com o que a casa sempre compra</figcaption>
-        </figure></li>
+        <li><img src="img/quem-ve-a-lista.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Aba Presentes com três listas, cada uma mostrando quem da casa pode vê-la: só eu, todos da casa ou somente donos"></li>
+        <li><img src="img/lista-compartilhada.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Lista da semana aberta, com itens e quantidades que todos da casa veem e atualizam"></li>
       </ul>
     </div>
   </section>
 
-  <section id="como-funciona">
+  <section id="colar-link" class="feature">
     <div class="wrap">
-      <h2>Como funciona</h2>
-      <ol class="steps">
-        <li>
-          <span class="n" aria-hidden="true">1</span>
-          <strong>Monte sua lista</strong>
-          <span>Adicione os itens que sua casa precisa, do jeito que for mais fácil pra você.</span>
-        </li>
-        <li>
-          <span class="n" aria-hidden="true">2</span>
-          <strong>O agente compara</strong>
-          <span>Nosso agente de IA busca os produtos da sua lista nos varejistas parceiros e compara preços automaticamente.</span>
-        </li>
-        <li>
-          <span class="n" aria-hidden="true">3</span>
-          <strong>Você finaliza</strong>
-          <span>O carrinho já chega pronto no site do varejista escolhido. Você só confirma e paga.</span>
-        </li>
-      </ol>
+      <h2>Cole o link de um produto e veja onde mais ele aparece, com o selo Mesmo produto quando houver.</h2>
     </div>
   </section>
 
-  <section id="comparacao" class="compare-band">
+  <section id="presentes" class="feature">
     <div class="wrap">
-      <div class="compare">
-        <span class="tag">Mecanismo de comparação</span>
-        <h2>Comparação de preços entre varejistas parceiros</h2>
-        <p>O ShopNow é um mecanismo de comparação: buscamos os mesmos itens da sua lista em diferentes lojas parceiras e te mostramos onde vale mais a pena comprar, item por item. Você decide onde finalizar — nós só facilitamos a busca.</p>
-      </div>
+      <h2>Busque o presente em várias lojas de uma vez e veja o que cabe no orçamento de cada pessoa.</h2>
+      <ul class="shots">
+        <li><img src="img/presentes-orcamento.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Lista de presentes de uma pessoa, com o valor previsto e o limite definido em cada ideia"></li>
+      </ul>
     </div>
   </section>
 
-  <section id="para-quem">
+  <section id="busca-por-nome" class="feature">
     <div class="wrap">
-      <h2>Feito para quem cuida da casa</h2>
-      <div class="prose">
-        <p>Famílias que fazem compras recorrentes de supermercado, farmácia e itens do dia a dia — e querem gastar menos tempo pesquisando preço e mais tempo com o que importa.</p>
-      </div>
+      <h2>Busque o produto pelo nome e adicione à sua lista com um toque.</h2>
+      <ul class="shots">
+        <li><img src="img/busca-por-nome.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Campo de busca com o nome de um produto digitado e a opção de adicioná-lo à lista com um toque"></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="convidar" class="feature">
+    <div class="wrap">
+      <h2>Em Conta, toque em Convidar para a casa e compartilhe o código no WhatsApp.</h2>
+      <ul class="shots">
+        <li><img src="img/conta-convidar.webp" width="600" height="1304" loading="lazy" decoding="async" alt="Tela Conta do ShopNow com o botão Convidar para a casa"></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="baixar" class="baixar">
+    <div class="wrap">
       <a class="cta" data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
       <a class="cta" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
     </div>
