@@ -244,8 +244,39 @@ var ShopNowBaixar = (function () {
     return moderna.then(function () { return true; }, function () { return viaTextarea(); });
   }
 
+  // Valor bruto do parametro, so para o contador: '' se nao veio; 'invalido' se fora de [a-z0-9-]{1,40}; senao o slug.
+  function pedido(search, nome) {
+    var bruto = new URLSearchParams(search).get(nome);
+    if (bruto === null || bruto === '') return '';
+    bruto = bruto.toLowerCase();
+    return /^[a-z0-9-]{1,40}$/.test(bruto) ? bruto : 'invalido';
+  }
 
-  return { canal: canal, campanha: campanha, conteudo: conteudo, links: links, detectar: detectar, copiar: copiar };
+  // Corpo do contador agregado (text/plain com JSON). Sem identificador: so tipo, canal, campanha, conteudo, loja e destaque.
+  // extra: { k, u, canalPedido, campanhaPedido } (k ja normalizado; os *Pedido sao o valor bruto).
+  function corpoAcesso(tipo, c, loja, destaque, extra) {
+    extra = extra || {};
+    var o = { tipo: tipo, canal: Object.prototype.hasOwnProperty.call(CANAIS, c) ? c : 'site' };
+    o.campanha = CAMPANHAS.indexOf(extra.k) >= 0 ? extra.k : 'perfil';
+    if (extra.canalPedido) o.canalPedido = extra.canalPedido;
+    if (extra.campanhaPedido) o.campanhaPedido = extra.campanhaPedido;
+    if (extra.u && /^[a-z0-9-]{1,40}$/.test(extra.u)) o.conteudo = extra.u;
+    if (tipo === 'clique' && (loja === 'ios' || loja === 'android')) o.loja = loja;
+    if (destaque === 'ios' || destaque === 'android' || destaque === 'ambos') o.destaque = destaque;
+    return JSON.stringify(o);
+  }
+
+  // Envia sem bloquear nada e sem nunca lancar: sendBeacon, e fetch keepalive se o beacon recusar.
+  function enviar(url, corpo) {
+    try {
+      if (navigator.sendBeacon && navigator.sendBeacon(url, corpo)) return;
+    } catch (e) {}
+    try {
+      fetch(url, { method: 'POST', body: corpo, keepalive: true, mode: 'no-cors', credentials: 'omit' }).catch(function () {});
+    } catch (e) {}
+  }
+
+  return { canal: canal, campanha: campanha, conteudo: conteudo, links: links, detectar: detectar, copiar: copiar, pedido: pedido, corpoAcesso: corpoAcesso, enviar: enviar };
 })();
 /* DETECCAO-FIM */
 
@@ -267,6 +298,20 @@ var ShopNowBaixar = (function () {
     else if (det.destaque === 'android') { bAnd.className = 'btn maior'; bIos.className = 'btn menor'; }
     if (det.interno) document.getElementById('nav-aviso').hidden = false;
 
+    // Contador agregado (visita no carregamento, toque no botao da loja). Sem cookie nem armazenamento.
+    var ENDPOINT = 'https://southamerica-east1-meu-app-compras.cloudfunctions.net/registrarAcessoBaixar';
+    var extra = {
+      k: k, u: u,
+      canalPedido: ShopNowBaixar.pedido(window.location.search, 'c'),
+      campanhaPedido: ShopNowBaixar.pedido(window.location.search, 'k')
+    };
+    ShopNowBaixar.enviar(ENDPOINT, ShopNowBaixar.corpoAcesso('visita', c, null, det.destaque, extra));
+    document.addEventListener('click', function (ev) {
+      try {
+        var a = ev.target && ev.target.closest ? ev.target.closest('a[data-loja]') : null;
+        if (a) ShopNowBaixar.enviar(ENDPOINT, ShopNowBaixar.corpoAcesso('clique', c, a.getAttribute('data-loja'), det.destaque, extra));
+      } catch (e) {}
+    });
 
     // "Copiar link" so onde a pessoa pode cair no Play: Android e computador
     if (det.destaque !== 'ios') {
