@@ -66,6 +66,26 @@ footer{padding:0 0 40px;font-size:12px;color:var(--muted);display:flex;flex-dire
 .mlbox ul{padding-left:18px;font-weight:700}
 .mlbox a{display:block;text-align:center;text-decoration:none;font-weight:800;padding:14px;border-radius:12px;background:var(--dark);color:#fff}
 </style>
+<style>
+.pres{background:var(--card);border:1.5px solid var(--ind);border-radius:20px;padding:20px 16px}
+.pres h2{margin-bottom:4px}
+.pres .psub{font-size:14px;color:var(--muted);margin-bottom:14px}
+.pcard{border:1px solid var(--line);border-radius:16px;padding:14px 14px 10px;background:var(--light)}
+.pcard+.pcard{margin-top:12px}
+.pcard h3{font-size:18px;font-weight:800;line-height:1.2}
+.pcard .pmod{font-size:13px;color:var(--muted);margin-top:2px}
+.pcard .pnota{font-size:13px;color:var(--muted);margin-top:6px}
+.plj{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:10px}
+.plj.min{border:2px solid var(--green);background:#ECFDF3}
+.plj .pl{font-weight:800;font-size:15px}
+.plj .pv{grid-column:1;font-size:12px;color:var(--muted)}
+.plj .pp{grid-column:2;grid-row:1/3;text-align:right;font-weight:700;font-size:18px;white-space:nowrap}
+.plj .pp small{display:block;font-size:12px;font-weight:700;color:var(--muted)}
+.plj.min .pp{font-weight:800;color:var(--green)}
+.plj .pb{grid-column:1/-1;display:block;text-align:center;text-decoration:none;font-weight:800;font-size:15px;padding:10px 12px;border-radius:10px;background:var(--ind);color:#fff;margin-top:8px}
+.pres .pfoot{font-size:12px;color:var(--muted);margin-top:12px}
+.pres .pafil{font-size:12px;color:var(--muted);margin-top:6px}
+</style>
 </head>
 <body>
 <header><div class="wrap">
@@ -78,6 +98,13 @@ footer{padding:0 0 40px;font-size:12px;color:var(--muted);display:flex;flex-dire
 </div></header>
 
 <main class="wrap">
+  <section class="pres" id="presentes" aria-labelledby="ptit">
+    <h2 id="ptit"></h2>
+    <p class="psub">Produtos para presente, no Pix, direto nas lojas.</p>
+    <div id="pcards"></div>
+    <p class="pfoot" id="pfoot"></p>
+    <p class="pafil" id="pafil" hidden></p>
+  </section>
   <section>
     <h2>Onde cada item saiu mais barato</h2>
     <div class="filt" id="filt" role="tablist" aria-label="Filtrar por mercado"></div>
@@ -1312,7 +1339,7 @@ const DATA = {
   "acucar-uniao-refinado-1kg"
  ]
 };
-const LOJAS = {ios:"https://shopnowapp.com.br", android:"https://shopnowapp.com.br"};
+const LOJAS = {ios:"https://shopnowapp.com.br/baixar/?c=site", android:"https://shopnowapp.com.br/baixar/?c=site"};
 const brl = v => v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
 const $ = id => document.getElementById(id);
 const nome = Object.fromEntries(DATA.mercados.map(m=>[m.id,m.nome]));
@@ -1354,6 +1381,53 @@ $('mllist').innerHTML = ml.map(i=>`<li>${i.nome} · ${brl(i.min[1].preco)}</li>`
 if (!ml.length || $('mllink').getAttribute('href').startsWith('__')) $('mlbox').style.display = ml.length ? '' : 'none';
 $('coleta').textContent = `Preços coletados em 27 e 28/10/2026 pelo app ShopNow (${DATA.regiao}); cada item mostra a sua data. Preço avulso, sem frete. Preços podem mudar.`;
 $('ios').href = LOJAS.ios; $('android').href = LOJAS.android;
+</script>
+<script>
+/* Presentes. Para acrescentar um produto, acrescente um objeto em PRESENTES:
+   { produto, modelo, nota?, data:"AAAA-MM-DD",
+     lojas:[{ loja, preco_pix (número), vendedor_nota?, link }] }
+   link vazio ("") = a loja aparece sem botão. Nada de HTML/CSS a mexer. */
+const AMZ = asin => 'https://www.amazon.com.br/dp/' + asin + '?tag=shopnowapp-20';
+const MGL = url => url + '?seller_id=magazineluiza&partner_id=3440&promoter_id=5840466&utm_source=divulgador&utm_medium=magalu&utm_campaign=5840466';
+const PRESENTES = [
+ { produto:'TV Samsung 50" Crystal UHD 4K', modelo:'UN50U8000HGXZD', data:'2026-10-30',
+   nota:'Vendida pelo Magalu nas duas lojas.',
+   lojas:[
+    { loja:'Amazon', preco_pix:2345.59, link:AMZ('B0HBYYN84S') },
+    { loja:'Magalu', preco_pix:2687.55, link:MGL('https://www.magazineluiza.com.br/smart-tv-50-samsung-4k-uhd-crystal-uhd-un50u8000hgxzd-one-ui-tizen-2026/p/242406200/et/elit/') }
+   ] },
+ { produto:'iPhone 16 128 GB Preto', modelo:'Apple iPhone 16', data:'2026-10-30',
+   lojas:[
+    { loja:'Mercado Livre', preco_pix:4598.99, vendedor_nota:'Loja oficial Apple', link:'https://meli.la/18qVJQs' },
+    { loja:'Amazon', preco_pix:4598.99, link:AMZ('B0DJFTJ6LX') },
+    { loja:'Magalu', preco_pix:4799.00, link:MGL('https://www.magazineluiza.com.br/apple-iphone-16-128gb-preto-61-48mp-ios-5g/p/238803400/te/ip16/') }
+   ] }
+];
+const AVISO_AFILIADO = ''; /* pendente de decisão do dono; vazio = sem aviso */
+function renderPresentes(lista, aviso){
+  const esc = t => String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const f = d => d.split('-').reverse().join('/');
+  const datas = lista.map(p=>p.data).sort();
+  const ult = datas[datas.length-1];
+  document.getElementById('ptit').textContent = 'Presentes: preços coletados em ' + f(ult);
+  document.getElementById('pcards').innerHTML = lista.map(p=>{
+    const min = Math.min(...p.lojas.map(l=>l.preco_pix));
+    return `<article class="pcard"><h3>${esc(p.produto)}</h3><div class="pmod">${esc(p.modelo)}</div>`+
+     (p.nota?`<div class="pnota">${esc(p.nota)}</div>`:'')+
+     p.lojas.map(l=>{
+       const v = brl(l.preco_pix), ehMin = l.preco_pix===min;
+       const lab = ehMin ? `${esc(l.loja)}, ${v} no Pix, o valor mais baixo entre as lojas coletadas` : `${esc(l.loja)}, ${v} no Pix`;
+       return `<div class="plj${ehMin?' min':''}" role="group" aria-label="${lab}"><span class="pl">${esc(l.loja)}</span>`+
+        `<span class="pp">${v}<small>no Pix</small></span>`+
+        (l.vendedor_nota?`<span class="pv">${esc(l.vendedor_nota)}</span>`:'')+
+        (l.link?`<a class="pb" data-loja-botao="${esc(l.loja)}" href="${esc(l.link)}" target="_blank" rel="sponsored noopener">Ver ${/^Amazon/.test(l.loja)?'na':'no'} ${esc(l.loja)}</a>`:'')+
+        `</div>`;
+     }).join('')+`</article>`;
+  }).join('');
+  document.getElementById('pfoot').textContent = 'Preços no Pix coletados em ' + f(ult) + '. Preços mudam; confira na loja.';
+  const a = document.getElementById('pafil'); a.textContent = aviso||''; a.hidden = !aviso;
+}
+renderPresentes(PRESENTES, AVISO_AFILIADO);
 </script>
 </body>
 </html>
