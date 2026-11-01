@@ -120,7 +120,7 @@
 
       <div class="acoes" id="acoes">
         <a class="btn" id="btn-ios" data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
-        <a class="btn" id="btn-android" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
+        <a class="btn" id="btn-android" data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dperfil">Baixar no Google Play</a>
         <div class="copiar" id="copiar" hidden>
           <button type="button" id="btn-copiar">Não abriu? Copiar link</button>
           <span class="copiar-msg" id="copiar-msg" role="status" aria-live="polite"></span>
@@ -154,7 +154,7 @@
     <p>ShopNow — shopnowapp.com.br</p>
     <nav aria-label="Rodapé">
       <a data-loja="ios" href="https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&amp;ct=site&amp;mt=8">Baixar na App Store</a>
-      <a data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dpresentes">Baixar no Google Play</a>
+      <a data-loja="android" href="https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&amp;referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dperfil">Baixar no Google Play</a>
       <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/">Política de privacidade</a>
       <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/excluir-conta/">Excluir conta</a>
       <a href="mailto:contato@shopnowapp.com.br">contato@shopnowapp.com.br</a>
@@ -165,13 +165,15 @@
 <script>
 /* DETECCAO-INICIO */
 var ShopNowBaixar = (function () {
+  // Tabela unica de nomes (fonte: docs/observabilidade/utm-baixar.md). Tudo em minusculas, igual nas duas lojas.
   var CANAIS = {
     instagram: { ct: 'instagram', src: 'instagram', med: 'social' },
-    facebook: { ct: 'Facebook', src: 'facebook', med: 'social' },
+    facebook: { ct: 'facebook', src: 'facebook', med: 'social' },
     'status-whatsapp': { ct: 'status-whatsapp', src: 'status-whatsapp', med: 'whatsapp' },
     crm: { ct: 'crm', src: 'crm', med: 'crm' },
     site: { ct: 'site', src: 'site', med: 'site' }
   };
+  var CAMPANHAS = ['presentes-lancamento', 'radar-bf', 'cesta', 'lista-casa', 'perfil'];
 
   function canal(search) {
     var c = new URLSearchParams(search).get('c');
@@ -179,12 +181,28 @@ var ShopNowBaixar = (function () {
     return Object.prototype.hasOwnProperty.call(CANAIS, c) ? c : 'site';
   }
 
-  function links(c) {
+  // ?k=: fora da tabela (ou ausente) vira 'perfil'.
+  function campanha(search) {
+    var k = new URLSearchParams(search).get('k');
+    k = k ? k.toLowerCase() : '';
+    return CAMPANHAS.indexOf(k) >= 0 ? k : 'perfil';
+  }
+
+  // ?u= (slug do criativo): [a-z0-9-], ate 40. Maiuscula normaliza; espaco, acento ou mais de 40 = descartado ('').
+  function conteudo(search) {
+    var u = new URLSearchParams(search).get('u');
+    u = u ? u.toLowerCase() : '';
+    return /^[a-z0-9-]{1,40}$/.test(u) ? u : '';
+  }
+
+  // Apple: so o ct com o canal. Android: referrer com source, medium, campaign e, se houver, content.
+  function links(c, k, u) {
     var d = CANAIS[c];
     return {
       ios: 'https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&ct=' + d.ct + '&mt=8',
       android: 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=' +
-        'utm_source%3D' + d.src + '%26utm_medium%3D' + d.med + '%26utm_campaign%3Dpresentes'
+        'utm_source%3D' + d.src + '%26utm_medium%3D' + d.med + '%26utm_campaign%3D' + (CAMPANHAS.indexOf(k) >= 0 ? k : 'perfil') +
+        (u ? '%26utm_content%3D' + u : '')
     };
   }
 
@@ -226,14 +244,17 @@ var ShopNowBaixar = (function () {
     return moderna.then(function () { return true; }, function () { return viaTextarea(); });
   }
 
-  return { canal: canal, links: links, detectar: detectar, copiar: copiar };
+
+  return { canal: canal, campanha: campanha, conteudo: conteudo, links: links, detectar: detectar, copiar: copiar };
 })();
 /* DETECCAO-FIM */
 
 (function () {
   try {
     var c = ShopNowBaixar.canal(window.location.search);
-    var url = ShopNowBaixar.links(c);
+    var k = ShopNowBaixar.campanha(window.location.search);
+    var u = ShopNowBaixar.conteudo(window.location.search);
+    var url = ShopNowBaixar.links(c, k, u);
     var todos = document.querySelectorAll('a[data-loja]');
     for (var i = 0; i < todos.length; i++) {
       todos[i].setAttribute('href', todos[i].getAttribute('data-loja') === 'ios' ? url.ios : url.android);
@@ -245,6 +266,7 @@ var ShopNowBaixar = (function () {
     if (det.destaque === 'ios') { bIos.className = 'btn maior'; bAnd.className = 'btn menor'; }
     else if (det.destaque === 'android') { bAnd.className = 'btn maior'; bIos.className = 'btn menor'; }
     if (det.interno) document.getElementById('nav-aviso').hidden = false;
+
 
     // "Copiar link" so onde a pessoa pode cair no Play: Android e computador
     if (det.destaque !== 'ios') {
