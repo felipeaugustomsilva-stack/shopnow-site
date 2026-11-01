@@ -1387,20 +1387,18 @@ $('ios').href = LOJAS.ios; $('android').href = LOJAS.android;
    { produto, modelo, nota?, data:"AAAA-MM-DD",
      lojas:[{ loja, preco_pix (número), vendedor_nota?, link }] }
    link vazio ("") = a loja aparece sem botão. Nada de HTML/CSS a mexer. */
-const AMZ = asin => 'https://www.amazon.com.br/dp/' + asin + '?tag=shopnowapp-20';
-const MGL = url => url + '?seller_id=magazineluiza&partner_id=3440&promoter_id=5840466&utm_source=divulgador&utm_medium=magalu&utm_campaign=5840466';
 const PRESENTES = [
  { produto:'TV Samsung 50" Crystal UHD 4K', modelo:'UN50U8000HGXZD', data:'2026-10-30',
    nota:'Vendida pelo Magalu nas duas lojas.',
    lojas:[
-    { loja:'Amazon', preco_pix:2345.59, link:AMZ('B0HBYYN84S') },
-    { loja:'Magalu', preco_pix:2687.55, link:MGL('https://www.magazineluiza.com.br/smart-tv-50-samsung-4k-uhd-crystal-uhd-un50u8000hgxzd-one-ui-tizen-2026/p/242406200/et/elit/') }
+    { loja:'Amazon', preco_pix:2345.59, link:'https://www.amazon.com.br/dp/B0HBYYN84S?&linkCode=ll2&tag=shopnowapp-20&linkId=e812b7f6a398eb215a7543574f6f3b1b&ref_=as_li_ss_tl' },
+    { loja:'Magalu', preco_pix:2687.55, link:'https://magazineluiza.onelink.me/589508454/qzeo940a' }
    ] },
  { produto:'iPhone 16 128 GB Preto', modelo:'Apple iPhone 16', data:'2026-10-30',
    lojas:[
-    { loja:'Mercado Livre', preco_pix:4598.99, vendedor_nota:'Loja oficial Apple', link:'https://meli.la/18qVJQs' },
-    { loja:'Amazon', preco_pix:4598.99, link:AMZ('B0DJFTJ6LX') },
-    { loja:'Magalu', preco_pix:4799.00, link:MGL('https://www.magazineluiza.com.br/apple-iphone-16-128gb-preto-61-48mp-ios-5g/p/238803400/te/ip16/') }
+    { loja:'Mercado Livre', preco_pix:4598.99, vendedor_nota:'Loja oficial Apple', link:'https://meli.la/1Uhm19m' },
+    { loja:'Amazon', preco_pix:4598.99, link:'https://www.amazon.com.br/dp/B0DJFTJ6LX?&linkCode=ll2&tag=shopnowapp-20&linkId=b719e053634d6fb79c287463df4125af&ref_=as_li_ss_tl' },
+    { loja:'Magalu', preco_pix:4799.00, link:'https://magazineluiza.onelink.me/589508454/tyowtlub' }
    ] }
 ];
 const AVISO_AFILIADO = ''; /* pendente de decisão do dono; vazio = sem aviso */
