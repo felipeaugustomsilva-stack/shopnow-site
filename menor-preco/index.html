@@ -1384,32 +1384,36 @@ $('ios').href = LOJAS.ios; $('android').href = LOJAS.android;
 </script>
 <script>
 /* Presentes. Para acrescentar um produto, acrescente um objeto em PRESENTES:
-   { produto, modelo, nota?, data:"AAAA-MM-DD",
-     lojas:[{ loja, preco_pix (número), vendedor_nota?, link }] }
+   { produto, modelo, nota?,
+     lojas:[{ loja, preco_pix (número), visto:"AAAA-MM-DD" ou "AAAA-MM-DDTHH:MM", vendedor_nota?, link }] }
    link vazio ("") = a loja aparece sem botão. Nada de HTML/CSS a mexer. */
 const PRESENTES = [
- { produto:'TV Samsung 50" Crystal UHD 4K', modelo:'UN50U8000HGXZD', data:'2026-10-30',
+ { produto:'TV Samsung 50" Crystal UHD 4K', modelo:'UN50U8000HGXZD',
    nota:'Vendida pelo Magalu nas duas lojas.',
    lojas:[
-    { loja:'Amazon', preco_pix:2345.59, link:'https://www.amazon.com.br/dp/B0HBYYN84S?&linkCode=ll2&tag=shopnowapp-20&linkId=e812b7f6a398eb215a7543574f6f3b1b&ref_=as_li_ss_tl' },
-    { loja:'Magalu', preco_pix:2687.55, link:'https://magazineluiza.onelink.me/589508454/qzeo940a' }
+    { loja:'Amazon', preco_pix:2553.17, visto:'2026-11-02T07:53', link:'https://www.amazon.com.br/dp/B0HBYYN84S?&linkCode=ll2&tag=shopnowapp-20&linkId=e812b7f6a398eb215a7543574f6f3b1b&ref_=as_li_ss_tl' },
+    { loja:'Magalu', preco_pix:2687.55, visto:'2026-11-02T07:54', link:'https://magazineluiza.onelink.me/589508454/qzeo940a' }
    ] },
- { produto:'iPhone 16 128 GB Preto', modelo:'Apple iPhone 16', data:'2026-10-30',
+ { produto:'iPhone 16 128 GB Preto', modelo:'Apple iPhone 16',
    lojas:[
-    { loja:'Mercado Livre', preco_pix:4598.99, vendedor_nota:'Loja oficial Apple', link:'https://meli.la/1Uhm19m' },
-    { loja:'Amazon', preco_pix:4598.99, link:'https://www.amazon.com.br/dp/B0DJFTJ6LX?&linkCode=ll2&tag=shopnowapp-20&linkId=b719e053634d6fb79c287463df4125af&ref_=as_li_ss_tl' },
-    { loja:'Magalu', preco_pix:4799.00, link:'https://magazineluiza.onelink.me/589508454/tyowtlub' }
+    { loja:'Mercado Livre', preco_pix:4598.99, visto:'2026-10-30', vendedor_nota:'Loja oficial Apple', link:'https://meli.la/1Uhm19m' },
+    { loja:'Amazon', preco_pix:4598.99, visto:'2026-11-02T07:53', link:'https://www.amazon.com.br/dp/B0DJFTJ6LX?&linkCode=ll2&tag=shopnowapp-20&linkId=b719e053634d6fb79c287463df4125af&ref_=as_li_ss_tl' },
+    { loja:'Magalu', preco_pix:4799.00, visto:'2026-11-02T07:55', link:'https://magazineluiza.onelink.me/589508454/tyowtlub' }
    ] }
 ];
 const AVISO_AFILIADO = ''; /* pendente de decisão do dono; vazio = sem aviso */
 function renderPresentes(lista, aviso){
   const esc = t => String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const f = d => d.split('-').reverse().join('/');
-  const datas = lista.map(p=>p.data).sort();
-  const ult = datas[datas.length-1];
-  document.getElementById('ptit').textContent = 'Presentes: preços coletados em ' + f(ult);
+  const fv = v => { const [d,h] = v.split('T'); return d.split('-').reverse().slice(0,2).join('/') + (h ? ' ' + h : ''); };
+  const dias = [...new Set(lista.flatMap(p=>p.lojas.map(l=>l.visto.slice(0,10))))].sort();
+  const ult = dias[dias.length-1], mista = dias.length > 1;
+  document.getElementById('ptit').textContent = mista
+    ? 'Presentes: preços vistos entre ' + f(dias[0]).slice(0,5) + ' e ' + f(ult).slice(0,5)
+    : 'Presentes: preços coletados em ' + f(ult);
   document.getElementById('pcards').innerHTML = lista.map(p=>{
-    const min = Math.min(...p.lojas.map(l=>l.preco_pix));
+    const mesmoDia = new Set(p.lojas.map(l=>l.visto.slice(0,10))).size === 1;
+    const min = mesmoDia ? Math.min(...p.lojas.map(l=>l.preco_pix)) : null;
     return `<article class="pcard"><h3>${esc(p.produto)}</h3><div class="pmod">${esc(p.modelo)}</div>`+
      (p.nota?`<div class="pnota">${esc(p.nota)}</div>`:'')+
      p.lojas.map(l=>{
@@ -1417,12 +1421,14 @@ function renderPresentes(lista, aviso){
        const lab = ehMin ? `${esc(l.loja)}, ${v} no Pix, o valor mais baixo entre as lojas coletadas` : `${esc(l.loja)}, ${v} no Pix`;
        return `<div class="plj${ehMin?' min':''}" role="group" aria-label="${lab}"><span class="pl">${esc(l.loja)}</span>`+
         `<span class="pp">${v}<small>no Pix</small></span>`+
-        (l.vendedor_nota?`<span class="pv">${esc(l.vendedor_nota)}</span>`:'')+
+        `<span class="pv">${l.vendedor_nota?esc(l.vendedor_nota)+' · ':''}visto em ${fv(l.visto)}</span>`+
         (l.link?`<a class="pb" data-loja-botao="${esc(l.loja)}" href="${esc(l.link)}" target="_blank" rel="sponsored noopener">Ver ${/^Amazon/.test(l.loja)?'na':'no'} ${esc(l.loja)}</a>`:'')+
         `</div>`;
      }).join('')+`</article>`;
   }).join('');
-  document.getElementById('pfoot').textContent = 'Preços no Pix coletados em ' + f(ult) + '. Preços mudam; confira na loja.';
+  document.getElementById('pfoot').textContent = mista
+    ? 'Preços no Pix; cada preço mostra a data em que foi visto. Preços mudam; confira na loja.'
+    : 'Preços no Pix coletados em ' + f(ult) + '. Preços mudam; confira na loja.';
   const a = document.getElementById('pafil'); a.textContent = aviso||''; a.hidden = !aviso;
 }
 renderPresentes(PRESENTES, AVISO_AFILIADO);
