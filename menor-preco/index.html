@@ -86,6 +86,34 @@ footer{padding:0 0 40px;font-size:12px;color:var(--muted);display:flex;flex-dire
 .pres .pfoot{font-size:12px;color:var(--muted);margin-top:12px}
 .pres .pafil{font-size:12px;color:var(--muted);margin-top:6px}
 </style>
+<style>
+/* Tabelas de preço por mercado (Cesta Express e Mercearia): um componente só. */
+.tb{min-width:0;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 16px}
+.tb h2{margin-bottom:2px}
+.tb .tsub{font-size:14px;color:var(--muted);margin-bottom:14px}
+.tb .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:12px}
+.tb .tscroll:focus-visible{outline:2px solid var(--ind);outline-offset:2px}
+.tb table{border-collapse:separate;border-spacing:0;width:100%;min-width:540px;font-size:14px}
+.tb caption{text-align:left;font-size:13px;font-weight:700;color:var(--muted);padding:10px 12px}
+.tb th,.tb td{padding:10px 8px;border-top:1px solid var(--line);vertical-align:middle;text-align:center}
+.tb thead th{font-size:13px;font-weight:800;background:var(--light);border-top:0}
+.tb tbody th{text-align:left;font-weight:700;min-width:132px;position:sticky;left:0;background:var(--card);border-right:1px solid var(--line)}
+.tb thead th:first-child{position:sticky;left:0;z-index:1;text-align:left;border-right:1px solid var(--line)}
+.tb .fora{display:block;font-size:12px;font-weight:500;color:var(--muted)}
+.tb .c-preco{font-weight:800;white-space:nowrap}
+.tb .c-nao{font-size:12px;font-weight:700;color:var(--muted);background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(107,104,144,.10) 6px 7px)}
+.tb .c-aguard{font-size:12px;font-weight:500;font-style:italic;color:var(--muted)}
+.tb .tot{margin-top:14px}
+.tb .tot table{min-width:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.tb .tot th{text-align:left;font-weight:700}
+.tb .tot td{text-align:right;font-weight:800;white-space:nowrap}
+.tb .tot td.falta{font-weight:500;font-style:italic;color:var(--muted)}
+.tb .tdica{display:none;font-size:12px;color:var(--muted);margin-bottom:6px}
+@media (max-width:640px){.tb .tdica{display:block}}
+.tb .tfoot{font-size:12px;color:var(--muted);margin-top:12px}
+.tb .terro{font-size:12px;color:#B42318;background:#FEF3F2;border-radius:8px;padding:8px 10px;margin-bottom:10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
 </head>
 <body>
 <header><div class="wrap">
@@ -105,6 +133,8 @@ footer{padding:0 0 40px;font-size:12px;color:var(--muted);display:flex;flex-dire
     <p class="pfoot" id="pfoot"></p>
     <p class="pafil" id="pafil" hidden></p>
   </section>
+  <section class="tb" id="cesta-express" aria-labelledby="ce-tit" hidden></section>
+  <section class="tb" id="mercearia" aria-labelledby="me-tit" hidden></section>
   <section>
     <h2>Onde cada item saiu mais barato</h2>
     <div class="filt" id="filt" role="tablist" aria-label="Filtrar por mercado"></div>
@@ -1432,6 +1462,167 @@ function renderPresentes(lista, aviso){
   const a = document.getElementById('pafil'); a.textContent = aviso||''; a.hidden = !aviso;
 }
 renderPresentes(PRESENTES, AVISO_AFILIADO);
+</script>
+<script>
+/* Tabelas por mercado. UM componente para a Cesta Express e a Mercearia: para uma tabela nova, acrescente um objeto
+   em PRECOS_SEMANA.secoes. Valor de célula (precos[mercado]):
+     número > 0 (até 2 casas)  = preço;   'nao_encontrado' = consultado, item exato não existe na busca;
+     ausente = aguardando.  Qualquer outra coisa (0, negativo, NaN, texto) NUNCA é preço: vira "aguardando" e a
+     validação aponta o erro no console.
+   publicar:false = a seção não é desenhada. ATENÇÃO: este HTML é público; preço commitado é legível no código-fonte
+   mesmo com publicar:false. Nenhum preço entra num commit que vá ao ar antes da hora de publicar. */
+/* TABELA-INICIO */
+var ShopNowTabela = (function () {
+  var NAO_ENCONTRADO = 'nao_encontrado';
+
+  // -> { e: 'preco' | 'nao_encontrado' | 'aguardando', valor?, erro? }
+  function estado(v) {
+    if (v === undefined || v === null) return { e: 'aguardando' };
+    if (v === NAO_ENCONTRADO) return { e: 'nao_encontrado' };
+    if (typeof v === 'number' && isFinite(v) && v > 0 && Math.abs(v * 100 - Math.round(v * 100)) < 1e-6) return { e: 'preco', valor: v };
+    return { e: 'aguardando', erro: 'valor invalido: ' + String(v) };
+  }
+
+  function idsDoTotal(secao) {
+    return secao.itens_total || secao.itens.map(function (i) { return i.id; });
+  }
+
+  // Total de um mercado: so existe com TODOS os itens do total em estado 'preco'. Soma em centavos.
+  function total(secao, mercadoId) {
+    var ids = idsDoTotal(secao), centavos = 0, faltam = 0, n = 0;
+    secao.itens.forEach(function (it) {
+      if (ids.indexOf(it.id) < 0) return;
+      n++;
+      var est = estado(it.precos ? it.precos[mercadoId] : undefined);
+      if (est.e === 'preco') centavos += Math.round(est.valor * 100); else faltam++;
+    });
+    return faltam === 0 && n > 0 ? { completo: true, centavos: centavos, n: n } : { completo: false, faltam: faltam, n: n };
+  }
+
+  // Linhas de total. Com 2 ou mais totais completos, os completos vem primeiro, do menor para o maior valor
+  // (empate: ordem fixa); o resto segue em ordem fixa. Sem isso, ordem fixa. Nunca ordena por outro criterio.
+  function totais(secao) {
+    var linhas = (secao.totais_de || []).map(function (m, i) {
+      var t = total(secao, m); t.mercado = m; t.pos = i; return t;
+    });
+    var completos = linhas.filter(function (l) { return l.completo; });
+    if (completos.length < 2) return linhas;
+    completos.sort(function (a, b) { return a.centavos - b.centavos || a.pos - b.pos; });
+    return completos.concat(linhas.filter(function (l) { return !l.completo; }));
+  }
+
+  function dataValida(s) {
+    if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+    var d = new Date(s + 'T00:00:00Z');
+    return !isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
+  }
+
+  // Lista de problemas (vazia = ok). Nao muda nada: so aponta.
+  function validar(secao, mercados) {
+    var erros = [], idsM = mercados.map(function (m) { return m.id; }), vistos = {};
+    if (typeof secao.publicar !== 'boolean') erros.push('publicar precisa ser true ou false');
+    if (secao.reconferido_em != null && !dataValida(secao.reconferido_em)) erros.push('reconferido_em invalido: ' + secao.reconferido_em);
+    (secao.totais_de || []).forEach(function (m) { if (idsM.indexOf(m) < 0) erros.push('totais_de com mercado desconhecido: ' + m); });
+    secao.itens.forEach(function (it) {
+      if (!it.nome) erros.push('item sem nome: ' + it.id);
+      if (vistos[it.id]) erros.push('item repetido: ' + it.id);
+      vistos[it.id] = true;
+      Object.keys(it.precos || {}).forEach(function (m) {
+        if (idsM.indexOf(m) < 0) erros.push(it.id + ': mercado desconhecido ' + m);
+        var est = estado(it.precos[m]);
+        if (est.erro) erros.push(it.id + ' / ' + m + ': ' + est.erro);
+      });
+    });
+    (secao.itens_total || []).forEach(function (id) { if (!vistos[id]) erros.push('itens_total com item desconhecido: ' + id); });
+    return erros;
+  }
+
+  return { estado: estado, total: total, totais: totais, validar: validar, dataValida: dataValida };
+})();
+/* TABELA-FIM */
+
+const PRECOS_SEMANA = {
+ mercados: [
+  { id:'paodeacucar', nome:'Pão de Açúcar' },
+  { id:'shopper', nome:'Shopper' },
+  { id:'carrefour', nome:'Carrefour' },
+  { id:'mercadolivre', nome:'Mercado Livre' }
+ ],
+ secoes: [
+  { id:'cesta-express', titulo:'Cesta Express', publicar:false, reconferido_em:null,
+    totais_de:['paodeacucar','shopper','carrefour','mercadolivre'],
+    itens_total:['feijao-carioca-camil-1kg','acucar-uniao-refinado-1kg','cafe-pilao-tradicional-500g','coca-cola-original-2l','papel-higienico-neve-12x30m'],
+    itens:[
+     { id:'arroz-camil-tipo1-5kg', nome:'Arroz branco Camil tipo 1, 5 kg', precos:{} },
+     { id:'feijao-carioca-camil-1kg', nome:'Feijão carioca Camil, 1 kg', precos:{} },
+     { id:'acucar-uniao-refinado-1kg', nome:'Açúcar refinado União, 1 kg', precos:{} },
+     { id:'cafe-pilao-tradicional-500g', nome:'Café Pilão Tradicional a vácuo, 500 g', precos:{} },
+     { id:'leite-uht-piracanjuba-1l', nome:'Leite UHT integral Piracanjuba, 1 L', precos:{} },
+     { id:'ovos-brancos-grandes-12', nome:'Ovos brancos grandes, 12 un', precos:{} },
+     { id:'iogurte-natural-danone-160g', nome:'Iogurte natural integral Danone, 160 g', precos:{} },
+     { id:'coca-cola-original-2l', nome:'Coca-Cola original, 2 L', precos:{} },
+     { id:'detergente-ype-neutro-500ml', nome:'Detergente Ypê neutro, 500 ml', precos:{} },
+     { id:'papel-higienico-neve-12x30m', nome:'Papel higiênico Neve Toque da Seda, 12 rolos × 30 m', precos:{} }
+    ] },
+  { id:'mercearia', titulo:'Mercearia', publicar:false, reconferido_em:null,
+    totais_de:['paodeacucar','shopper'],
+    itens:[
+     { id:'arroz-camil-tipo1-5kg', nome:'Arroz branco Camil tipo 1, 5 kg', precos:{} },
+     { id:'feijao-carioca-camil-1kg', nome:'Feijão carioca Camil, 1 kg', precos:{} },
+     { id:'acucar-uniao-refinado-1kg', nome:'Açúcar refinado União, 1 kg', precos:{} },
+     { id:'cafe-pilao-tradicional-500g', nome:'Café Pilão Tradicional a vácuo, 500 g', precos:{} },
+     { id:'oleo-soja-soya-900ml', nome:'Óleo de soja Soya, 900 ml', precos:{} },
+     { id:'macarrao-barilla-5-500g', nome:'Macarrão espaguete Barilla nº 5, 500 g', precos:{} }
+    ] }
+ ]
+};
+function renderTabelas(dados){
+  const ST = ShopNowTabela;
+  const local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  const esc = t => String(t).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const fmt = c => (c/100).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+  const fdia = s => s.split('-').reverse().join('/');
+  const nome = Object.fromEntries(dados.mercados.map(m=>[m.id,m.nome]));
+  dados.secoes.forEach(sec=>{
+    const el = document.getElementById(sec.id);
+    if (!el) return;
+    const erros = ST.validar(sec, dados.mercados);
+    if (erros.length) console.error('[' + sec.id + '] ' + erros.join(' | '));
+    if (sec.publicar !== true && !local) { el.hidden = true; el.innerHTML = ''; return; }
+    const ids = new Set(sec.itens_total || sec.itens.map(i=>i.id));
+    const cel = (it, m) => {
+      const e = ST.estado(it.precos ? it.precos[m.id] : undefined);
+      if (e.e === 'preco') return `<td class="c-preco">${fmt(Math.round(e.valor*100))}</td>`;
+      if (e.e === 'nao_encontrado') return `<td class="c-nao">não encontrado nesta versão</td>`;
+      return `<td class="c-aguard">aguardando</td>`;
+    };
+    const linhas = sec.itens.map(it =>
+      `<tr><th scope="row">${esc(it.nome)}${ids.has(it.id)?'':'<span class="fora">fora do total</span>'}</th>${dados.mercados.map(m=>cel(it,m)).join('')}</tr>`).join('');
+    const tot = ST.totais(sec).map(t=>{
+      const r = t.completo ? `<td>${fmt(t.centavos)}</td>` : `<td class="falta">${t.faltam===1?'falta 1 item':'faltam '+t.faltam+' itens'}</td>`;
+      return `<tr><th scope="row">${esc(nome[t.mercado])}</th>${r}</tr>`;
+    }).join('');
+    const nT = ids.size;
+    const rec = sec.reconferido_em && ST.dataValida(sec.reconferido_em) ? 'Reconferido em ' + fdia(sec.reconferido_em) : 'Aguardando reconferência';
+    el.hidden = false;
+    el.innerHTML =
+      (local && erros.length ? `<div class="terro">Erros nos dados (só aparece no ambiente local): ${esc(erros.join(' · '))}</div>` : '') +
+      `<h2 id="${sec.id==='mercearia'?'me-tit':'ce-tit'}">${esc(sec.titulo)}</h2>` +
+      `<p class="tsub">${rec}</p>` +
+      `<p class="tdica">Deslize a tabela para ver todos os mercados.</p>` +
+      `<div class="tscroll" role="region" aria-labelledby="${sec.id}-cap" tabindex="0"><table>` +
+      `<caption id="${sec.id}-cap">${esc(sec.titulo)}: preço de cada item em cada mercado</caption>` +
+      `<thead><tr><th scope="col">Item</th>${dados.mercados.map(m=>`<th scope="col">${esc(m.nome)}</th>`).join('')}</tr></thead>` +
+      `<tbody>${linhas}</tbody></table></div>` +
+      (tot ? `<div class="tot"><table><caption>Total dos ${nT} itens, por mercado</caption><tbody>${tot}</tbody></table></div>` : '') +
+      `<p class="tfoot">Pelos preços da busca. Confira o total no site do mercado.</p>`;
+  });
+}
+(function(){
+  /* Ambiente local: dados de TESTE injetados pelo servidor de prévia (nunca fazem parte do commit). */
+  const local = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+  renderTabelas(local && window.__PRECOS_TESTE ? window.__PRECOS_TESTE : PRECOS_SEMANA);
+})();
 </script>
 </body>
 </html>
