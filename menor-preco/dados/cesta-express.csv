@@ -1,0 +1,41 @@
+secao,item,mercado,preco,estado,data_coleta,url_produto,soma
+express,"Arroz branco Camil tipo 1, 5 kg",carrefour,30.69,preco,2026-11-06,,nao
+express,"Arroz branco Camil tipo 1, 5 kg",shopper,31.39,preco,2026-11-06,,nao
+express,"Arroz branco Camil tipo 1, 5 kg",mercadolivre,29.99,preco,2026-11-06,,nao
+express,"Arroz branco Camil tipo 1, 5 kg",paodeacucar,,nao_encontrado,2026-11-06,,nao
+express,"Feijão carioca Camil, 1 kg",carrefour,7.99,preco,2026-11-06,,sim
+express,"Feijão carioca Camil, 1 kg",shopper,10.99,preco,2026-11-06,,sim
+express,"Feijão carioca Camil, 1 kg",mercadolivre,11.99,preco,2026-11-06,,sim
+express,"Feijão carioca Camil, 1 kg",paodeacucar,10.49,preco,2026-11-06,,sim
+express,"Açúcar refinado União, 1 kg",carrefour,3.35,preco,2026-11-06,,sim
+express,"Açúcar refinado União, 1 kg",shopper,4.69,preco,2026-11-06,,sim
+express,"Açúcar refinado União, 1 kg",mercadolivre,8.99,preco,2026-11-06,,sim
+express,"Açúcar refinado União, 1 kg",paodeacucar,4.59,preco,2026-11-06,,sim
+express,"Café Pilão Tradicional, 500 g, a vácuo",carrefour,24.90,preco,2026-11-06,,sim
+express,"Café Pilão Tradicional, 500 g, a vácuo",shopper,35.90,preco,2026-11-06,,sim
+express,"Café Pilão Tradicional, 500 g, a vácuo",mercadolivre,26.99,preco,2026-11-06,,sim
+express,"Café Pilão Tradicional, 500 g, a vácuo",paodeacucar,33.99,preco,2026-11-06,,sim
+express,"Leite UHT integral Piracanjuba, 1 L",carrefour,4.89,preco,2026-11-06,,sim
+express,"Leite UHT integral Piracanjuba, 1 L",shopper,6.49,preco,2026-11-06,,sim
+express,"Leite UHT integral Piracanjuba, 1 L",mercadolivre,7.82,preco,2026-11-06,,sim
+express,"Leite UHT integral Piracanjuba, 1 L",paodeacucar,6.49,preco,2026-11-06,,sim
+express,"Ovos brancos grandes, 12 unidades",carrefour,,nao_encontrado,2026-11-06,,nao
+express,"Ovos brancos grandes, 12 unidades",shopper,,nao_encontrado,2026-11-06,,nao
+express,"Ovos brancos grandes, 12 unidades",mercadolivre,,nao_encontrado,2026-11-06,,nao
+express,"Ovos brancos grandes, 12 unidades",paodeacucar,,nao_encontrado,2026-11-06,,nao
+express,"Iogurte natural integral Danone, 160 g",carrefour,3.09,preco,2026-11-06,,nao
+express,"Iogurte natural integral Danone, 160 g",shopper,,nao_encontrado,2026-11-06,,nao
+express,"Iogurte natural integral Danone, 160 g",mercadolivre,,nao_encontrado,2026-11-06,,nao
+express,"Iogurte natural integral Danone, 160 g",paodeacucar,4.89,preco,2026-11-06,,nao
+express,"Coca-Cola original, 2 L (garrafa avulsa)",carrefour,12.49,preco,2026-11-06,,sim
+express,"Coca-Cola original, 2 L (garrafa avulsa)",shopper,13.99,preco,2026-11-06,,sim
+express,"Coca-Cola original, 2 L (garrafa avulsa)",mercadolivre,14.98,preco,2026-11-06,,sim
+express,"Coca-Cola original, 2 L (garrafa avulsa)",paodeacucar,10.99,preco,2026-11-06,,sim
+express,"Detergente Ypê neutro, 500 ml",carrefour,,nao_encontrado,2026-11-06,,nao
+express,"Detergente Ypê neutro, 500 ml",shopper,2.29,preco,2026-11-06,,nao
+express,"Detergente Ypê neutro, 500 ml",mercadolivre,7.21,preco,2026-11-06,,nao
+express,"Detergente Ypê neutro, 500 ml",paodeacucar,,nao_encontrado,2026-11-06,,nao
+express,"Papel higiênico Neve Toque da Seda folha dupla, 12 rolos de 30 m",carrefour,25.19,preco,2026-11-06,,nao
+express,"Papel higiênico Neve Toque da Seda folha dupla, 12 rolos de 30 m",shopper,34.90,preco,2026-11-06,,nao
+express,"Papel higiênico Neve Toque da Seda folha dupla, 12 rolos de 30 m",mercadolivre,,nao_encontrado,2026-11-06,,nao
+express,"Papel higiênico Neve Toque da Seda folha dupla, 12 rolos de 30 m",paodeacucar,29.99,preco,2026-11-06,,nao
