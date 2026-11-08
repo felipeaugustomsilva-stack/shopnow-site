@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["9Z4HZ63642.com.felipeamsilva.meuappcompras"],
+        "components": [
+          { "/": "/lista/*" },
+          { "/": "/escola/*" }
+        ]
+      }
+    ]
+  }
+}
