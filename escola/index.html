@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista de material escolar · ShopNow</title>
+<meta name="description" content="Lista de material escolar publicada pela escola. Monte a lista no app ShopNow e divida a compra com quem mora com você.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta name="theme-color" content="#4F46E5">
+<link rel="stylesheet" href="/escolas/estilo.css">
+</head>
+<body>
+<header class="topo"><div class="in">
+  <a class="marca" href="/">ShopNow</a>
+  <a class="app" href="/baixar/">Baixar o app</a>
+</div></header>
+
+<main>
+  <p id="carregando" class="carregando" role="status">Carregando a lista…</p>
+
+  <div id="lista" class="lista" hidden>
+    <aside class="lateral">
+      <span id="ano" class="peq"></span>
+      <h1 id="escola"></h1>
+      <span id="local" class="suave"></span>
+      <span id="selo" class="selo" hidden>
+        <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>
+        Enviada pela escola
+      </span>
+      <div class="acoes">
+        <a id="montar" class="btn cheio" href="/baixar/">Montar no app</a>
+        <div id="lojas" class="lojas" hidden>
+          <a id="loja-ios" class="btn" href="#">App Store</a>
+          <a id="loja-android" class="btn" href="#">Google Play</a>
+        </div>
+        <button id="copiar" type="button" class="btn curto">Copiar link</button>
+      </div>
+      <span id="versao" class="peq" style="margin-top:8px"></span>
+    </aside>
+    <div class="itens-col">
+      <span id="total" class="peq" style="font-size:13px"></span>
+      <div id="grupos" style="display:flex;flex-direction:column;gap:18px"></div>
+    </div>
+  </div>
+
+  <div id="nao" class="nao-achada" hidden>
+    <h1>Lista não encontrada</h1>
+    <p class="suave">O link pode estar incompleto ou a lista saiu do ar. Peça o link de novo à escola.</p>
+    <a class="btn" href="/baixar/">Montar a lista no app</a>
+  </div>
+
+  <div id="erro" class="nao-achada" hidden>
+    <h1>Não foi possível abrir a lista</h1>
+    <p class="suave">Verifique a conexão e tente de novo.</p>
+    <button id="de-novo" type="button" class="btn">Tentar de novo</button>
+  </div>
+</main>
+
+<footer class="rodape"><div class="in">
+  <a href="/escolas/">É da sua escola? Envie a lista</a>
+  <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/">Privacidade</a>
+</div></footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Em localhost, ?api=http://127.0.0.1:PORTA troca o servidor por um de teste; em produção nunca.
+  var LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var params = new URLSearchParams(location.search);
+  var api = LOCAL ? (params.get('api') || '') : '';
+  var URL_API = api ? api + '/fn/obterListaOficial' : 'https://southamerica-east1-meu-app-compras.cloudfunctions.net/obterListaOficial';
+  // Mesmo id da função: código da escola (8 dígitos, ou "x" + 12 hex) _ ano _ série.
+  var ID = params.get('l') || '';
+  var ID_OK = /^(\d{8}|x[0-9a-f]{12})_\d{4}_[a-z0-9_]{2,12}$/.test(ID);
+
+  var IOS = 'https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&ct=site&mt=8';
+  var ANDROID = 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dperfil';
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, texto) { var e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; }
+  function mostrar(qual) {
+    ['carregando', 'lista', 'nao', 'erro'].forEach(function (n) { $(n).hidden = n !== qual; });
+  }
+  function dataBr(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; }
+
+  function lojas() {
+    var ua = navigator.userAgent || '';
+    var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    var android = !ios && /Android/.test(ua);
+    var btn = $('montar');
+    if (ios) { btn.href = IOS; }
+    else if (android) { btn.href = ANDROID; }
+    else { btn.href = '/baixar/'; $('lojas').hidden = false; $('loja-ios').href = IOS; $('loja-android').href = ANDROID; }
+  }
+
+  function desenhar(l) {
+    document.title = l.escola_nome + ' · lista de material ' + l.ano_letivo + ' · ShopNow';
+    $('ano').textContent = 'Lista de material · ' + l.ano_letivo;
+    $('escola').textContent = l.escola_nome;
+    $('local').textContent = l.serie_nome + (l.municipio_nome ? ' · ' + l.municipio_nome + (l.uf ? ', ' + l.uf : '') : (l.uf ? ' · ' + l.uf : ''));
+    $('selo').hidden = !l.verificada;
+    var data = dataBr(l.atualizada_em);
+    $('versao').textContent = l.versao > 1 ? 'Versão ' + l.versao + (data ? ' · atualizada em ' + data : '') : (data ? 'Atualizada em ' + data : '');
+    $('total').textContent = l.itens.length + (l.itens.length === 1 ? ' item' : ' itens');
+
+    // Itens agrupados pela matéria quando a lista a traz; os sem matéria vêm primeiro.
+    var ordem = [], grupos = {};
+    l.itens.forEach(function (i) {
+      var m = i.materia || '';
+      if (!(m in grupos)) { grupos[m] = []; ordem.push(m); }
+      grupos[m].push(i);
+    });
+    ordem.sort(function (a, b) { return a === '' ? -1 : b === '' ? 1 : 0; });
+    var raiz = $('grupos'); raiz.textContent = '';
+    var comTitulo = ordem.length > 1 || ordem[0] !== '';
+    ordem.forEach(function (m) {
+      var sec = el('section', 'grupo');
+      if (comTitulo) sec.appendChild(el('h2', null, m || 'Geral'));
+      var ul = el('ul');
+      grupos[m].forEach(function (i) {
+        var li = el('li');
+        li.appendChild(el('span', 'q', String(i.quantidade)));
+        li.appendChild(el('span', null, i.nome + (i.unidade && i.unidade !== 'unidade' && i.unidade !== 'livro' ? ' (' + i.unidade + ')' : '')));
+        var e = [i.especificacao, i.marca ? 'Marca: ' + i.marca : ''].filter(Boolean).join(' · ');
+        li.appendChild(el('span', 'e', e));
+        ul.appendChild(li);
+      });
+      sec.appendChild(ul); raiz.appendChild(sec);
+    });
+    lojas();
+    mostrar('lista');
+  }
+
+  function carregar() {
+    if (!ID_OK) return mostrar('nao');
+    mostrar('carregando');
+    fetch(URL_API + '?l=' + encodeURIComponent(ID), { credentials: 'omit' })
+      .then(function (r) {
+        if (r.status === 404 || r.status === 400) return null;
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      })
+      .then(function (l) {
+        if (!l || !Array.isArray(l.itens)) return mostrar('nao');
+        desenhar(l);
+      })
+      .catch(function () { mostrar('erro'); });
+  }
+
+  $('de-novo').addEventListener('click', carregar);
+  $('copiar').addEventListener('click', function () {
+    var b = $('copiar'), url = 'https://shopnowapp.com.br/escola/?l=' + encodeURIComponent(ID);
+    function ok() { b.textContent = 'Link copiado'; setTimeout(function () { b.textContent = 'Copiar link'; }, 2000); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { window.prompt('Copie o link:', url); });
+    else window.prompt('Copie o link:', url);
+  });
+
+  carregar();
+})();
+</script>
+</body>
+</html>
