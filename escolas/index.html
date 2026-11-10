@@ -67,6 +67,11 @@
           <span id="ano-letivo" class="ano-fixo"></span>
         </div>
       </div>
+      <div id="serie-livre" class="campo forte" hidden>
+        <label for="serie-texto">Qual série?</label>
+        <input id="serie-texto" type="text" maxlength="40" placeholder="Ex.: Maternal III" aria-describedby="e-serie-texto">
+        <span id="e-serie-texto" class="erro-campo" role="alert" hidden></span>
+      </div>
 
       <div>
         <span class="rotulo" id="rot-lista" style="display:block">Lista</span>
@@ -160,6 +165,7 @@
   UFS.forEach(function (u) { selUf.appendChild(new Option(u, u)); });
   selSerie.appendChild(new Option('Escolha a série', ''));
   SERIES.forEach(function (s) { selSerie.appendChild(new Option(s[1], s[0])); });
+  selSerie.appendChild(new Option('Outra (informar)', 'outra'));
   $('ano-letivo').textContent = String(estado.ano);  // um só ano, sem escolha: a lista é sempre do próximo período letivo
 
   // ---- Firestore (REST, sem login: a regra libera o get da base de escolas) ----
@@ -375,13 +381,15 @@
   var btn = $('enviar'), form = $('form');
   function validar() {
     var ok = true;
-    mostrarErro('e-uf', ''); mostrarErro('e-escola', ''); mostrarErro('e-serie', ''); mostrarErro('e-email', ''); mostrarErro('e-arq', '');
+    mostrarErro('e-uf', ''); mostrarErro('e-escola', ''); mostrarErro('e-serie', ''); mostrarErro('e-serie-texto', ''); mostrarErro('e-email', ''); mostrarErro('e-arq', '');
     var primeiro = null;
     function erro(id, texto, alvo) { mostrarErro(id, texto); ok = false; if (!primeiro) primeiro = alvo; }
     if (!estado.uf) erro('e-uf', 'Escolha o estado.', selUf);
     var nome = (estado.escolaEscolhida ? estado.escolaEscolhida.nome : inEscola.value).replace(/\s+/g, ' ').trim();
     if (nome.length < 3) erro('e-escola', 'Digite o nome da escola.', inEscola);
     if (!selSerie.value) erro('e-serie', 'Escolha a série.', selSerie);
+    var serieTexto = $('serie-texto').value.replace(/\s+/g, ' ').trim();
+    if (selSerie.value === 'outra' && serieTexto.length < 2) erro('e-serie-texto', 'Digite a série.', $('serie-texto'));
     var email = $('email').value.trim();
     var mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     $('email').setAttribute('aria-invalid', String(!mail));
@@ -391,7 +399,7 @@
     else if (!bons.length) erro('e-arq', 'Envie a lista em PDF ou foto.', solta);
     else if (estado.arquivos.some(function (a) { return a.erro; })) erro('e-arq', 'Tire o arquivo com erro e tente de novo.', solta);
     if (primeiro && primeiro.focus) primeiro.focus();
-    return ok ? { nome: nome, email: email, arquivos: bons } : null;
+    return ok ? { nome: nome, email: email, arquivos: bons, serieTexto: serieTexto } : null;
   }
   function esperarToken(ms) {
     return new Promise(function (ok) {
@@ -419,6 +427,7 @@
     if (estado.municipio) fd.append('municipio', estado.municipio);
     fd.append('uf', estado.uf);
     fd.append('serie_id', selSerie.value);
+    if (selSerie.value === 'outra') fd.append('serie_texto', v.serieTexto);
     fd.append('ano_letivo', String(estado.ano));
     fd.append('email', v.email);
     fd.append('site_escola', $('honey').value);
@@ -441,7 +450,7 @@
       if (xhr.status === 403) return avisar('erro', 'Não conseguimos confirmar que é uma pessoa. Tente de novo.', true);
       if (xhr.status === 413) return mostrarErro('e-arq', 'Arquivo grande demais (até 10 MB cada).');
       if (xhr.status === 400 && r.erro === 'campos') {
-        var mapa = { escola: ['e-escola', 'Confira o nome da escola (sem links).'], serie: ['e-serie', 'Escolha a série.'], ano: ['e-serie', 'Confira o ano letivo.'], email: ['e-email', 'Confira o e-mail.'], municipio: ['e-uf', 'Confira o estado e a cidade.'] };
+        var mapa = { escola: ['e-escola', 'Confira o nome da escola (sem links).'], serie: [selSerie.value === 'outra' ? 'e-serie-texto' : 'e-serie', selSerie.value === 'outra' ? 'Confira a série (sem links).' : 'Escolha a série.'], ano: ['e-serie', 'Confira o ano letivo.'], email: ['e-email', 'Confira o e-mail.'], municipio: ['e-uf', 'Confira o estado e a cidade.'] };
         var m = mapa[r.campo] || ['e-escola', 'Confira os dados.']; return mostrarErro(m[0], m[1]);
       }
       if (xhr.status === 400 && r.erro === 'formato') return mostrarErro('e-arq', 'Só PDF ou foto (JPG, PNG ou WebP).');
@@ -452,7 +461,13 @@
   form.addEventListener('submit', function (e) { e.preventDefault(); enviarForm(); });
   // O erro de um campo some quando a pessoa mexe nele.
   selUf.addEventListener('change', function () { mostrarErro('e-uf', ''); });
-  selSerie.addEventListener('change', function () { mostrarErro('e-serie', ''); });
+  selSerie.addEventListener('change', function () {
+    mostrarErro('e-serie', ''); mostrarErro('e-serie-texto', '');
+    var outra = selSerie.value === 'outra';
+    $('serie-livre').hidden = !outra;
+    if (outra) $('serie-texto').focus();
+  });
+  $('serie-texto').addEventListener('input', function () { mostrarErro('e-serie-texto', ''); $('serie-texto').removeAttribute('aria-invalid'); });
   $('email').addEventListener('input', function () { mostrarErro('e-email', ''); $('email').removeAttribute('aria-invalid'); });
 
   function concluido(email) {
@@ -461,7 +476,7 @@
     window.scrollTo(0, 0);
   }
   $('outra').addEventListener('click', function () {
-    estado.arquivos = []; redesenharArquivos(); selSerie.value = ''; renovarTurnstile(); aviso.hidden = true;
+    estado.arquivos = []; redesenharArquivos(); selSerie.value = ''; $('serie-livre').hidden = true; $('serie-texto').value = ''; renovarTurnstile(); aviso.hidden = true;
     $('recebido').hidden = true; $('envio').hidden = false; window.scrollTo(0, 0); selSerie.focus();
   });
 })();
