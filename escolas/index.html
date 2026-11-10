@@ -209,15 +209,18 @@
 
   var inCidade = $('cidade'), inEscola = $('escola'), lCidade = $('l-cidade'), lEscola = $('l-escola');
 
+  // Ordem: 1º começa pela frase digitada ("sao pau" → São Paulo), 2º começa pela primeira palavra, 3º contém todas.
   function filtrar(base, q, max) {
-    var tokens = chave(q).split(' ').filter(Boolean);
+    var frase = chave(q);
+    var tokens = frase.split(' ').filter(Boolean);
     if (!tokens.length) return [];
-    var inicio = [], resto = [];
-    for (var i = 0; i < base.length && inicio.length + resto.length < 400; i++) {
+    var t0 = [], t1 = [], t2 = [];
+    for (var i = 0; i < base.length; i++) {
       var k = base[i].k;
-      if (tokens.every(function (t) { return k.indexOf(t) >= 0; })) (k.indexOf(tokens[0]) === 0 ? inicio : resto).push(base[i]);
+      if (!tokens.every(function (t) { return k.indexOf(t) >= 0; })) continue;
+      (k.indexOf(frase) === 0 ? t0 : k.indexOf(tokens[0]) === 0 ? t1 : t2).push(base[i]);
     }
-    return inicio.concat(resto).slice(0, max);
+    return t0.concat(t1, t2).slice(0, max);
   }
 
   // UF → cidades
