@@ -63,10 +63,9 @@
           <select id="serie" name="serie_id" required aria-describedby="e-serie"></select>
           <span id="e-serie" class="erro-campo" role="alert" hidden></span>
         </label>
-        <fieldset>
-          <legend>Ano letivo</legend>
-          <div class="anos" id="anos"></div>
-        </fieldset>
+        <div class="campo forte">Ano letivo
+          <span id="ano-letivo" class="ano-fixo"></span>
+        </div>
       </div>
 
       <div>
@@ -151,7 +150,7 @@
 
   // ---- estado ----
   var anoAtual = ano();
-  // De outubro em diante as listas são do ano seguinte; antes, do ano em curso (são 2 botões: dá para trocar).
+  // De outubro em diante as listas são do ano seguinte; antes, do ano em curso.
   var anoPadrao = new Date(Date.now() - 3 * 3600 * 1000).getUTCMonth() >= 9 ? anoAtual + 1 : anoAtual;
   var estado = { uf: '', municipio: '', cidadeNome: '', escolaId: '', escolaEscolhida: null, ano: anoPadrao, arquivos: [], cidades: [], escolas: [], enviando: false, tokenTurnstile: '', widget: null };
 
@@ -161,16 +160,7 @@
   UFS.forEach(function (u) { selUf.appendChild(new Option(u, u)); });
   selSerie.appendChild(new Option('Escolha a série', ''));
   SERIES.forEach(function (s) { selSerie.appendChild(new Option(s[1], s[0])); });
-  var boxAnos = $('anos');
-  [anoAtual, anoAtual + 1].forEach(function (a) {
-    var b = el('button', null, String(a)); b.type = 'button';
-    b.setAttribute('aria-pressed', String(a === estado.ano));
-    b.addEventListener('click', function () {
-      estado.ano = a;
-      Array.prototype.forEach.call(boxAnos.children, function (x) { x.setAttribute('aria-pressed', String(x === b)); });
-    });
-    boxAnos.appendChild(b);
-  });
+  $('ano-letivo').textContent = String(estado.ano);  // um só ano, sem escolha: a lista é sempre do próximo período letivo
 
   // ---- Firestore (REST, sem login: a regra libera o get da base de escolas) ----
   function valor(v) {

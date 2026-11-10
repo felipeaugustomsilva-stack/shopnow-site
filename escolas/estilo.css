@@ -103,6 +103,7 @@ input[type=text], input[type=email], input[type=search], select {
 input[aria-invalid=true] { border: 1.5px solid var(--err); }
 .duas { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 12px; }
 .pares { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ano-fixo { display: flex; align-items: center; min-height: 44px; font-size: 16px; font-weight: 600; color: var(--text); }
 .anos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .anos button { min-height: 44px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: inherit; font-size: 15px; cursor: pointer; }
 .anos button[aria-pressed=true] { border: 1.5px solid var(--accent); background: var(--accent-dim); color: var(--accent); font-weight: 600; }
