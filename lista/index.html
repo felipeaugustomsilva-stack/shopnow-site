@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lista de material escolar · ShopNow</title>
+<meta name="description" content="Lista de material escolar compartilhada por outra família. Adicione a lista à sua casa no app ShopNow.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta name="theme-color" content="#4F46E5">
+<link rel="stylesheet" href="/escolas/estilo.css">
+<style>
+.grupo li { grid-template-columns: 44px minmax(0, 1fr) auto; }
+.grupo .p { font-size: 13px; color: var(--text-2); text-align: right; white-space: nowrap; }
+.grupo .p:empty { display: none; }
+.cod { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; }
+.cod b { font-size: 20px; letter-spacing: .18em; font-weight: 600; }
+.aviso-copia { background: #23252C; color: #F5F6F8; border-radius: 12px; padding: 10px 14px; font-size: 13px; }
+@media (max-width: 640px) { .grupo li { grid-template-columns: 32px minmax(0, 1fr); } .grupo .p { grid-column: 2; margin-top: -6px; text-align: left; } }
+</style>
+</head>
+<body>
+<header class="topo"><div class="in">
+  <a class="marca" href="/">ShopNow</a>
+  <a class="app" href="/baixar/">Baixar o app</a>
+</div></header>
+
+<main>
+  <p id="carregando" class="carregando" role="status">Carregando a lista…</p>
+
+  <div id="lista" class="lista" hidden>
+    <aside class="lateral">
+      <span id="ano" class="peq"></span>
+      <h1 id="escola"></h1>
+      <span id="local" class="suave"></span>
+      <div class="acoes">
+        <a id="montar" class="btn cheio" href="/baixar/">Adicionar no app</a>
+        <div id="lojas" class="lojas" hidden>
+          <a id="loja-ios" class="btn" href="#">App Store</a>
+          <a id="loja-android" class="btn" href="#">Google Play</a>
+        </div>
+        <div class="cod"><span class="suave">Código <b id="codigo"></b></span><button id="copiar-codigo" type="button" class="btn curto">Copiar</button></div>
+        <button id="copiar" type="button" class="btn curto">Copiar link</button>
+        <div id="aviso-copia" class="aviso-copia" role="status" hidden></div>
+      </div>
+      <span id="versao" class="peq" style="margin-top:8px"></span>
+    </aside>
+    <div class="itens-col">
+      <span id="total" class="peq" style="font-size:13px"></span>
+      <div id="grupos" style="display:flex;flex-direction:column;gap:18px"></div>
+    </div>
+  </div>
+
+  <div id="nao" class="nao-achada" hidden>
+    <h1>Lista não encontrada</h1>
+    <p class="suave">O link pode estar incompleto. Peça o link de novo a quem enviou.</p>
+    <a class="btn" href="/baixar/">Conhecer o ShopNow</a>
+  </div>
+
+  <div id="vencido" class="nao-achada" hidden>
+    <h1>Este link não vale mais</h1>
+    <p class="suave">Peça um link novo a quem enviou a lista.</p>
+    <a class="btn" href="/baixar/">Conhecer o ShopNow</a>
+  </div>
+
+  <div id="erro" class="nao-achada" hidden>
+    <h1>Não foi possível abrir a lista</h1>
+    <p class="suave">Verifique a conexão e tente de novo.</p>
+    <button id="de-novo" type="button" class="btn">Tentar de novo</button>
+  </div>
+</main>
+
+<footer class="rodape"><div class="in">
+  <a href="mailto:contato@shopnowapp.com.br">Contato</a>
+  <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/">Privacidade</a>
+</div></footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Em localhost, ?api=http://127.0.0.1:PORTA troca o servidor por um de teste; em produção nunca.
+  var LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var params = new URLSearchParams(location.search);
+  var api = LOCAL ? (params.get('api') || '') : '';
+  var URL_API = api ? api + '/fn/obterListaCompartilhadaWeb' : 'https://southamerica-east1-meu-app-compras.cloudfunctions.net/obterListaCompartilhadaWeb';
+  // O token tem 128 bits em base64url (22 caracteres), o mesmo formato da função.
+  var TOKEN = params.get('t') || '';
+  var TOKEN_OK = /^[A-Za-z0-9_-]{22}$/.test(TOKEN);
+  var LINK = 'https://shopnowapp.com.br/lista/?t=' + encodeURIComponent(TOKEN);
+
+  var IOS = 'https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&ct=lista&mt=8';
+  // O referrer leva só o token: o app o lê na primeira abertura (Install Referrer) e abre a revisão da lista.
+  var ANDROID = 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=' + encodeURIComponent('t=' + TOKEN);
+  var NOMES = { mercadolivre: 'Mercado Livre', amazon: 'Amazon', shopee: 'Shopee', magalu: 'Magalu', kalunga: 'Kalunga', carrefour: 'Carrefour', shopper: 'Shopper', paodeacucar: 'Pão de Açúcar', atacadao: 'Atacadão', spani: 'Spani', sonda: 'Sonda' };
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, texto) { var e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; }
+  function mostrar(qual) {
+    ['carregando', 'lista', 'nao', 'vencido', 'erro'].forEach(function (n) { $(n).hidden = n !== qual; });
+  }
+  function diaMes(iso) { var m = /^\d{4}-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[2] + '/' + m[1] : ''; }
+  function reais(c) { return 'R$ ' + (c / 100).toFixed(2).replace('.', ','); }
+
+  var codigo = '';
+
+  function aviso(texto) {
+    var a = $('aviso-copia'); a.textContent = texto; a.hidden = false;
+    clearTimeout(aviso.t); aviso.t = setTimeout(function () { a.hidden = true; }, 4000);
+  }
+  function copiar(texto, mensagem) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).then(function () { aviso(mensagem); }, function () { window.prompt('Copie:', texto); });
+    } else { window.prompt('Copie:', texto); }
+  }
+
+  function plataforma() {
+    var ua = navigator.userAgent || '';
+    var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+    var android = !ios && /Android/.test(ua);
+    var btn = $('montar');
+    if (ios) { btn.href = IOS; btn.addEventListener('click', function () { copiar(LINK, 'Link copiado. Cole no app depois de instalar.'); }); }
+    else if (android) { btn.href = ANDROID; }
+    else { btn.href = '/baixar/'; $('lojas').hidden = false; $('loja-ios').href = IOS; $('loja-android').href = ANDROID; }
+  }
+
+  function desenhar(l) {
+    document.title = l.escola_nome + ' · lista de material ' + l.ano_letivo + ' · ShopNow';
+    $('ano').textContent = 'Lista de material · ' + l.ano_letivo;
+    $('escola').textContent = l.escola_nome;
+    $('local').textContent = l.serie_nome;
+    codigo = l.codigo || '';
+    $('codigo').textContent = codigo;
+    $('copiar-codigo').parentNode.hidden = !codigo;
+    var data = diaMes(l.atualizado_em);
+    $('versao').textContent = data ? 'Atualizada em ' + data : '';
+    $('total').textContent = l.itens.length + (l.itens.length === 1 ? ' item' : ' itens');
+
+    var ordem = [], grupos = {};
+    l.itens.forEach(function (i) {
+      var m = i.materia || '';
+      if (!(m in grupos)) { grupos[m] = []; ordem.push(m); }
+      grupos[m].push(i);
+    });
+    ordem.sort(function (a, b) { return a === '' ? -1 : b === '' ? 1 : 0; });
+    var raiz = $('grupos'); raiz.textContent = '';
+    var comTitulo = ordem.length > 1 || ordem[0] !== '';
+    ordem.forEach(function (m) {
+      var sec = el('section', 'grupo');
+      if (comTitulo) sec.appendChild(el('h2', null, m || 'Geral'));
+      var ul = el('ul');
+      grupos[m].forEach(function (i) {
+        var li = el('li');
+        li.appendChild(el('span', 'q', String(i.quantidade)));
+        li.appendChild(el('span', null, i.nome + (i.unidade && i.unidade !== 'unidade' && i.unidade !== 'livro' ? ' (' + i.unidade + ')' : '')));
+        var p = '';
+        if (i.preco) p = reais(i.preco.valor_centavos) + ' · ' + (NOMES[i.preco.loja] || i.preco.loja) + ' · ' + diaMes(i.preco.consultado_em);
+        var e = [i.especificacao, i.marca ? 'Marca: ' + i.marca : ''].filter(Boolean).join(' · ');
+        li.appendChild(el('span', 'p', p));
+        if (e) { var ee = el('span', 'e', e); ee.style.gridColumn = '2 / -1'; li.appendChild(ee); }
+        ul.appendChild(li);
+      });
+      sec.appendChild(ul); raiz.appendChild(sec);
+    });
+    plataforma();
+    mostrar('lista');
+  }
+
+  function carregar() {
+    if (!TOKEN_OK) return mostrar('nao');
+    mostrar('carregando');
+    fetch(URL_API + '?t=' + encodeURIComponent(TOKEN), { credentials: 'omit', cache: 'no-store' })
+      .then(function (r) {
+        if (r.status === 410) return 'vencido';
+        if (r.status === 404 || r.status === 400) return null;
+        if (!r.ok) throw new Error('http ' + r.status);
+        return r.json();
+      })
+      .then(function (l) {
+        if (l === 'vencido') return mostrar('vencido');
+        if (!l || !Array.isArray(l.itens)) return mostrar('nao');
+        desenhar(l);
+      })
+      .catch(function () { mostrar('erro'); });
+  }
+
+  $('de-novo').addEventListener('click', carregar);
+  $('copiar').addEventListener('click', function () { copiar(LINK, 'Link copiado'); });
+  $('copiar-codigo').addEventListener('click', function () { if (codigo) copiar(codigo, 'Código copiado'); });
+
+  carregar();
+})();
+</script>
+</body>
+</html>
