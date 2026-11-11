@@ -112,6 +112,12 @@ footer a{color:var(--ac);font-weight:600}
 .mlbox{background:var(--yel);border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:10px}
 .mlbox ul{padding-left:18px;font-weight:700;list-style:disc}
 .mlbox a{display:flex;align-items:center;justify-content:center;min-height:48px;text-align:center;text-decoration:none;font-weight:800;padding:12px;border-radius:12px;background:var(--tx);color:#fff}
+#ml-baratos .mlbox>h2{font-size:26px;font-weight:800;letter-spacing:-.015em;line-height:1.15}
+.mlsub{font-size:15px}
+.mlbox .mllista{list-style:none;padding:0;display:flex;flex-direction:column}
+.mllista li{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(27,24,64,.18);font-weight:600}
+.mllista b{font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (max-width:640px){#ml-baratos .mlbox>h2{font-size:22px}}
 .ant .rod{font-size:13px;color:var(--tx3)}
 @media (max-width:640px){
  .w{padding:0 16px}
@@ -220,6 +226,15 @@ h1{font-size:clamp(38px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spac
   <div id="cs-painel" role="tabpanel" tabindex="-1"></div>
 </section>
 
+<section id="ml-baratos" class="w sec" aria-labelledby="mlb-t">
+  <div class="mlbox">
+    <h2 id="mlb-t">Os mais baratos do Mercado Livre · coletado em 11/11</h2>
+    <p class="mlsub">Os 5 itens em que o Mercado Livre teve o menor valor entre Carrefour, Pão de Açúcar, Shopper e Mercado Livre. Vendedor parceiro, preço à vista.</p>
+    <ul class="mllista"><li><span>Limpador Veja Multiuso Gold 500 ml</span><b>R$ 4,95</b></li><li><span>Feijão carioca Camil 1 kg</span><b>R$ 8,99</b></li><li><span>Papel higiênico Neve Toque da Seda 12 rolos</span><b>R$ 23,50</b></li><li><span>Azeite Gallo extravirgem 500 ml</span><b>R$ 25,90</b></li><li><span>Sabão líquido Omo Lavagem Perfeita 3 L</span><b>R$ 32,66</b></li></ul>
+    <a data-mercado="mercadolivre" href="https://meli.la/1vTcrqP" target="_blank" rel="sponsored noopener">Ver esses itens no Mercado Livre</a>
+  </div>
+</section>
+
 <section id="pedido-sec" class="w sec" aria-labelledby="pedido-t">
   <div class="pedido">
     <div>
@@ -259,12 +274,6 @@ h1{font-size:clamp(38px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spac
     <div class="filt" id="filt" role="tablist" aria-label="Filtrar por mercado"></div>
     <p class="fnote" id="fnote"></p>
     <div id="items"></div>
-  </div>
-  <div class="mlbox" id="mlbox">
-    <h3 class="h3a">Itens com o menor valor coletado no Mercado Livre</h3>
-    <p>Coleta de 27 e 28/10</p>
-    <ul id="mllist"></ul>
-    <a id="mllink" href="https://meli.la/1vTcrqP" target="_blank" rel="sponsored noopener">Ver esses itens no Mercado Livre</a>
   </div>
   <p class="rod" id="coleta"></p>
 </section>
@@ -1546,9 +1555,6 @@ const conta = m => items.filter(i=>i.min[0]===m).length;
 $('filt').innerHTML = `<button data-m="todos" role="tab">Todos</button>` + DATA.mercados.map(m=>`<button data-m="${m.id}" role="tab">${m.nome} (${conta(m.id)})</button>`).join('');
 $('filt').addEventListener('click', e=>{const b=e.target.closest('button'); if(!b) return; filtro=b.dataset.m; render();});
 render();
-const ml = items.filter(i=>i.min[0]==='mercadolivre');
-$('mllist').innerHTML = ml.map(i=>`<li>${i.nome} · ${brl(i.min[1].preco)}</li>`).join('');
-if (!ml.length || $('mllink').getAttribute('href').startsWith('__')) $('mlbox').style.display = ml.length ? '' : 'none';
 $('coleta').textContent = `Preços coletados em 27 e 28/10/2026 pelo app ShopNow (${DATA.regiao}); cada item mostra a sua data. Preço avulso, sem frete. Preços podem mudar.`;
 </script>
 <script>
