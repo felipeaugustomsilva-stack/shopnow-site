@@ -1615,7 +1615,7 @@ renderPresentes(PRESENTES, AVISO_AFILIADO);
   var C = window.ShopNowCesta;
   var LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   var $ = function(id){ return document.getElementById(id); };
-  var ARQUIVO = 'dados/cesta-sexta.csv';
+  var ARQUIVO = 'dados/cesta-sexta.json';
 
   /* "Onde comprar": online leva à página do mercado; físico abre o Google Maps. Só o ML usa o link de afiliado já configurado. */
   var ONDE = {
@@ -1625,7 +1625,8 @@ renderPresentes(PRESENTES, AVISO_AFILIADO);
     mercadolivre: { url: 'https://meli.la/1vTcrqP', afiliado: true },
     sonda:        { mapa: 'Sonda Supermercados' },
     atacadao:     { mapa: 'Atacadão' },
-    assai:        { mapa: 'Assaí Atacadista' }
+    assai:        { mapa: 'Assaí Atacadista' },
+    spani:        { mapa: 'Spani Atacadista' }
   };
 
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
@@ -1746,7 +1747,7 @@ renderPresentes(PRESENTES, AVISO_AFILIADO);
     return r.text();
   }).then(function(texto){
     if (texto === null) return primeira();
-    var r = C.ler(texto);
+    var r = C.lerJson(texto);
     if (r.erros.length) return conferindo(r.erros);
     if (r.avisos.length) console.warn('[cesta-de-sexta] ' + r.avisos.join(' | '));
     mostrarCesta(r.modelo);

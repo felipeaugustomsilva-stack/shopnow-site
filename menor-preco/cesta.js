@@ -40,7 +40,8 @@
       nome: 'Atacado',
       mercados: [
         { id: 'atacadao', nome: 'Atacadão', fisico: true },
-        { id: 'assai', nome: 'Assaí', fisico: true }
+        { id: 'assai', nome: 'Assaí', fisico: true },
+        { id: 'spani', nome: 'Spani', fisico: true }
       ]
     }
   };
@@ -82,6 +83,35 @@
     var dt = new Date(Date.UTC(a, mes - 1, d, h + 3, mi)); // Brasília = UTC-3
     if (dt.getUTCFullYear() !== a || dt.getUTCMonth() !== mes - 1 || dt.getUTCDate() !== d || h > 23 || mi > 59) return null;
     return { texto: m[1] + '-' + m[2] + '-' + m[3] + ' ' + m[4] + ':' + m[5], data: m[1] + '-' + m[2] + '-' + m[3], hora: m[4] + ':' + m[5], ms: dt.getTime() };
+  }
+
+  /* Monta o modelo de uma cesta: itens = [{ nome, k, celulas: { mercadoId: { estado, centavos, condicao } } }]; def = { nome, mercados:[{id,nome,fisico,parceiro}] }. */
+  function construir(cestaId, def, itens, momento, avisos) {
+    var mercados = def.mercados.map(function (m) {
+      var comPreco = 0, total = 0;
+      itens.forEach(function (it) { var c = it.celulas[m.id]; if (c && c.estado === 'preco') { comPreco++; total += c.centavos; } });
+      var semLinha = itens.filter(function (it) { return !it.celulas[m.id]; }).length;
+      var temLinha = itens.some(function (it) { return it.celulas[m.id]; });
+      if (semLinha && temLinha) avisos.push('cesta ' + cestaId + ': ' + m.id + ' não tem linha para ' + semLinha + ' item(ns); contam como indisponíveis');
+      return { id: m.id, nome: m.nome, fisico: !!m.fisico, parceiro: !!m.parceiro, comPreco: comPreco, total: comPreco ? total : null, completo: false, noRanking: false, semLinha: semLinha };
+    });
+    var n = itens.length;
+    mercados.forEach(function (m) {
+      m.completo = m.comPreco === n;
+      m.noRanking = m.comPreco > 0 && m.comPreco * 5 >= n * 4; /* ≥ 80% */
+    });
+    var ranking = mercados.filter(function (m) { return m.noRanking; }).sort(function (a, b) { return a.total - b.total; }); // sort estável: empate mantém a ordem fixa
+    var incompletos = mercados.filter(function (m) { return !m.noRanking; });
+    var maior = ranking.length ? ranking[ranking.length - 1].total : 0;
+    ranking.forEach(function (m, i) { m.posicao = i + 1; m.largura = maior ? Math.max(4, Math.round(m.total / maior * 100)) : 0; });
+    var presentes = {};
+    itens.forEach(function (it) { Object.keys(it.celulas).forEach(function (id) { presentes[id] = true; }); });
+    mercados.forEach(function (m) { if (!presentes[m.id]) avisos.push('cesta ' + cestaId + ': nenhuma linha para o mercado ' + m.id + ' (aparece como incompleto)'); });
+    itens.forEach(function (it) {
+      var nm = Object.keys(it.celulas).length;
+      if (nm * 2 < def.mercados.length) avisos.push('cesta ' + cestaId + ': o item "' + it.nome + '" só aparece em ' + nm + ' de ' + def.mercados.length + ' mercados (confira se o nome está igual nos outros)');
+    });
+    return { id: cestaId, nome: def.nome, itens: itens, n: n, mercados: mercados, ranking: ranking, incompletos: incompletos, momento: momento };
   }
 
   /* Lê e valida. Devolve { erros: [texto], avisos: [texto], modelo }. Com qualquer erro, modelo é null: o arquivo é rejeitado inteiro.
@@ -154,32 +184,72 @@
       }
       var itens = [], porK = {};
       linhas.forEach(function (r) { if (!porK[r.k]) { porK[r.k] = { nome: r.item, k: r.k, celulas: {} }; itens.push(porK[r.k]); } porK[r.k].celulas[r.mercado] = r; });
-      var mercados = def.mercados.map(function (m) {
-        var comPreco = 0, total = 0;
-        itens.forEach(function (it) { var c = it.celulas[m.id]; if (c && c.estado === 'preco') { comPreco++; total += c.centavos; } });
-        var semLinha = itens.filter(function (it) { return !it.celulas[m.id]; }).length;
-        var temLinha = itens.some(function (it) { return it.celulas[m.id]; });
-        if (semLinha && temLinha) avisos.push('cesta ' + cestaId + ': ' + m.id + ' não tem linha para ' + semLinha + ' item(ns); contam como indisponíveis');
-        return { id: m.id, nome: m.nome, fisico: !!m.fisico, parceiro: !!m.parceiro, comPreco: comPreco, total: comPreco ? total : null, completo: false, noRanking: false, semLinha: semLinha };
-      });
-      var n = itens.length;
-      mercados.forEach(function (m) {
-        m.completo = m.comPreco === n;
-        m.noRanking = m.comPreco > 0 && m.comPreco * 5 >= n * 4; /* ≥ 80% */
-      });
-      var ranking = mercados.filter(function (m) { return m.noRanking; }).sort(function (a, b) { return a.total - b.total; }); // sort estável: empate mantém a ordem fixa
-      var incompletos = mercados.filter(function (m) { return !m.noRanking; });
-      var maior = ranking.length ? ranking[ranking.length - 1].total : 0;
-      ranking.forEach(function (m, i) { m.posicao = i + 1; m.largura = maior ? Math.max(4, Math.round(m.total / maior * 100)) : 0; });
-      var presentes = {};
-      linhas.forEach(function (r) { presentes[r.mercado] = true; });
-      mercados.forEach(function (m) { if (!presentes[m.id]) avisos.push('cesta ' + cestaId + ': nenhuma linha para o mercado ' + m.id + ' (aparece como incompleto)'); });
-      itens.forEach(function (it) {
-        var nm = Object.keys(it.celulas).length;
-        if (nm * 2 < def.mercados.length) avisos.push('cesta ' + cestaId + ': o item "' + it.nome + '" só aparece em ' + nm + ' de ' + def.mercados.length + ' mercados (confira se o nome está igual nos outros)');
-      });
-      modelo.cestas[cestaId] = { id: cestaId, nome: def.nome, itens: itens, n: n, mercados: mercados, ranking: ranking, incompletos: incompletos, momento: textos.length ? momentos[textos[0]] : null };
+      modelo.cestas[cestaId] = construir(cestaId, def, itens, textos.length ? momentos[textos[0]] : null, avisos);
     });
+    if (erros.length) return { erros: erros, avisos: avisos, modelo: null };
+    return { erros: [], avisos: avisos, modelo: modelo };
+  }
+
+  /* Lê o JSON v2 da coleta (o arquivo que o Analista gera) e usa as cestas que ele definiu em `cestas.varejo` e `cestas.atacado`:
+     os itens e os mercados de cada aba, só preço de nível "exato". `cestas.todos` é ignorada. O total de cada mercado é recalculado
+     dos preços e precisa bater com `cestas.<aba>.totais`; senão o arquivo é rejeitado. */
+  var FISICOS = { sonda: 1, atacadao: 1, assai: 1, spani: 1 };
+  function lerJson(texto) {
+    var erros = [], avisos = [], d;
+    try { d = JSON.parse(String(texto)); } catch (e) { return { erros: ['o arquivo não é um JSON válido (' + e.message + ')'], avisos: avisos, modelo: null }; }
+    if (!d || typeof d !== 'object' || Array.isArray(d)) return { erros: ['o JSON precisa ser um objeto'], avisos: avisos, modelo: null };
+    if (d.versao !== 2) erros.push('versao precisa ser 2 (veio ' + JSON.stringify(d.versao) + ')');
+    var hf = d.horario_coleta && d.horario_coleta.fim;
+    var momento = momentoValido(String(d.data_coleta) + ' ' + String(hf));
+    if (!momento) erros.push('data_coleta (AAAA-MM-DD) e horario_coleta.fim (HH:MM) inválidos (vieram ' + JSON.stringify(d.data_coleta) + ' e ' + JSON.stringify(hf) + ')');
+    var catalogo = {};
+    (Array.isArray(d.mercados) ? d.mercados : []).forEach(function (m) { if (m && m.id) catalogo[m.id] = m; });
+    var porId = {};
+    (Array.isArray(d.itens) ? d.itens : []).forEach(function (it) { if (it && it.id) porId[it.id] = it; });
+    if (!d.cestas || typeof d.cestas !== 'object') erros.push('falta o campo cestas');
+    if (erros.length) return { erros: erros, avisos: avisos, modelo: null };
+    var modelo = { cestas: {} };
+    ['varejo', 'atacado'].forEach(function (tab) {
+      var c = d.cestas[tab];
+      if (!c) return;
+      var L = 'cestas.' + tab + ': ';
+      if (!Array.isArray(c.mercados) || !c.mercados.length || !Array.isArray(c.itens) || !c.itens.length) { erros.push(L + 'precisa de mercados e itens'); return; }
+      var def = { nome: CESTAS[tab].nome, mercados: [] };
+      c.mercados.forEach(function (id) {
+        var m = catalogo[id];
+        if (!m) { erros.push(L + 'mercado "' + id + '" não está em mercados'); return; }
+        var parceiro = id === 'mercadolivre' || Object.keys(porId).some(function (k) { var p = porId[k].precos && porId[k].precos[id]; return p && p.vendedor_parceiro === true; });
+        def.mercados.push({ id: id, nome: m.nome || id, fisico: !!FISICOS[id], parceiro: parceiro });
+      });
+      var itens = [];
+      c.itens.forEach(function (iid) {
+        var it = porId[iid];
+        if (!it) { erros.push(L + 'item "' + iid + '" não está em itens'); return; }
+        var linha = { nome: it.nome || iid, k: iid, celulas: {} };
+        def.mercados.forEach(function (m) {
+          var p = it.precos && it.precos[m.id];
+          if (p && p.status === 'ok') {
+            if (p.nivel !== 'exato') { erros.push(L + 'item "' + iid + '" em ' + m.id + ' tem nível "' + p.nivel + '"; só "exato" entra na cesta'); return; }
+            var cts = typeof p.preco === 'number' ? Math.round(p.preco * 100) : NaN;
+            if (!(cts > 0) || Math.abs(p.preco * 100 - cts) > 1e-6) { erros.push(L + 'preço inválido em ' + iid + '/' + m.id + ' (veio ' + JSON.stringify(p.preco) + '): use valor maior que zero com até 2 casas'); return; }
+            linha.celulas[m.id] = { estado: 'preco', centavos: cts, condicao: '' };
+          } else {
+            linha.celulas[m.id] = { estado: 'indisponivel', centavos: null, condicao: '' };
+          }
+        });
+        itens.push(linha);
+      });
+      if (erros.length) return;
+      var cesta = construir(tab, def, itens, momento, avisos);
+      if (c.totais) {
+        cesta.mercados.forEach(function (m) {
+          var esp = c.totais[m.id];
+          if (typeof esp === 'number' && m.completo && Math.abs(Math.round(esp * 100) - m.total) > 1) erros.push(L + 'o total de ' + m.id + ' no arquivo (' + esp + ') não bate com a soma dos preços (' + (m.total / 100) + ')');
+        });
+      }
+      modelo.cestas[tab] = cesta;
+    });
+    if (!erros.length && !Object.keys(modelo.cestas).length) erros.push('o arquivo não tem cestas.varejo nem cestas.atacado');
     if (erros.length) return { erros: erros, avisos: avisos, modelo: null };
     return { erros: [], avisos: avisos, modelo: modelo };
   }
@@ -187,5 +257,5 @@
   /* Dias inteiros entre a coleta e agora (ms em UTC). */
   function idadeDias(momento, agoraMs) { return Math.floor((agoraMs - momento.ms) / 86400000); }
 
-  return { COLUNAS: COLUNAS, OPCIONAIS: OPCIONAIS, CESTAS: CESTAS, MINIMO_RANKING: MINIMO_RANKING, lerCsv: lerCsv, ler: ler, centavosDe: centavosDe, momentoValido: momentoValido, idadeDias: idadeDias };
+  return { COLUNAS: COLUNAS, OPCIONAIS: OPCIONAIS, CESTAS: CESTAS, MINIMO_RANKING: MINIMO_RANKING, lerCsv: lerCsv, ler: ler, lerJson: lerJson, centavosDe: centavosDe, momentoValido: momentoValido, idadeDias: idadeDias };
 });

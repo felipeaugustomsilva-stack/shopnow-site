@@ -1,5 +1,5 @@
 // Valida o CSV da Cesta de Sexta ANTES de publicar. Não envia nada a lugar nenhum.
-//   node menor-preco/validar-cesta.mjs menor-preco/dados/cesta-sexta.csv
+//   node menor-preco/validar-cesta.mjs menor-preco/dados/cesta-sexta.json   (o JSON v2 da coleta; um .csv também é aceito)
 // Rejeita (saída 1) com mensagem clara: coluna faltando, mercado/estado desconhecido, preço com estado "indisponivel",
 // preço inválido ou zero, coletado_em vazio ou diferente entre as linhas, item repetido, atacado sem condicao.
 // Avisos (não bloqueiam): item sem linha para um mercado, mercado sem nenhuma linha, nome de item que só aparece em poucos mercados.
@@ -12,14 +12,14 @@ const brl = (c) => (c / 100).toLocaleString('pt-BR', { style: 'currency', curren
 const arquivo = process.argv[2];
 
 if (!arquivo) {
-  console.error('Uso: node menor-preco/validar-cesta.mjs <arquivo.csv>');
-  console.error('Colunas obrigatórias: ' + C.COLUNAS.join(',') + '  (opcional: ' + C.OPCIONAIS.join(', ') + ')');
+  console.error('Uso: node menor-preco/validar-cesta.mjs <arquivo.json | arquivo.csv>');
+  console.error('CSV, colunas obrigatórias: ' + C.COLUNAS.join(',') + '  (opcional: ' + C.OPCIONAIS.join(', ') + ')');
   process.exit(2);
 }
 let texto;
 try { texto = readFileSync(arquivo, 'utf8'); } catch (e) { console.error(`✗ não consegui abrir ${arquivo} (${e.code})`); process.exit(1); }
 
-const r = C.ler(texto);
+const r = arquivo.toLowerCase().endsWith('.csv') ? C.ler(texto) : C.lerJson(texto);
 if (r.erros.length) {
   console.error(`✗ arquivo REJEITADO (${arquivo}), ${r.erros.length} problema(s):`);
   r.erros.slice(0, 40).forEach((e) => console.error('   - ' + e));
