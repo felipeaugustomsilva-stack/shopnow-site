@@ -1,0 +1,2080 @@
+{
+  "versao": 2,
+  "campanha": "Cesta de Sexta",
+  "data_coleta": "2026-11-11",
+  "horario_coleta": {
+    "inicio": "13:46",
+    "fim": "16:21",
+    "fuso": "America/Sao_Paulo"
+  },
+  "regiao": "Bela Vista / Av. Paulista, São Paulo/SP (CEP 01417-010)",
+  "fonte": "app ShopNow",
+  "observacao_precos": "Preço avulso coletado em 11/11, sem frete e sem clube. Pix só quando a loja mostra Pix. Preços podem mudar.",
+  "texto_origem_itens": "o que mais entrou nas listas das casas do ShopNow",
+  "mercados": [
+    {
+      "id": "carrefour",
+      "nome": "Carrefour",
+      "tipo": "varejo"
+    },
+    {
+      "id": "paodeacucar",
+      "nome": "Pão de Açúcar",
+      "tipo": "varejo"
+    },
+    {
+      "id": "shopper",
+      "nome": "Shopper",
+      "tipo": "varejo"
+    },
+    {
+      "id": "mercadolivre",
+      "nome": "Mercado Livre",
+      "tipo": "varejo"
+    },
+    {
+      "id": "sonda",
+      "nome": "Sonda",
+      "tipo": "varejo"
+    },
+    {
+      "id": "atacadao",
+      "nome": "Atacadão",
+      "tipo": "atacado"
+    },
+    {
+      "id": "spani",
+      "nome": "Spani",
+      "tipo": "atacado"
+    }
+  ],
+  "itens": [
+    {
+      "id": "arroz-camil-5kg",
+      "nome": "Arroz branco Camil tipo 1, 5 kg",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 26.18,
+          "nivel": "exato",
+          "anuncio": "Arroz Branco Camil Tipo 1 5kg",
+          "url": "https://mercado.carrefour.com.br/produto/arroz-branco-camil-tipo-1-5kg-1970",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 5.24,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 31.99,
+          "nivel": "exato",
+          "anuncio": "Agulhinha Tipo 1 CAMIL Pacote 5kg",
+          "url": "https://www.paodeacucar.com/produto/41329/arroz-agulhinha-tipo-1-camil-pacote-5kg",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.4,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 31.39,
+          "nivel": "exato",
+          "anuncio": "Polido Longo Fino Camil Tipo 1 5KG",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.28,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 31.24,
+          "nivel": "exato",
+          "anuncio": "Arroz Branco Tipo 1 Camil Longo Pacote 5 kg Sem Glúten",
+          "url": "https://www.mercadolivre.com.br/arroz-branco-tipo-1-camil-longo-pacote-5-kg-sem-gluten/p/MLB18305812",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 6.25,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 38.48,
+          "nivel": "exato",
+          "anuncio": "Arroz Branco Tipo 1 Camil Seleções Pacote 5kg",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/arroz-branco-tipo-1-camil-selecoes-pacote-5kg/1000056814",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.7,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 23.49,
+          "nivel": "exato",
+          "anuncio": "Arroz Branco Camil Tipo 1 5kg",
+          "url": "https://www.atacadao.com.br/arroz-branco-camil-tipo-1-12658-13743/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 4.7,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 20.9,
+          "nivel": "exato",
+          "anuncio": "Arroz Tipo 1 Camil 5kg",
+          "url": "https://www.spani.com.br/produto/1185/arroz-tipo-1-camil-5kg",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 4.18,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "spani",
+        "preco": 20.9
+      },
+      "diferenca_max_min": 17.58
+    },
+    {
+      "id": "feijao-carioca-camil-1kg",
+      "nome": "Feijão carioca Camil, 1 kg",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 9.38,
+          "nivel": "exato",
+          "anuncio": "Feijão Carioca Camil 1kg",
+          "url": "https://mercado.carrefour.com.br/produto/feijao-carioca-camil-1kg-2927",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 9.38,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 10.49,
+          "nivel": "exato",
+          "anuncio": "Feijão Carioca Tipo 1 CAMIL Pacote 1kg",
+          "url": "https://www.paodeacucar.com/produto/9461/feijao-carioca-tipo-1-camil-pacote-1kg",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 10.49,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 10.99,
+          "nivel": "exato",
+          "anuncio": "Feijão Carioca Camil 1KG",
+          "url": "https://mercado.carrefour.com.br/feijao-carioca-camil-1kg/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 10.99,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 8.99,
+          "nivel": "exato",
+          "anuncio": "Feijão carioca tipo 1 1kg Camil",
+          "url": "https://www.mercadolivre.com.br/feijao-carioca-tipo-1-1kg-camil/p/MLB18390354",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 8.99,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 7.69,
+          "nivel": "exato",
+          "anuncio": "Feijão Carioca Camil 1kg",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/feijao-carioca-camil-1kg/1000001726",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.69,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 8.35,
+          "nivel": "exato",
+          "anuncio": "Feijão Carioca Camil Tipo 1 1kg",
+          "url": "https://www.atacadao.com.br/feijao-carioca-camil-tipo-1-7382-9742/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 8.35,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 7.99,
+          "nivel": "exato",
+          "anuncio": "Feijão Carioca Tipo 1 Camil 1kg",
+          "url": "https://www.spani.com.br/produto/799/feijao-carioca-tipo-1-camil-1kg",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.99,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "sonda",
+        "preco": 7.69
+      },
+      "diferenca_max_min": 3.3
+    },
+    {
+      "id": "leite-piracanjuba-integral-1l",
+      "nome": "Leite UHT integral Piracanjuba, 1 L",
+      "categoria": "laticínios",
+      "precos": {
+        "carrefour": {
+          "status": "sem_estoque"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 6.49,
+          "nivel": "exato",
+          "anuncio": "Leite UHT Integral Piracanjuba Caixa com tampa 1L",
+          "url": "https://www.paodeacucar.com/produto/164065/leite-uht-integral-piracanjuba-caixa-com-tampa-1l",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.49,
+          "unidade_medida": "L"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 6.49,
+          "nivel": "exato",
+          "anuncio": "Leite Longa Vida Piracanjuba Integral 1L",
+          "url": "https://mercado.carrefour.com.br/leite-longa-vida-piracanjuba-integral-1l/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.49,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 7.91,
+          "nivel": "exato",
+          "anuncio": "Leite Uht Integral Piracanjuba 1L",
+          "url": "https://www.mercadolivre.com.br/leite-uht-integral-piracanjuba-1l/p/MLB18310846",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 7.91,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 5.45,
+          "nivel": "exato",
+          "anuncio": "Leite Longa Vida Piracanjuba Com tampa Integral 1L",
+          "url": "https://www.atacadao.com.br/leite-longa-vida-piracanjuba-com-tampa-integral-58045-32839/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 5.45,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 5.45
+      },
+      "diferenca_max_min": 2.46
+    },
+    {
+      "id": "cafe-pilao-tradicional-vacuo-500g",
+      "nome": "Café Pilão tradicional a vácuo, 500 g",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 23.49,
+          "nivel": "exato",
+          "anuncio": "Café Torrado e Moído a Vácuo Tradicional Pilão Pacote 500g",
+          "url": "https://mercado.carrefour.com.br/produto/cafe-torrado-e-moido-a-vacuo-tradicional-pilao-pacote-500g-4536",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 46.98,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 33.99,
+          "nivel": "exato",
+          "anuncio": "Café Torrado e Moído a Vácuo Tradicional Pilão Pacote 500g",
+          "url": "https://www.paodeacucar.com/produto/90515/cafe-torrado-e-moido-a-vacuo-tradicional-pilao-pacote-500g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 67.98,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 35.9,
+          "nivel": "exato",
+          "anuncio": "Café Torrado E Moído Pilão Tradicional 500G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 71.8,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 26.59,
+          "nivel": "exato",
+          "anuncio": "Café Pilão Torrado E Moído Cafeína Tradicional Vácuo 500g",
+          "url": "https://www.mercadolivre.com.br/cafe-pilao-torrado-e-moido-cafeina-tradicional-vacuo-500g/p/MLB22874840",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 53.18,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 27.9,
+          "nivel": "exato",
+          "anuncio": "Café Pilão Vácuo 500g",
+          "url": "https://www.atacadao.com.br/cafe-pilao-vacuo-18437-3092/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 55.8,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 23.5,
+          "nivel": "exato",
+          "anuncio": "Café Torrado E Moído Pilão 500g A Vácuo Tradicional",
+          "url": "https://www.spani.com.br/produto/776/cafe-torrado-e-moido-pilao-500g-a-vacuo-tradicional",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 47.0,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "carrefour",
+        "preco": 23.49
+      },
+      "diferenca_max_min": 12.41
+    },
+    {
+      "id": "papel-higienico-neve-toque-da-seda-12",
+      "nome": "Papel higiênico Neve Toque da Seda folha dupla, 12 rolos",
+      "categoria": "higiene",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 32.39,
+          "nivel": "exato",
+          "anuncio": "Leve 12 Pague 11 Unidades",
+          "url": "https://mercado.carrefour.com.br/produto/papel-higienico-folha-dupla-neutro-neve-toque-da-seda-30-metros-leve-12-pague-11-unidades-326774545",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.7,
+          "unidade_medida": "rolo"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 25.99,
+          "nivel": "exato",
+          "anuncio": "Leve 12 Pague 11 Unidades",
+          "url": "https://www.paodeacucar.com/produto/568597/papel-higienico-folha-dupla-neutro-neve-toque-da-seda-30m-pacote-leve-12-pague-11-unidades",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.17,
+          "unidade_medida": "rolo"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 32.9,
+          "nivel": "exato",
+          "anuncio": "Papel Higiênico Neve Folha Dupla Neutro C/12",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.74,
+          "unidade_medida": "rolo"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 23.5,
+          "nivel": "exato",
+          "anuncio": "Papel Higiênico Toque De Seda - 12 Rolos",
+          "url": null,
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 1.96,
+          "unidade_medida": "rolo"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 19.9,
+          "nivel": "exato",
+          "anuncio": "Papel Higiênico Folha Dupla Neutro Neve 30m Pacote Leve 12 Pague 11 Unidades",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/papel-higienico-folha-dupla-neutro-neve-30m-pacote-leve-12-pague-11-unidades/1000021051",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 1.66,
+          "unidade_medida": "rolo"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 28.89,
+          "nivel": "exato",
+          "anuncio": "Papel Higiênico Neve Folha Dupla 30m 12 rolos",
+          "url": "https://www.atacadao.com.br/papel-higienico-neve-folha-dupla-30m-71657-25516/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.41,
+          "unidade_medida": "rolo"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 24.9,
+          "nivel": "exato",
+          "anuncio": "Papel Higiênico Folha Dupla Neve 30m Leve 12 E Pague 11 Seda",
+          "url": "https://www.spani.com.br/produto/9324/papel-higienico-folha-dupla-neve-30m-leve-12-e-pague-11-seda",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.07,
+          "unidade_medida": "rolo"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "sonda",
+        "preco": 19.9
+      },
+      "diferenca_max_min": 13.0
+    },
+    {
+      "id": "ovos-brancos-grandes-12un",
+      "nome": "Ovos brancos grandes, 12 un",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "nao_encontrado"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 12.99,
+          "nivel": "exato",
+          "anuncio": "Ovo Branco Grande Com 12 unidades",
+          "url": "https://www.paodeacucar.com/produto/88060/ovo-branco-grande-com-12-unidades",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 1.08,
+          "unidade_medida": "un"
+        },
+        "shopper": {
+          "status": "nao_encontrado"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 6.99,
+          "nivel": "exato",
+          "anuncio": "Ovos branco tipo grande polpa Mantiqueira 12 Unidades",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/ovos-branco-tipo-grande-polpa-mantiqueira-12-unidades/1000009970",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 0.58,
+          "unidade_medida": "un"
+        },
+        "atacadao": {
+          "status": "nao_encontrado"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "sonda",
+        "preco": 6.99
+      },
+      "diferenca_max_min": 6.0
+    },
+    {
+      "id": "detergente-ype-neutro-500ml",
+      "nome": "Detergente Ypê neutro, 500 ml",
+      "categoria": "limpeza",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 3.09,
+          "nivel": "equivalente",
+          "anuncio": "Detergente Ypê Clear 500ml",
+          "url": "https://mercado.carrefour.com.br/produto/detergente-ype-clear-500ml-14371",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.18,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "nao_encontrado"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 2.29,
+          "nivel": "exato",
+          "anuncio": "Detergente Líquido Ypê Neutro 500ML",
+          "url": "https://mercado.carrefour.com.br/detergente-liquido-ype-neutro-500ml/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 4.58,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 7.68,
+          "nivel": "exato",
+          "anuncio": "Detergente líquido Lava-louças neutro 500ml Ypê",
+          "url": "https://www.mercadolivre.com.br/detergente-liquido-lava-loucas-neutro-500ml-ype/p/MLB24342734",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 15.36,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 2.69,
+          "nivel": "exato",
+          "anuncio": "Detergente Líquido Ypê Neutro 500ml",
+          "url": "https://www.atacadao.com.br/detergente-liquido-ype-neutro-11757-36732/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 5.38,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 2.68,
+          "nivel": "exato",
+          "anuncio": "Detergente Líquido Ypê 500ml Neutro",
+          "url": "https://www.spani.com.br/produto/574/detergente-liquido-ype-500ml-neutro",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 5.36,
+          "unidade_medida": "L"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "shopper",
+        "preco": 2.29
+      },
+      "diferenca_max_min": 5.39
+    },
+    {
+      "id": "coca-cola-original-2l",
+      "nome": "Coca-Cola original, 2 L",
+      "categoria": "bebidas",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 12.49,
+          "nivel": "exato",
+          "anuncio": "Refrigerante Coca-Cola Garrafa 2 L",
+          "url": "https://mercado.carrefour.com.br/produto/refrigerante-cocacola-garrafa-2-l-4766189",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.25,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 10.99,
+          "nivel": "exato",
+          "anuncio": "Refrigerante Coca-Cola Original Garrafa 2l",
+          "url": "https://www.paodeacucar.com/produto/449568/refrigerante-coca-cola-original-garrafa-2l",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 5.5,
+          "unidade_medida": "L"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 13.99,
+          "nivel": "exato",
+          "anuncio": "Refrigerante Coca-cola Sabor Original Pet 2L",
+          "url": "https://mercado.carrefour.com.br/shop/busca",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.0,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 14.98,
+          "nivel": "exato",
+          "anuncio": "Refrigerante Coca-Cola Original Garrafa 2l",
+          "url": "https://www.mercadolivre.com.br/refrigerante-coca-cola-original-garrafa-2l/p/MLB18306190",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 7.49,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 14.73,
+          "nivel": "equivalente",
+          "anuncio": "Refrigerante Coca-Cola Sabor Original Menos Açúcar Pet 2l",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/refrigerante-coca-cola-sabor-original-menos-acucar-pet-2l/1000007812",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.37,
+          "unidade_medida": "L"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 12.49,
+          "nivel": "exato",
+          "anuncio": "Refrigerante Coca-Cola 2L",
+          "url": "https://www.atacadao.com.br/refrigerante-coca-cola-pet-com-2l-12380-3870/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.25,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 12.59,
+          "nivel": "exato",
+          "anuncio": "Refrigerante Coca Cola 2l",
+          "url": "https://www.spani.com.br/produto/10565/refrigerante-coca-cola-2l",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 6.29,
+          "unidade_medida": "L"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "paodeacucar",
+        "preco": 10.99
+      },
+      "diferenca_max_min": 3.99
+    },
+    {
+      "id": "iogurte-natural-danone-160g",
+      "nome": "Iogurte natural integral Danone, 160 g",
+      "categoria": "laticínios",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 3.69,
+          "nivel": "exato",
+          "anuncio": "Iogurte Integral Danone Natural 160 g",
+          "url": "https://mercado.carrefour.com.br/produto/iogurte-integral-danone-natural-160-g-6949796",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 23.06,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 4.89,
+          "nivel": "exato",
+          "anuncio": "Iogurte Integral Natural Danone Copo 160g",
+          "url": "https://www.paodeacucar.com/produto/478707/iogurte-integral-natural-danone-copo-160g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 30.56,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "nao_encontrado"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 3.59,
+          "nivel": "exato",
+          "anuncio": "Iogurte Natural Integral Danone Copo 160g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/iogurte-natural-integral-danone-copo-160g/1000036055",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 22.44,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 4.29,
+          "nivel": "exato",
+          "anuncio": "Iogurte Natural Danone Integral 160g",
+          "url": "https://www.atacadao.com.br/iogurte-natural-danone-integral-70082-24235/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 26.81,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 3.99,
+          "nivel": "equivalente",
+          "anuncio": "Iogurte Natural Integral Danone Copo 160g Mel",
+          "url": "https://www.spani.com.br/produto/12729/iogurte-natural-integral-danone-copo-160g-mel",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 24.94,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "sonda",
+        "preco": 3.59
+      },
+      "diferenca_max_min": 1.3
+    },
+    {
+      "id": "acucar-refinado-uniao-1kg",
+      "nome": "Açúcar refinado União, 1 kg",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 3.35,
+          "nivel": "exato",
+          "anuncio": "Açúcar Refinado União 1kg",
+          "url": "https://mercado.carrefour.com.br/produto/acucar-refinado-uniao-1kg-2406",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 3.35,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 4.59,
+          "nivel": "exato",
+          "anuncio": "Açúcar Refinado União Pacote 1kg",
+          "url": "https://www.paodeacucar.com/produto/74215/acucar-refinado-uniao-pacote-1kg",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 4.59,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 4.39,
+          "nivel": "exato",
+          "anuncio": "Açúcar Refinado União 1KG",
+          "url": "https://mercado.carrefour.com.br/acucar-refinado-uniao-1kg/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 4.39,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 6.99,
+          "nivel": "exato",
+          "anuncio": "Açúcar Refinado União 1kg",
+          "url": "https://www.mercadolivre.com.br/acucar-refinado-uniao-1kg/p/MLB18312051",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 6.99,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 3.49,
+          "nivel": "exato",
+          "anuncio": "Açúcar refinado União 1kg",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/acucar-refinado-uniao-1kg/1000001025",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 3.49,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 3.75,
+          "nivel": "exato",
+          "anuncio": "Açúcar União Refinado 1kg",
+          "url": "https://www.atacadao.com.br/acucar-uniao-refinado-21176-2371/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 3.75,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 3.19,
+          "nivel": "exato",
+          "anuncio": "Açúcar Refinado União 1kg",
+          "url": "https://www.spani.com.br/produto/1177/acucar-refinado-uniao-1kg",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 3.19,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "spani",
+        "preco": 3.19
+      },
+      "diferenca_max_min": 3.8
+    },
+    {
+      "id": "suco-laranja-natural-one-900ml",
+      "nome": "Suco de laranja Natural One, 900 ml",
+      "categoria": "bebidas",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 17.29,
+          "nivel": "exato",
+          "anuncio": "Suco de Laranja Integral Refrigerado Natural One 100% Suco 900ml",
+          "url": "https://mercado.carrefour.com.br/produto/suco-de-laranja-integral-refrigerado-natural-one-100-suco-900ml-4573",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 19.21,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 14.99,
+          "nivel": "exato",
+          "anuncio": "Suco Integral Laranja The Natural One Refrigerado Garrafa 900ml",
+          "url": "https://www.paodeacucar.com/produto/292149/suco-integral-laranja-the-natural-one-refrigerado-garrafa-900ml",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 16.66,
+          "unidade_medida": "L"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 17.59,
+          "nivel": "exato",
+          "anuncio": "Suco Natural One Laranja 900ML",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 19.54,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 13.5,
+          "nivel": "exato",
+          "anuncio": "Suco Natural One Refrigerado Laranja 900ml",
+          "url": "https://www.atacadao.com.br/suco-natural-one-refrigerado-laranja-48074-25902/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 15.0,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 12.9,
+          "nivel": "exato",
+          "anuncio": "Suco Integral Natural One Refrigerado 900ml Laranja",
+          "url": "https://www.spani.com.br/produto/3835/suco-integral-natural-one-refrigerado-900ml-laranja",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 14.33,
+          "unidade_medida": "L"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "spani",
+        "preco": 12.9
+      },
+      "diferenca_max_min": 4.69
+    },
+    {
+      "id": "agua-sanitaria-qboa-1l",
+      "nome": "Água sanitária Qboa, 1 L",
+      "categoria": "limpeza",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 4.69,
+          "nivel": "exato",
+          "anuncio": "Água Sanitária Qboa Frasco 1L",
+          "url": "https://mercado.carrefour.com.br/produto/agua-sanitaria-qboa-frasco-1l-33",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 4.69,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "nao_encontrado"
+        },
+        "shopper": {
+          "status": "nao_encontrado"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "nao_encontrado"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": false,
+      "menor_preco": {
+        "mercado": "carrefour",
+        "preco": 4.69
+      }
+    },
+    {
+      "id": "sabao-liquido-omo-lavagem-perfeita-3l",
+      "nome": "Sabão líquido Omo Lavagem Perfeita, 3 L",
+      "categoria": "limpeza",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 48.19,
+          "nivel": "exato",
+          "anuncio": "Lava-Roupas Líquido Omo Lavagem Perfeita Galão 3L",
+          "url": "https://mercado.carrefour.com.br/produto/lava-roupas-liquido-omo-lavagem-perfeita-galao-3l-340540989",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 16.06,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "nao_encontrado"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 54.99,
+          "nivel": "exato",
+          "anuncio": "Lava Roupas Líquido Omo Lavagem Perfeita 3L",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 18.33,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 32.66,
+          "nivel": "exato",
+          "anuncio": "Sabão Líquido Omo Lavagem Perfeita 3l",
+          "url": "https://www.mercadolivre.com.br/sabao-liquido-omo-lavagem-perfeita-3l/p/MLB67562376",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 10.89,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 64.9,
+          "nivel": "exato",
+          "anuncio": "Lava Roupas Líquido Omo Lavagem Perfeita 3L",
+          "url": "https://www.atacadao.com.br/lava-roupas-liquido-omo-lavagem-perfeita-68746-30241/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 21.63,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "mercadolivre",
+        "preco": 32.66
+      },
+      "diferenca_max_min": 32.24
+    },
+    {
+      "id": "sabonete-dove-original-90g",
+      "nome": "Sabonete Dove Original, 90 g",
+      "categoria": "higiene",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 6.89,
+          "nivel": "exato",
+          "anuncio": "Sabonete em Barra Dove Original 90g",
+          "url": "https://mercado.carrefour.com.br/produto/sabonete-em-barra-dove-original-90g-6-unidades-6944",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 76.56,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 5.79,
+          "nivel": "exato",
+          "anuncio": "Sabonete Barra Original Dove 90G",
+          "url": "https://www.paodeacucar.com/produto/127976/sabonete-barra-original-dove-90g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 64.33,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 5.99,
+          "nivel": "exato",
+          "anuncio": "Sabonete Em Barra Dove Original 90G",
+          "url": "https://mercado.carrefour.com.br/shop/busca",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 66.56,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 5.94,
+          "nivel": "exato",
+          "anuncio": "Dove Sabonete em Barra 90g",
+          "url": "https://www.mercadolivre.com.br/dove-sabonete-em-barra-90g/p/MLB20693529",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 66.0,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 5.67,
+          "nivel": "equivalente",
+          "anuncio": "Sabonete em Barra Karité Dove 90g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/sabonete-em-barra-karite-dove-90g/1000015197",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 63.0,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 4.99,
+          "nivel": "equivalente",
+          "anuncio": "Sabonete Dove Branco 90g",
+          "url": "https://www.atacadao.com.br/sabonete-dove-branco-unidade-com-90g-25200-10191/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 55.44,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 3.89,
+          "nivel": "exato",
+          "anuncio": "Sabonete Dove 90g Original",
+          "url": "https://www.spani.com.br/produto/6606/sabonete-dove-90g-original",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 43.22,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "spani",
+        "preco": 3.89
+      },
+      "diferenca_max_min": 3.0
+    },
+    {
+      "id": "pao-forma-pullman-tradicional-480g",
+      "nome": "Pão de forma Pullman tradicional, 480 g",
+      "categoria": "padaria",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 9.39,
+          "nivel": "exato",
+          "anuncio": "Pão de Forma Pullman 480g",
+          "url": "https://mercado.carrefour.com.br/produto/pao-de-forma-pullman-480g-681",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 19.56,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 8.99,
+          "nivel": "exato",
+          "anuncio": "Pão de Forma Tradicional Pullman 480g",
+          "url": "https://www.paodeacucar.com/produto/1944/pao-de-forma-tradicional-pullman-480g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 18.73,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 10.29,
+          "nivel": "exato",
+          "anuncio": "Pão De Forma Tradicional Pullman 480G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 21.44,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 20.52,
+          "nivel": "exato",
+          "anuncio": "Pão de Forma Tradicional Pullman Pacote 480g",
+          "url": "https://www.mercadolivre.com.br/pao-de-forma-tradicional-pullman-pacote-480g-kit-c2-uni/up/MLBU3163325340",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 42.75,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "nao_encontrado"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 7.99,
+          "nivel": "exato",
+          "anuncio": "Pão de Forma Pullman Tradicional 480g",
+          "url": "https://www.atacadao.com.br/pao-de-forma-pullman-tradicional-71620-22295/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 16.65,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 7.99,
+          "nivel": "exato",
+          "anuncio": "Pão De Forma Pullman 480g",
+          "url": "https://www.spani.com.br/produto/5576/pao-de-forma-pullman-480g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 16.65,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 7.99
+      },
+      "diferenca_max_min": 12.53
+    },
+    {
+      "id": "creme-leite-nestle-200g",
+      "nome": "Creme de leite Nestlé, 200 g",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 3.49,
+          "nivel": "exato",
+          "anuncio": "Creme de Leite NESTLÉ 200g",
+          "url": "https://mercado.carrefour.com.br/produto/kit-creme-de-leite-nestle-200g-12-unidades-b2-12-515647-329983420",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 17.45,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 4.49,
+          "nivel": "exato",
+          "anuncio": "Creme de Leite UHT Leve Homogeneizado Nestlé Caixa 200g",
+          "url": "https://www.paodeacucar.com/produto/43804/creme-de-leite-uht-leve-homogeneizado-nestle-caixa-200g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 22.45,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 5.49,
+          "nivel": "exato",
+          "anuncio": "Creme De Leite Nestlé 200G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 27.45,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 3.66,
+          "nivel": "exato",
+          "anuncio": "Creme de leite Nestlé 200g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/creme-de-leite-nestle-200g/1000004986",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 18.3,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 3.99,
+          "nivel": "exato",
+          "anuncio": "Creme de Leite Nestlé 200g",
+          "url": "https://www.atacadao.com.br/creme-de-leite-nestle-21220-27401/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 19.95,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "carrefour",
+        "preco": 3.49
+      },
+      "diferenca_max_min": 2.0
+    },
+    {
+      "id": "limpador-veja-multiuso-500ml",
+      "nome": "Limpador Veja Multiuso (Original ou Gold), 500 ml",
+      "categoria": "limpeza",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 6.98,
+          "nivel": "exato",
+          "anuncio": "Limpador Multiuso Veja Gold Original 500ml",
+          "url": "https://mercado.carrefour.com.br/produto/limpador-multiuso-veja-gold-original-500ml-3180",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 13.96,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 6.99,
+          "nivel": "exato",
+          "anuncio": "Limpador Multiuso Original Veja Gold Squeeze 500ml Grátis 10% de Desconto",
+          "url": "https://www.paodeacucar.com/produto/321143/limpador-multiuso-original-veja-gold-squeeze-500ml-gratis-10-de-desconto",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 13.98,
+          "unidade_medida": "L"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 6.29,
+          "nivel": "exato",
+          "anuncio": "Limpador Multiuso Veja O Original 500ML",
+          "url": "https://mercado.carrefour.com.br/shop/busca",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 12.58,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 4.95,
+          "nivel": "exato",
+          "anuncio": "Limpador Veja Multiuso Gold 500ml Original Squeeze Limpeza",
+          "url": "https://www.mercadolivre.com.br/limpador-veja-multiuso-gold-500ml-original-squeeze-limpeza/p/MLB20290477",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 9.9,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 7.02,
+          "nivel": "exato",
+          "anuncio": "Limpador multi uso original Veja Gold 10% de desconto 500ml",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/limpador-multi-uso-original-veja-gold-10-de-desconto-500ml/1000020296",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 14.04,
+          "unidade_medida": "L"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 3.99,
+          "nivel": "exato",
+          "anuncio": "Limpador Multiuso Veja Gold Original 500ml",
+          "url": "https://www.atacadao.com.br/limpador-multiuso-veja-original-6143-34507/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.98,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 5.49,
+          "nivel": "exato",
+          "anuncio": "Limpador Multiuso Veja 500ml Gold Original",
+          "url": "https://www.spani.com.br/produto/754/limpador-multiuso-veja-500ml-gold-original",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 10.98,
+          "unidade_medida": "L"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 3.99
+      },
+      "diferenca_max_min": 3.03
+    },
+    {
+      "id": "agua-mineral-crystal-sem-gas-1-5l",
+      "nome": "Água mineral Crystal sem gás, 1,5 L",
+      "categoria": "bebidas",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 4.49,
+          "nivel": "equivalente",
+          "anuncio": "Água Mineral sem Gás Crystal 500 ml",
+          "url": "https://mercado.carrefour.com.br/produto/agua-mineral-sem-gas-crystal-500-ml-21",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 8.98,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 3.99,
+          "nivel": "exato",
+          "anuncio": "Água Mineral Natural sem Gás Crystal Garrafa 1,5l",
+          "url": "https://www.paodeacucar.com/produto/99466/agua-mineral-natural-sem-gas-crystal-garrafa-1-5l",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.66,
+          "unidade_medida": "L"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 4.49,
+          "nivel": "exato",
+          "anuncio": "ÁGua Mineral Crystal Sem Gás 1,5L",
+          "url": "https://mercado.carrefour.com.br/agua-mineral-crystal-sem-gas-1-5l/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.99,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 3.73,
+          "nivel": "exato",
+          "anuncio": "Água Mineral sem Gás Crystal 1,5l",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/agua-mineral-sem-gas-crystal-15l/1000007552",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.49,
+          "unidade_medida": "L"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 3.59,
+          "nivel": "exato",
+          "anuncio": "Água Mineral Crystal Sem gás 1,5L",
+          "url": "https://www.atacadao.com.br/agua-mineral-crystal-sem-gas-13490-3501/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 2.39,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 3.59
+      },
+      "diferenca_max_min": 0.9
+    },
+    {
+      "id": "amaciante-comfort-frescor-intenso-1l",
+      "nome": "Amaciante Comfort concentrado Frescor Intenso, 1 L",
+      "categoria": "limpeza",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 25.99,
+          "nivel": "equivalente",
+          "anuncio": "Amaciante Concentrado Comfort Frescor Intenso 900 ml Refil",
+          "url": "https://mercado.carrefour.com.br/produto/amaciante-concentrado-comfort-frescor-intenso-900-ml-refil-9730",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 28.88,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 17.99,
+          "nivel": "exato",
+          "anuncio": "Amaciante de Roupa Concentrado Frescor Intenso Comfort Frasco 1l",
+          "url": "https://www.paodeacucar.com/produto/287859/amaciante-de-roupa-concentrado-frescor-intenso-comfort-frasco-1l",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 17.99,
+          "unidade_medida": "L"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 17.99,
+          "nivel": "equivalente",
+          "anuncio": "Amaciante Concentrado Comfort Frescor Intenso 500ML",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 35.98,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 19.9,
+          "nivel": "exato",
+          "anuncio": "Amaciante Concentrado Comfort Frescor Intenso 1 L",
+          "url": "https://www.mercadolivre.com.br/amaciante-concentrado-comfort-frescor-intenso-1-l/p/MLB16086126",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 19.9,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 16.9,
+          "nivel": "exato",
+          "anuncio": "Amaciante Concentrado Frescor Intenso Comfort 1l",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/amaciante-concentrado-frescor-intenso-comfort-1l/1000016579",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 16.9,
+          "unidade_medida": "L"
+        },
+        "atacadao": {
+          "status": "nao_encontrado"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 10.9,
+          "nivel": "equivalente",
+          "anuncio": "Amaciante Comfort Concentrado 500ml Frescor Intenso",
+          "url": "https://www.spani.com.br/produto/3167/amaciante-comfort-concentrado-500ml-frescor-intenso",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 21.8,
+          "unidade_medida": "L"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "sonda",
+        "preco": 16.9
+      },
+      "diferenca_max_min": 3.0
+    },
+    {
+      "id": "azeite-gallo-extravirgem-500ml",
+      "nome": "Azeite Gallo extravirgem, 500 ml",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 35.48,
+          "nivel": "exato",
+          "anuncio": "Azeite Português Extra Virgem Tradicional Gallo 500ml",
+          "url": "https://mercado.carrefour.com.br/produto/azeite-portugues-extra-virgem-tradicional-gallo-500ml-4346",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 70.96,
+          "unidade_medida": "L"
+        },
+        "paodeacucar": {
+          "status": "nao_encontrado"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 39.9,
+          "nivel": "exato",
+          "anuncio": "Azeite Português Extra Virgem Gallo 500ML",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 79.8,
+          "unidade_medida": "L"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 25.9,
+          "nivel": "exato",
+          "anuncio": "Azeite De Oliva Gallo 500 Ml - Extra Virgem",
+          "url": "https://www.mercadolivre.com.br/azeite-de-oliva-gallo-500-ml-extra-virgem/p/MLB18405766",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 51.8,
+          "unidade_medida": "L"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 29.89,
+          "nivel": "exato",
+          "anuncio": "Azeite de oliva clássico extra virgem Gallo 500ml",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/azeite-de-oliva-classico-extra-virgem-gallo-500ml/1000001853",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 59.78,
+          "unidade_medida": "L"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 29.9,
+          "nivel": "exato",
+          "anuncio": "Azeite de Oliva Gallo Extra Virgem 500ml",
+          "url": "https://www.atacadao.com.br/azeite-de-oliva-gallo-extra-virgem-7082-16464/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 59.8,
+          "unidade_medida": "L"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 26.99,
+          "nivel": "exato",
+          "anuncio": "Azeite Extra Virgem Gallo Vidro 500ml",
+          "url": "https://www.spani.com.br/produto/2803/azeite-extra-virgem-gallo-vidro-500ml",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 53.98,
+          "unidade_medida": "L"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "mercadolivre",
+        "preco": 25.9
+      },
+      "diferenca_max_min": 14.0
+    },
+    {
+      "id": "macarrao-espaguete-renata-500g",
+      "nome": "Macarrão espaguete Renata, 500 g",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "nao_encontrado"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 4.79,
+          "nivel": "exato",
+          "anuncio": "Macarrão de Sêmola com Ovos Espaguete 8 Renata Pacote 500g",
+          "url": "https://www.paodeacucar.com/produto/159771/macarrao-de-semola-com-ovos-espaguete-8-renata-pacote-500g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 9.58,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 5.27,
+          "nivel": "exato",
+          "anuncio": "Macarrão Com Ovos Espaguete Renata 500G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 10.54,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 11.87,
+          "nivel": "equivalente",
+          "anuncio": "Macarrão orgânico espaguete 8 Renata 500g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/macarrao-organico-espaguete-8-renata-500g/1000040854",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 23.74,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 3.69,
+          "nivel": "equivalente",
+          "anuncio": "Macarrão com Ovos Renata Espaguete 500g",
+          "url": "https://www.atacadao.com.br/macarrao-com-ovos-renata-espaguete-7647-1433/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 7.38,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 4.19,
+          "nivel": "exato",
+          "anuncio": "Macarrão Renata Espaguete 8 500g",
+          "url": "https://www.spani.com.br/produto/1505/macarrao-renata-espaguete-8-500g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 8.38,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "spani",
+        "preco": 4.19
+      },
+      "diferenca_max_min": 1.08
+    },
+    {
+      "id": "atum-solido-gomes-da-costa-170g",
+      "nome": "Atum sólido Gomes da Costa, 170 g",
+      "categoria": "mercearia",
+      "precos": {
+        "carrefour": {
+          "status": "nao_encontrado"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 19.99,
+          "nivel": "exato",
+          "anuncio": "Atum Sólido em Azeite de Oliva Gomes da Costa Caixa 170g",
+          "url": "https://www.paodeacucar.com/produto/175093/atum-solido-em-azeite-de-oliva-gomes-da-costa-caixa-170g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 117.59,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 12.99,
+          "nivel": "exato",
+          "anuncio": "Atum Sólido Gomes Da Costa Oleo 170G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 76.41,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 23.35,
+          "nivel": "exato",
+          "anuncio": "Atum Gomes Da Costa Sólido Ao Natural 170g",
+          "url": "https://www.mercadolivre.com.br/atum-gomes-da-costa-solido-ao-natural-170g/up/MLBU3256320465",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 137.35,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 20.89,
+          "nivel": "equivalente",
+          "anuncio": "Atum Sólido ao Natural Gomes da Costa Tuna Pro Lata 135g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/atum-solido-ao-natural-gomes-da-costa-tuna-pro-lata-135g/1000056543",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 154.74,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "nao_encontrado"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 10.49,
+          "nivel": "exato",
+          "anuncio": "Atum Sólido Gomes Da Costa 170g Óleo",
+          "url": "https://www.spani.com.br/produto/2788/atum-solido-gomes-da-costa-170g-oleo",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 61.71,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "spani",
+        "preco": 10.49
+      },
+      "diferenca_max_min": 12.86
+    },
+    {
+      "id": "creme-dental-colgate-maxima-protecao-90g",
+      "nome": "Creme dental Colgate Máxima Proteção, 90 g",
+      "categoria": "higiene",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 6.9,
+          "nivel": "exato",
+          "anuncio": "Creme Dental Colgate Máxima Proteção Anticáries 90g",
+          "url": "https://mercado.carrefour.com.br/produto/creme-dental-colgate-maxima-protecao-anticaries-90g-2014",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 76.67,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 7.99,
+          "nivel": "equivalente",
+          "anuncio": "Creme Dental Menta Refrescante Colgate Máxima Proteção Anticáries Caixa 120g",
+          "url": "https://www.paodeacucar.com/produto/1618391/creme-dental-menta-refrescante-colgate-maxima-protecao-anticaries-caixa-120g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 66.58,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 6.99,
+          "nivel": "exato",
+          "anuncio": "Creme Dental Colgate Máx. Proteção Anticáries 90G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 77.67,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "ok",
+          "preco": 10.73,
+          "nivel": "exato",
+          "anuncio": "Creme Dental Colgate Máxima Proteção Anticáries 90g",
+          "url": "https://www.mercadolivre.com.br/creme-dental-colgate-maxima-protecao-anticaries-90g/up/MLBU1093906540",
+          "vendedor_parceiro": true,
+          "preco_por_unidade": 119.22,
+          "unidade_medida": "kg"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 6.04,
+          "nivel": "exato",
+          "anuncio": "Creme Dental Menta Refrescante Colgate Máxima Proteção Anticáries 90g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/creme-dental-menta-refrescante-colgate-maxima-protecao-anticaries-90g/1000013842",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 67.11,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 4.89,
+          "nivel": "exato",
+          "anuncio": "Creme Dental Colgate Máxima Proteção Anticáries 90g",
+          "url": "https://www.atacadao.com.br/creme-dental-colgate-maxima-protecao-anticaries-12075-28319/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 54.33,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 4.89,
+          "nivel": "exato",
+          "anuncio": "Creme Dental Colgate 90g Máxima Proteção Anticáries",
+          "url": "https://www.spani.com.br/produto/6190/creme-dental-colgate-90g-maxima-protecao-anticaries",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 54.33,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 4.89
+      },
+      "diferenca_max_min": 5.84
+    },
+    {
+      "id": "manteiga-aviacao-com-sal-200g",
+      "nome": "Manteiga Aviação com sal, 200 g",
+      "categoria": "laticínios",
+      "precos": {
+        "carrefour": {
+          "status": "ok",
+          "preco": 14.69,
+          "nivel": "exato",
+          "anuncio": "Manteiga com Sal Aviação Barra 200g",
+          "url": "https://mercado.carrefour.com.br/produto/manteiga-com-sal-aviacao-barra-200g-1800",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 73.45,
+          "unidade_medida": "kg"
+        },
+        "paodeacucar": {
+          "status": "ok",
+          "preco": 16.9,
+          "nivel": "exato",
+          "anuncio": "Manteiga com Sal Aviação Pote 200g",
+          "url": "https://www.paodeacucar.com/produto/6971/manteiga-com-sal-aviacao-pote-200g",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 84.5,
+          "unidade_medida": "kg"
+        },
+        "shopper": {
+          "status": "ok",
+          "preco": 19.59,
+          "nivel": "exato",
+          "anuncio": "Manteiga Com Sal Aviação Pote 200G",
+          "url": null,
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 97.95,
+          "unidade_medida": "kg"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 23.31,
+          "nivel": "exato",
+          "anuncio": "Manteiga com Sal Aviação Lata 200g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/manteiga-com-sal-aviacao-lata-200g/1000011492",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 116.55,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 13.9,
+          "nivel": "exato",
+          "anuncio": "Manteiga Aviação Com sal 200g",
+          "url": "https://www.atacadao.com.br/manteiga-aviacao-com-sal-3674-5054/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 69.5,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "ok",
+          "preco": 15.11,
+          "nivel": "exato",
+          "anuncio": "Manteiga Aviação 200g Com Sal Tablete",
+          "url": "https://www.spani.com.br/produto/5501/manteiga-aviacao-200g-com-sal-tablete",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 75.55,
+          "unidade_medida": "kg"
+        }
+      },
+      "comparavel": true,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 13.9
+      },
+      "diferenca_max_min": 9.41
+    },
+    {
+      "id": "requeijao-itambe-200g",
+      "nome": "Requeijão cremoso Itambé, 200 g",
+      "categoria": "laticínios",
+      "precos": {
+        "carrefour": {
+          "status": "nao_encontrado"
+        },
+        "paodeacucar": {
+          "status": "nao_encontrado"
+        },
+        "shopper": {
+          "status": "nao_encontrado"
+        },
+        "mercadolivre": {
+          "status": "nao_encontrado"
+        },
+        "sonda": {
+          "status": "ok",
+          "preco": 14.62,
+          "nivel": "equivalente",
+          "anuncio": "Requeijão light Itambé Nolac 200g",
+          "url": "https://www.sondadelivery.com.br/delivery/produto/requeijao-light-itambe-nolac-200g/1000013196",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 73.1,
+          "unidade_medida": "kg"
+        },
+        "atacadao": {
+          "status": "ok",
+          "preco": 9.9,
+          "nivel": "exato",
+          "anuncio": "Requeijão Itambé Tradicional 200g",
+          "url": "https://www.atacadao.com.br/requeijao-itambe-tradicional-82685-8228/p",
+          "vendedor_parceiro": false,
+          "preco_por_unidade": 49.5,
+          "unidade_medida": "kg"
+        },
+        "spani": {
+          "status": "nao_encontrado"
+        }
+      },
+      "comparavel": false,
+      "menor_preco": {
+        "mercado": "atacadao",
+        "preco": 9.9
+      }
+    }
+  ],
+  "cestas": {
+    "varejo": {
+      "mercados": [
+        "carrefour",
+        "paodeacucar",
+        "shopper",
+        "mercadolivre"
+      ],
+      "itens": [
+        "arroz-camil-5kg",
+        "feijao-carioca-camil-1kg",
+        "cafe-pilao-tradicional-vacuo-500g",
+        "papel-higienico-neve-toque-da-seda-12",
+        "coca-cola-original-2l",
+        "acucar-refinado-uniao-1kg",
+        "sabonete-dove-original-90g",
+        "pao-forma-pullman-tradicional-480g",
+        "limpador-veja-multiuso-500ml"
+      ],
+      "totais": {
+        "carrefour": 130.54,
+        "paodeacucar": 139.81,
+        "mercadolivre": 143.7,
+        "shopper": 152.13
+      },
+      "diferenca_mais_caro_mais_barato": {
+        "valor": 21.59,
+        "percentual": 16.5
+      }
+    },
+    "atacado": {
+      "mercados": [
+        "atacadao",
+        "spani"
+      ],
+      "itens": [
+        "arroz-camil-5kg",
+        "feijao-carioca-camil-1kg",
+        "cafe-pilao-tradicional-vacuo-500g",
+        "papel-higienico-neve-toque-da-seda-12",
+        "detergente-ype-neutro-500ml",
+        "coca-cola-original-2l",
+        "acucar-refinado-uniao-1kg",
+        "suco-laranja-natural-one-900ml",
+        "pao-forma-pullman-tradicional-480g",
+        "limpador-veja-multiuso-500ml",
+        "azeite-gallo-extravirgem-500ml",
+        "creme-dental-colgate-maxima-protecao-90g",
+        "manteiga-aviacao-com-sal-200g"
+      ],
+      "totais": {
+        "spani": 169.12,
+        "atacadao": 181.73
+      },
+      "diferenca_mais_caro_mais_barato": {
+        "valor": 12.61,
+        "percentual": 7.5
+      }
+    },
+    "todos": {
+      "mercados": [
+        "carrefour",
+        "paodeacucar",
+        "shopper",
+        "mercadolivre",
+        "sonda",
+        "atacadao",
+        "spani"
+      ],
+      "itens": [
+        "arroz-camil-5kg",
+        "feijao-carioca-camil-1kg",
+        "papel-higienico-neve-toque-da-seda-12",
+        "acucar-refinado-uniao-1kg",
+        "limpador-veja-multiuso-500ml"
+      ],
+      "totais": {
+        "spani": 62.47,
+        "atacadao": 68.47,
+        "mercadolivre": 75.67,
+        "sonda": 76.58,
+        "carrefour": 78.28,
+        "paodeacucar": 80.05,
+        "shopper": 85.96
+      },
+      "diferenca_mais_caro_mais_barato": {
+        "valor": 23.49,
+        "percentual": 37.6
+      }
+    }
+  },
+  "cesta_menor_preco": {
+    "itens": 25,
+    "total": 263.85
+  },
+  "notas": [
+    "vendedor_parceiro=true: preço de vendedor de marketplace (Mercado Livre sempre)",
+    "nivel equivalente: versão próxima (outro tamanho ou linha); não entra em totais nem em menor_preco",
+    "Cesta de Sexta: lista final de itens sai qui 12/11 18h; este arquivo pode ser atualizado",
+    "categorias: total só com itens exatos presentes em todos os mercados listados naquela categoria (combinação que cobre mais itens × mercados); vitorias_item_a_item = em quantos itens cada mercado teve o menor preço exato"
+  ],
+  "categorias": {
+    "mercearia": {
+      "itens_na_categoria": 9,
+      "vitorias_item_a_item": {
+        "Spani": 4,
+        "Sonda": 2,
+        "Carrefour": 2,
+        "Mercado Livre": 1
+      },
+      "cesta": {
+        "itens": [
+          "Arroz branco Camil tipo 1, 5 kg",
+          "Feijão carioca Camil, 1 kg",
+          "Café Pilão tradicional a vácuo, 500 g",
+          "Açúcar refinado União, 1 kg",
+          "Azeite Gallo extravirgem, 500 ml"
+        ],
+        "totais": {
+          "Spani": 82.57,
+          "Atacadão": 93.39,
+          "Carrefour": 97.88,
+          "Mercado Livre": 99.71,
+          "Shopper": 122.57
+        },
+        "menor_total": "Spani",
+        "diferenca": {
+          "valor": 40.0,
+          "percentual": 48.4
+        }
+      }
+    },
+    "laticínios": {
+      "itens_na_categoria": 4,
+      "vitorias_item_a_item": {
+        "Atacadão": 2,
+        "Sonda": 1
+      },
+      "cesta": {
+        "itens": [
+          "Iogurte natural integral Danone, 160 g",
+          "Manteiga Aviação com sal, 200 g"
+        ],
+        "totais": {
+          "Atacadão": 18.19,
+          "Carrefour": 18.38,
+          "Pão de Açúcar": 21.79,
+          "Sonda": 26.9
+        },
+        "menor_total": "Atacadão",
+        "diferenca": {
+          "valor": 8.71,
+          "percentual": 47.9
+        }
+      }
+    },
+    "higiene": {
+      "itens_na_categoria": 3,
+      "vitorias_item_a_item": {
+        "Sonda": 1,
+        "Spani": 1,
+        "Atacadão": 1
+      },
+      "cesta": {
+        "itens": [
+          "Papel higiênico Neve Toque da Seda folha dupla, 12 rolos",
+          "Sabonete Dove Original, 90 g",
+          "Creme dental Colgate Máxima Proteção, 90 g"
+        ],
+        "totais": {
+          "Spani": 33.68,
+          "Mercado Livre": 40.17,
+          "Shopper": 45.88,
+          "Carrefour": 46.18
+        },
+        "menor_total": "Spani",
+        "diferenca": {
+          "valor": 12.5,
+          "percentual": 37.1
+        }
+      }
+    },
+    "limpeza": {
+      "itens_na_categoria": 5,
+      "vitorias_item_a_item": {
+        "Shopper": 1,
+        "Mercado Livre": 1,
+        "Atacadão": 1,
+        "Sonda": 1
+      },
+      "cesta": {
+        "itens": [
+          "Detergente Ypê neutro, 500 ml",
+          "Sabão líquido Omo Lavagem Perfeita, 3 L",
+          "Limpador Veja Multiuso (Original ou Gold), 500 ml"
+        ],
+        "totais": {
+          "Mercado Livre": 45.29,
+          "Shopper": 63.57,
+          "Atacadão": 71.58
+        },
+        "menor_total": "Mercado Livre",
+        "diferenca": {
+          "valor": 26.29,
+          "percentual": 58.0
+        }
+      }
+    },
+    "bebidas": {
+      "itens_na_categoria": 3,
+      "vitorias_item_a_item": {
+        "Pão de Açúcar": 1,
+        "Spani": 1,
+        "Atacadão": 1
+      },
+      "cesta": {
+        "itens": [
+          "Coca-Cola original, 2 L",
+          "Suco de laranja Natural One, 900 ml"
+        ],
+        "totais": {
+          "Spani": 25.49,
+          "Pão de Açúcar": 25.98,
+          "Atacadão": 25.99,
+          "Carrefour": 29.78,
+          "Shopper": 31.58
+        },
+        "menor_total": "Spani",
+        "diferenca": {
+          "valor": 6.09,
+          "percentual": 23.9
+        }
+      }
+    },
+    "padaria": {
+      "itens_na_categoria": 1,
+      "vitorias_item_a_item": {
+        "Atacadão": 1
+      }
+    }
+  }
+}
