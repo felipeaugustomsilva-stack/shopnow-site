@@ -192,6 +192,21 @@ h1{font-size:clamp(38px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spac
 .cs-itens .ip{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .cs-itens .ip small{display:block;font-size:12px;font-weight:500;color:var(--tx3);white-space:normal}
 .cs-itens .indisp{color:var(--tx3);font-style:italic;font-weight:600}
+.pi-cat{border:1px solid var(--track);border-radius:16px;background:var(--card, #fff);margin-top:12px;padding:0 16px}
+.pi-cat summary{min-height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;list-style:none;padding:8px 0}
+.pi-cat summary::-webkit-details-marker{display:none}
+.pi-cat summary::after{content:"";flex:none;width:8px;height:8px;border-right:2px solid var(--ac);border-bottom:2px solid var(--ac);transform:rotate(45deg);margin:-4px 0 0 4px}
+.pi-cat[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+.pi-ct{min-width:0;flex:1}
+.pi-ct b{display:block;font-size:17px;font-weight:800}
+.pi-ct small{display:block;font-size:13px;color:var(--tx3)}
+.pi-lista{border-top:1px solid var(--track)}
+.pi-lista li{padding:12px 0;border-bottom:1px solid var(--track)}
+.pi-lista li:last-child{border-bottom:0}
+.pi-l1{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;font-size:15px}
+.pi-l1 .pv{text-align:right;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.pi-l2{display:block;margin-top:2px;font-size:13px;color:var(--tx3)}
+.pi-l2 em{font-style:normal;color:var(--ac);font-weight:700}
 .cs-inc-t{font-size:18px;font-weight:800;margin-top:8px}
 @media (max-width:640px){
  .topo{padding-top:12px;padding-bottom:20px;gap:20px}
@@ -224,6 +239,12 @@ h1{font-size:clamp(38px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spac
 <section id="cesta" class="w sec" aria-label="Ranking da Cesta de Sexta" hidden>
   <div class="cs-abas" id="cs-abas" role="tablist" aria-label="Tipo de mercado"></div>
   <div id="cs-painel" role="tabpanel" tabindex="-1"></div>
+</section>
+
+<section id="por-item" class="w sec" aria-labelledby="pi-t" hidden>
+  <h2 id="pi-t" class="cs-inc-t">Item por item</h2>
+  <p class="cs-sub" id="pi-sub"></p>
+  <div id="pi-lista"></div>
 </section>
 
 <section id="ml-baratos" class="w sec" aria-labelledby="mlb-t">
@@ -1729,6 +1750,27 @@ renderPresentes(PRESENTES, AVISO_AFILIADO);
     $('cesta').hidden = false;
   }
 
+  function nomeCat(c){ return c.charAt(0).toUpperCase() + c.slice(1); }
+  function tagM(m){ return esc(m.nome) + (m.parceiro ? ' (vendedor parceiro)' : ''); }
+  function porItem(modelo){
+    var cats = modelo.porItem || [];
+    if (!cats.length) return;
+    var q = modelo.cestas[Object.keys(modelo.cestas)[0]].momento;
+    $('pi-sub').textContent = 'Onde cada item saiu mais barato na coleta de ' + dm(q) + '.';
+    $('pi-lista').innerHTML = cats.map(function(c, i){
+      var res = c.itens.length + (c.itens.length === 1 ? ' item' : ' itens');
+      if (c.total && !c.total.empate) res = 'Cesta de ' + res + ' mais barata no ' + tagM(c.total.vencedor) + ' · ' + fmt(c.total.vencedor.centavos);
+      var li = c.itens.map(function(it){
+        var venc = it.vencedores.map(tagM).join(' ou ');
+        var l2 = it.maisCaro ? 'mais caro: ' + esc(it.maisCaro.nome) + ' ' + fmt(it.maisCaro.centavos) : 'mesmo preço em ' + it.n + ' mercados';
+        return '<li><div class="pi-l1"><span>' + esc(it.nome) + '</span><span class="pv">' + fmt(it.centavos) + '</span></div>' +
+          '<span class="pi-l2"><em>' + venc + '</em> · ' + l2 + '</span></li>';
+      }).join('');
+      return '<details class="pi-cat"' + (i === 0 ? ' open' : '') + '><summary><span class="pi-ct"><b>' + esc(nomeCat(c.categoria)) + '</b><small>' + res + '</small></span></summary><ul class="pi-lista">' + li + '</ul></details>';
+    }).join('');
+    $('por-item').hidden = false;
+  }
+
   function primeira(){
     $('cs-hero').innerHTML = '<p class="cs-rot">Em breve</p><p class="cs-nome">A primeira Cesta de Sexta sai dia 13</p>' +
       '<p class="cs-frase">Toda sexta a gente coleta os preços da mesma lista de itens em vários mercados e mostra o total de cada um.</p>';
@@ -1751,6 +1793,7 @@ renderPresentes(PRESENTES, AVISO_AFILIADO);
     if (r.erros.length) return conferindo(r.erros);
     if (r.avisos.length) console.warn('[cesta-de-sexta] ' + r.avisos.join(' | '));
     mostrarCesta(r.modelo);
+    porItem(r.modelo);
   }).catch(function(e){ conferindo(['não foi possível ler ' + ARQUIVO + ' (' + e.message + ')']); });
 })();
 </script>

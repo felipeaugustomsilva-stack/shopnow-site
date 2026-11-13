@@ -251,11 +251,51 @@
     });
     if (!erros.length && !Object.keys(modelo.cestas).length) erros.push('o arquivo não tem cestas.varejo nem cestas.atacado');
     if (erros.length) return { erros: erros, avisos: avisos, modelo: null };
+    try { modelo.porItem = porItem(d); } catch (e) { modelo.porItem = []; }
     return { erros: [], avisos: avisos, modelo: modelo };
+  }
+
+  /* Visão "item por item": para cada item comparável, o mercado de menor preço EXATO (empate lista todos) e o mais caro.
+     Itens agrupam por categoria. Total por categoria só com 3 ou mais itens e só entre mercados que têm TODOS os itens dela. */
+  function porItem(d) {
+    var nomes = {}, fis = {}, saida = [], cats = {};
+    (Array.isArray(d.mercados) ? d.mercados : []).forEach(function (m) { if (m && m.id) nomes[m.id] = m.nome || m.id; });
+    (Array.isArray(d.itens) ? d.itens : []).forEach(function (it) {
+      if (!it || !it.id || it.comparavel === false || !it.precos) return;
+      var linhas = [];
+      Object.keys(it.precos).forEach(function (id) {
+        var p = it.precos[id];
+        if (!p || p.status !== 'ok' || p.nivel !== 'exato' || typeof p.preco !== 'number' || !(p.preco > 0) || !nomes[id]) return;
+        linhas.push({ id: id, nome: nomes[id], centavos: Math.round(p.preco * 100), parceiro: id === 'mercadolivre' || p.vendedor_parceiro === true, fisico: !!FISICOS[id] });
+      });
+      if (linhas.length < 2) return;
+      linhas.sort(function (a, b) { return a.centavos - b.centavos; });
+      var menor = linhas[0].centavos, maior = linhas[linhas.length - 1];
+      var cat = String(it.categoria || 'outros');
+      (cats[cat] = cats[cat] || []).push({
+        nome: it.nome || it.id, k: it.id,
+        vencedores: linhas.filter(function (l) { return l.centavos === menor; }),
+        centavos: menor, maisCaro: maior.centavos === menor ? null : maior, n: linhas.length, linhas: linhas
+      });
+    });
+    Object.keys(cats).forEach(function (cat) {
+      var itens = cats[cat], total = null;
+      if (itens.length >= 3) {
+        var soma = {}, quem = {};
+        itens.forEach(function (it) { it.linhas.forEach(function (l) { soma[l.id] = (soma[l.id] || 0) + l.centavos; quem[l.id] = (quem[l.id] || 0) + 1; quem['n_' + l.id] = l; }); });
+        var comp = Object.keys(soma).filter(function (id) { return quem[id] === itens.length; })
+          .map(function (id) { return { id: id, nome: nomes[id], centavos: soma[id], parceiro: quem['n_' + id].parceiro, fisico: quem['n_' + id].fisico }; })
+          .sort(function (a, b) { return a.centavos - b.centavos; });
+        if (comp.length >= 2) total = { vencedor: comp[0], mercados: comp.length, empate: comp[1].centavos === comp[0].centavos };
+      }
+      saida.push({ categoria: cat, itens: itens, total: total });
+    });
+    saida.sort(function (a, b) { return b.itens.length - a.itens.length || (a.categoria < b.categoria ? -1 : 1); });
+    return saida;
   }
 
   /* Dias inteiros entre a coleta e agora (ms em UTC). */
   function idadeDias(momento, agoraMs) { return Math.floor((agoraMs - momento.ms) / 86400000); }
 
-  return { COLUNAS: COLUNAS, OPCIONAIS: OPCIONAIS, CESTAS: CESTAS, MINIMO_RANKING: MINIMO_RANKING, lerCsv: lerCsv, ler: ler, lerJson: lerJson, centavosDe: centavosDe, momentoValido: momentoValido, idadeDias: idadeDias };
+  return { COLUNAS: COLUNAS, OPCIONAIS: OPCIONAIS, CESTAS: CESTAS, MINIMO_RANKING: MINIMO_RANKING, lerCsv: lerCsv, ler: ler, lerJson: lerJson, porItem: porItem, centavosDe: centavosDe, momentoValido: momentoValido, idadeDias: idadeDias };
 });
