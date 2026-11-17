@@ -221,7 +221,9 @@
       instagram: { ct: 'instagram', medium: 'social' },
       facebook: { ct: 'Facebook', medium: 'social' },
       status: { ct: 'status-whatsapp', medium: 'whatsapp' },
-      crm: { ct: 'crm', medium: 'crm' }
+      crm: { ct: 'crm', medium: 'crm' },
+      push: { ct: 'push', medium: 'push' },
+      email: { ct: 'email', medium: 'email' }
     };
     var c = new URLSearchParams(window.location.search).get('c');
     c = c ? c.trim().toLowerCase() : '';
