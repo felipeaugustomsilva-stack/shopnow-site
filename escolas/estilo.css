@@ -19,6 +19,8 @@
   --warn-dim: #FFF6E0;
   --warn-border: #F0DDA8;
   --warn-text: #6B4E00;
+  --info: #1F5E8C;
+  --info-dim: #E4F0FA;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -41,6 +43,8 @@
     --warn-dim: #3A2F10;
     --warn-border: #6B5A20;
     --warn-text: #F4D98B;
+    --info: #8CC4F0;
+    --info-dim: #12263A;
   }
 }
 
@@ -96,7 +100,7 @@ legend, .rotulo { font-size: 15px; font-weight: 600; padding: 0; margin-bottom: 
 .campo { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-2); min-width: 0; }
 .campo.forte { font-size: 15px; font-weight: 600; color: var(--text); }
 .campo.forte .peq { font-weight: 500; }
-input[type=text], input[type=email], input[type=search], select {
+input[type=text], input[type=email], input[type=search], input[type=number], select {
   height: 44px; width: 100%; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text);
   font: inherit; font-size: 16px; font-weight: 500; padding: 0 12px;
 }
@@ -164,6 +168,122 @@ label.arquivo input { position: absolute; width: 1px; height: 1px; opacity: 0; o
 .nao-achada { max-width: 480px; display: flex; flex-direction: column; gap: 14px; padding-top: 8px; }
 .nao-achada h1 { font-size: 22px; }
 
+/* ---- /escolas/: turmas do pedido ---- */
+.turmas-cab { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.turmas-cab .rotulo { margin: 0; }
+.turma { border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.turma.erro { border: 1.5px solid var(--err); }
+.turma-cab { display: flex; align-items: center; justify-content: space-between; font-weight: 600; min-height: 32px; }
+.turma-cab .icone { width: 44px; height: 44px; }
+.turma .erro-turma { font-size: 12px; color: var(--err); }
+.turma-ok { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 10px 14px; }
+.turma-ok .t { flex: 1; min-width: 0; }
+.mais-arquivo { min-height: 44px; border: 1.5px dashed var(--border-2); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--accent); cursor: pointer; text-align: center; }
+.mais-arquivo input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+.mais-arquivo:focus-within { outline: 2px solid var(--accent); outline-offset: 2px; }
+.mais-arquivo.sobre { border-color: var(--accent); background: var(--accent-dim); }
+.btn.add { color: var(--accent); font-weight: 600; font-size: 15px; border-color: var(--border-2); }
+.btn.add[disabled] { display: none; }
+.travado { display: flex; align-items: center; gap: 10px; border: 1px solid var(--border); background: var(--bg); border-radius: 10px; padding: 8px 12px; color: var(--text-2); }
+.travado .t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.travado .sub { font-size: 12px; }
+.andamento { display: flex; flex-direction: column; gap: 10px; }
+.linha-and { display: flex; align-items: center; gap: 12px; border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 10px 14px; }
+.linha-and.ativa { border: 1.5px solid var(--accent); }
+.linha-and .t { flex: 1; min-width: 0; }
+.linha-and .estado { font-size: 12px; color: var(--text-2); }
+.linha-and.ativa .estado { color: var(--accent); }
+.bola { flex: none; width: 22px; height: 22px; border-radius: 11px; display: flex; align-items: center; justify-content: center; font-size: 13px; border: 2px solid var(--border-2); }
+.bola.ok { border: 0; background: var(--ok-dim); color: var(--ok); }
+.bola.gira { border-color: var(--accent); border-top-color: var(--accent-dim); animation: gira 1s linear infinite; }
+@keyframes gira { to { transform: rotate(360deg); } }
+.lista-recebida { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 6px 14px; display: flex; flex-direction: column; }
+.lista-recebida span { padding: 8px 0; }
+.lista-recebida span + span { border-top: 1px solid var(--border); }
+
+/* ---- selos (lista pública) ---- */
+.selo.shopnow { background: var(--info-dim); color: var(--info); }
+
+/* ---- /revisao-escola/ ---- */
+.rv { max-width: 760px; display: flex; flex-direction: column; gap: 18px; }
+.rv.larga { max-width: 1120px; }
+.rv h1 { font-size: 26px; }
+.rv .tag { color: var(--text-2); font-size: 13px; }
+.faixa { border-radius: 12px; padding: 10px 14px; }
+.faixa.prazo { background: var(--warn-dim); border: 1px solid var(--warn-border); color: var(--warn-text); }
+.faixa.auto { background: var(--accent-dim); border: 1px solid var(--border-2); display: flex; flex-direction: column; gap: 4px; }
+.faixa.auto span { font-size: 13px; color: var(--text-2); }
+.rv-cards { display: flex; flex-direction: column; gap: 10px; list-style: none; }
+.rv-card { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 56px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+.rv-card:hover { border-color: var(--border-2); }
+.rv-card[disabled] { cursor: default; opacity: .75; }
+.rv-card .t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.rv-card .t strong { font-weight: 600; }
+.rv-card .t span { font-size: 12px; color: var(--text-2); }
+.chip { font-size: 12px; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.chip.rev { background: var(--accent-dim); color: var(--accent); }
+.chip.ok { background: var(--ok-dim); color: var(--ok); }
+.chip.sn { background: var(--info-dim); color: var(--info); }
+.chip.nao { background: var(--bg); color: var(--text-2); border: 1px solid var(--border); }
+.cartao-msg { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.cartao-msg > strong { font-weight: 600; }
+.msg-box { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; font-size: 13px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; }
+.msg-acoes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.msg-acoes .btn { min-height: 48px; font-size: 15px; padding: 0 8px; }
+.confirma { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.confirma strong { font-weight: 600; }
+.btn.perigo { background: var(--err); border-color: var(--err); color: #fff; font-weight: 600; }
+.btn.texto { border: 0; background: transparent; color: var(--text-2); }
+.link-suave { font-size: 13px; color: var(--text-2); min-height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: 0; font-family: inherit; cursor: pointer; }
+.rv-ed { display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start; }
+.rv-ed .col { flex: 3 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.rv-ed aside { flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; position: sticky; top: 16px; }
+.rv-ed aside .peq { color: var(--text-2); }
+.itens-ed { list-style: none; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; }
+.itens-ed > li { padding: 10px 12px; }
+.itens-ed > li + li { border-top: 1px solid var(--border); }
+.it-linha { display: flex; align-items: center; gap: 10px; }
+.it-linha .t { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.it-linha .t span + span { font-size: 12px; color: var(--text-2); }
+.it-linha .q, .stepper { display: flex; align-items: center; border: 1px solid var(--border); border-radius: 10px; }
+.stepper button { width: 32px; height: 40px; border: 0; background: transparent; color: var(--accent); font: inherit; font-size: 18px; cursor: pointer; }
+.stepper button:first-child { color: var(--text-2); }
+.stepper b { min-width: 22px; text-align: center; font-weight: 600; }
+.it-edit { background: var(--accent-dim); margin: -10px -12px; padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.it-edit .grade { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 10px; }
+.it-edit label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--text-2); }
+.it-edit input, .it-edit select { height: 44px; }
+.it-edit .acoes-ed { display: flex; justify-content: space-between; align-items: center; }
+.it-edit .acoes-ed .perigo-t { min-height: 44px; border: 0; background: transparent; color: var(--err); font: inherit; font-size: 15px; cursor: pointer; }
+.it-edit .acoes-ed .pronto { min-height: 44px; padding: 0 18px; border-radius: 10px; border: 0; background: var(--accent); color: var(--on-accent); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; }
+.it-edit .erro-campo { margin-top: -4px; }
+.btn.tracejado { border: 1.5px dashed var(--border-2); background: transparent; color: var(--accent); align-self: flex-start; min-height: 44px; font-size: 15px; }
+.barra-acoes { display: flex; flex-direction: column; gap: 8px; }
+.barra-acoes .btn { min-height: 44px; font-size: 14px; }
+.barra-acoes .btn.cheio { min-height: 52px; font-size: 16px; }
+.barra-acoes .par { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cab-ed { display: flex; flex-direction: column; gap: 4px; }
+.cab-ed .tag { color: var(--text-2); font-size: 13px; }
+.salvo { font-size: 12px; color: var(--ok); }
+
+/* ---- /escola/ em celular sem o app ---- */
+.cel-link { max-width: 480px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 16px; display: flex; flex-direction: column; gap: 14px; }
+.cel-link .cab { display: flex; flex-direction: column; gap: 2px; }
+.cel-link .cab strong { font-size: 18px; font-weight: 600; line-height: 1.3; }
+.nota-pc { padding: 10px 12px; border-radius: 10px; background: var(--accent-dim); color: var(--text); }
+
+@media (min-width: 900px) {
+  .it-desk { display: grid; grid-template-columns: 90px minmax(0, 2fr) 110px minmax(0, 2fr) 44px; gap: 12px; align-items: center; }
+  .itens-ed .cab-tab { display: grid; grid-template-columns: 90px minmax(0, 2fr) 110px minmax(0, 2fr) 44px; gap: 12px; padding: 10px 16px; font-size: 12px; color: var(--text-2); border-bottom: 1px solid var(--border); }
+}
+@media (max-width: 899px) {
+  .itens-ed .cab-tab { display: none; }
+  .rv-ed aside { position: fixed; left: 0; right: 0; bottom: 0; top: auto; border-radius: 0; border-width: 1px 0 0; z-index: 5; padding: 12px 16px; gap: 8px; }
+  .rv-ed aside .so-desk { display: none; }
+  .rv-ed { padding-bottom: 170px; }
+}
+@media (min-width: 900px) { .so-cel { display: none; } }
+
 @media (max-width: 640px) {
   main { padding: 24px 16px 40px; }
   .topo .in, .rodape .in { padding-left: 16px; padding-right: 16px; }
@@ -180,3 +300,25 @@ label.arquivo input { position: absolute; width: 1px; height: 1px; opacity: 0; o
   .grupo .e { grid-column: 2; margin-top: -6px; }
   .grupo .e:empty { display: none; }
 }
+
+/* ---- /revisao-escola/: complementos ---- */
+main.larga { max-width: 1160px; }
+.itens-ed ul { list-style: none; }
+.itens-ed ul > li { padding: 10px 12px; }
+.itens-ed ul > li + li { border-top: 1px solid var(--border); }
+.it-linha .icone { font-size: 18px; }
+.it-desk { padding: 2px 4px; }
+.it-desk .icone { font-size: 17px; }
+.it-desk input[type=text], .it-desk input[type=number], .it-desk select { height: 40px; font-size: 15px; padding: 0 8px; }
+.it-desk .d { color: var(--text-2); font-size: 13px; overflow-wrap: anywhere; }
+.it-desk .q { font-weight: 600; color: var(--accent); }
+.rv-vazio { text-align: center; padding: 28px 0; }
+.rv .cab { display: flex; flex-direction: column; gap: 4px; }
+.rv h2 { font-size: 20px; font-weight: 600; line-height: 1.25; }
+.rv .centro { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+@media (min-width: 900px) {
+  .barra-acoes .par { grid-template-columns: minmax(0, 1fr); }
+  .it-desk .nome-c { overflow-wrap: anywhere; }
+}
+
+.aside-topo { display: flex; flex-direction: column; gap: 6px; }

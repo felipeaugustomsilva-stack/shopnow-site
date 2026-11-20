@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Envie a lista de material da sua escola · ShopNow</title>
-<meta name="description" content="Escolas: envie a lista de material escolar em PDF ou foto. Conferimos e mandamos o link para divulgar às famílias, que montam a lista no app ShopNow.">
+<title>Envie as listas de material da sua escola · ShopNow</title>
+<meta name="description" content="Escolas: envie as listas de material escolar em PDF ou foto. Conferimos, a escola revisa e aprova, e as famílias montam a lista no app ShopNow.">
 <link rel="icon" type="image/png" href="/icon.png">
 <link rel="apple-touch-icon" href="/icon.png">
 <link rel="canonical" href="https://shopnowapp.com.br/escolas/">
@@ -21,10 +21,10 @@
   <div id="envio" class="envio">
     <div class="intro">
       <span class="tag">Para escolas</span>
-      <h1>Envie a lista de material</h1>
+      <h1>Envie as listas de material</h1>
       <ol class="passos">
-        <li><span class="n" aria-hidden="true">1</span><span>Envie a lista em PDF ou foto.</span></li>
-        <li><span class="n" aria-hidden="true">2</span><span>Conferimos e mandamos o link para divulgar às famílias.</span></li>
+        <li><span class="n" aria-hidden="true">1</span><span>Envie as listas em PDF ou foto.</span></li>
+        <li><span class="n" aria-hidden="true">2</span><span>Conferimos e mandamos um link para a escola revisar e aprovar.</span></li>
         <li><span class="n" aria-hidden="true">3</span><span>As famílias montam a lista no app e dividem a compra.</span></li>
       </ol>
     </div>
@@ -58,38 +58,21 @@
         <span id="e-escola" class="erro-campo" role="alert" hidden></span>
       </fieldset>
 
-      <div class="pares">
-        <label class="campo forte">Série
-          <select id="serie" name="serie_id" required aria-describedby="e-serie"></select>
-          <span id="e-serie" class="erro-campo" role="alert" hidden></span>
-        </label>
-        <div class="campo forte">Ano letivo
-          <span id="ano-letivo" class="ano-fixo"></span>
-        </div>
-      </div>
-      <div id="serie-livre" class="campo forte" hidden>
-        <label for="serie-texto">Qual série?</label>
-        <input id="serie-texto" type="text" maxlength="40" placeholder="Ex.: Maternal III" aria-describedby="e-serie-texto">
-        <span id="e-serie-texto" class="erro-campo" role="alert" hidden></span>
-      </div>
-
-      <div>
-        <span class="rotulo" id="rot-lista" style="display:block">Lista</span>
-        <ul id="arquivos" class="arquivos" aria-labelledby="rot-lista"></ul>
-        <label id="solta" class="arquivo" style="margin-top:8px">
-          <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
-          <span><span class="acao">Escolha os arquivos</span><span id="arraste"> ou arraste aqui</span></span>
-          <span class="peq">PDF ou foto · até 3 · 10 MB cada</span>
-          <input id="arq" type="file" accept="application/pdf,image/*" multiple>
-        </label>
-        <span id="e-arq" class="erro-campo" role="alert" hidden></span>
-      </div>
-
       <label class="campo forte">E-mail da escola
         <input id="email" type="email" name="email" inputmode="email" autocomplete="email" placeholder="secretaria@escola.com.br" maxlength="254" aria-describedby="e-email">
-        <span class="peq">Para avisar quando a lista for publicada.</span>
+        <span class="peq">Para mandar o link de revisão das listas.</span>
         <span id="e-email" class="erro-campo" role="alert" hidden></span>
       </label>
+
+      <div class="turmas-cab">
+        <span class="rotulo" id="rot-turmas">Turmas · <span id="ano-letivo"></span></span>
+        <span class="peq" id="conta-turmas"></span>
+      </div>
+      <div id="turmas" style="display:flex;flex-direction:column;gap:14px" aria-labelledby="rot-turmas"></div>
+      <button type="button" id="add-turma" class="btn add">+ Adicionar outra série</button>
+      <span id="e-turmas" class="erro-campo" role="alert" hidden></span>
+
+      <div id="andamento" class="andamento" hidden></div>
 
       <!-- Armadilha para robô: pessoa nunca vê nem preenche. -->
       <div class="honey" aria-hidden="true"><label>Não preencha<input id="honey" type="text" name="site_escola" tabindex="-1" autocomplete="off"></label></div>
@@ -106,18 +89,15 @@
 
   <div id="fechado" class="fechado" hidden style="max-width:520px">
     <strong>Envio fechado no momento</strong>
-    <span class="suave">Para mandar a lista agora, escreva para <a href="mailto:contato@shopnowapp.com.br">contato@shopnowapp.com.br</a>.</span>
+    <span class="suave">Para mandar as listas agora, escreva para <a href="mailto:contato@shopnowapp.com.br">contato@shopnowapp.com.br</a>.</span>
   </div>
 
   <div id="recebido" class="recebido" hidden>
     <div class="ok-icone"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div>
-    <h1>Recebemos a lista</h1>
-    <p class="suave">Vamos conferir. Quando ela for publicada, mandamos o link para <span id="recebido-email"></span>.</p>
-    <div class="nota-email">
-      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
-      <span>Confirme o e-mail pelo link que enviamos. A lista confirmada sai com o selo <strong style="font-weight:600">Enviada pela escola</strong>.</span>
-    </div>
-    <button id="outra" type="button" class="btn">Enviar outra série</button>
+    <h1 id="recebido-titulo">Recebemos a lista</h1>
+    <p class="suave" id="recebido-texto"></p>
+    <div id="recebido-lista" class="lista-recebida"></div>
+    <button id="mais" type="button" class="btn">Enviar mais turmas</button>
   </div>
 </main>
 
@@ -140,7 +120,7 @@
   // Chave pública do widget "ShopNow escolas" (Cloudflare); em localhost, a chave de teste que sempre passa.
   var SITEKEY = LOCAL ? '1x00000000000000000000AA' : '0x4AAAAAAF5Mz7_2BrAML6xD';
 
-  var MAX_ARQ = 3, MAX_BYTES = 10 * 1024 * 1024, LADO = 1568;
+  var MAX_ARQ = 3, MAX_BYTES = 10 * 1024 * 1024, LADO = 1568, MAX_TURMAS = 10;
   var UFS = ['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO'];
   var SERIES = [['bercario','Berçário'],['maternal_1','Maternal I'],['maternal_2','Maternal II'],['jardim_1','Jardim I'],['jardim_2','Jardim II'],['pre','Pré'],
     ['ef_1','1º ano'],['ef_2','2º ano'],['ef_3','3º ano'],['ef_4','4º ano'],['ef_5','5º ano'],['ef_6','6º ano'],['ef_7','7º ano'],['ef_8','8º ano'],['ef_9','9º ano'],
@@ -157,15 +137,17 @@
   var anoAtual = ano();
   // De outubro em diante as listas são do ano seguinte; antes, do ano em curso.
   var anoPadrao = new Date(Date.now() - 3 * 3600 * 1000).getUTCMonth() >= 9 ? anoAtual + 1 : anoAtual;
-  var estado = { uf: '', municipio: '', cidadeNome: '', escolaId: '', escolaEscolhida: null, ano: anoPadrao, arquivos: [], cidades: [], escolas: [], enviando: false, tokenTurnstile: '', widget: null };
+  var estado = {
+    uf: '', municipio: '', cidadeNome: '', escolaId: '', escolaEscolhida: null, ano: anoPadrao,
+    cidades: [], escolas: [], enviando: false, tokenTurnstile: '', widget: null,
+    pedido: null,      // { id, token } depois do `iniciar`
+    turmas: [], seq: 0, faltaFinalizar: false, emailEnviado: ''
+  };
 
   // ---- selects ----
-  var selUf = $('uf'), selSerie = $('serie');
+  var selUf = $('uf');
   selUf.appendChild(new Option('UF', ''));
   UFS.forEach(function (u) { selUf.appendChild(new Option(u, u)); });
-  selSerie.appendChild(new Option('Escolha a série', ''));
-  SERIES.forEach(function (s) { selSerie.appendChild(new Option(s[1], s[0])); });
-  selSerie.appendChild(new Option('Outra (informar)', 'outra'));
   $('ano-letivo').textContent = String(estado.ano);  // um só ano, sem escolha: a lista é sempre do próximo período letivo
 
   // ---- Firestore (REST, sem login: a regra libera o get da base de escolas) ----
@@ -274,22 +256,22 @@
     if (!lEscola.contains(ev.target) && ev.target !== inEscola) esconder(lEscola);
   });
 
-  // ---- arquivos ----
-  var inArq = $('arq'), lArq = $('arquivos'), solta = $('solta');
+  // ---- arquivos de uma turma ----
   function tamanhoTexto(b) { return b >= 1048576 ? (b / 1048576).toFixed(1).replace('.', ',') + ' MB' : Math.max(1, Math.round(b / 1024)) + ' KB'; }
-  function redesenharArquivos() {
-    lArq.textContent = '';
-    estado.arquivos.forEach(function (a, i) {
+  function icoX() { return '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>'; }
+  function redesenharArquivos(t) {
+    var u = t.ui;
+    u.lista.textContent = '';
+    t.arquivos.forEach(function (a, i) {
       var li = el('li', a.erro ? 'erro' : '');
-      var t = el('span', 't'); t.appendChild(el('span', 'nome', a.nome));
-      t.appendChild(a.erro ? el('span', 'erro-t', a.erro) : el('span', 'peq', (a.tipo === 'pdf' ? 'PDF' : 'Foto') + ' · ' + tamanhoTexto(a.blob.size)));
-      var x = el('button', 'icone'); x.type = 'button'; x.setAttribute('aria-label', 'Tirar ' + a.nome);
-      x.innerHTML = '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
-      x.addEventListener('click', function () { estado.arquivos.splice(i, 1); redesenharArquivos(); });
-      li.appendChild(t); li.appendChild(x); lArq.appendChild(li);
+      var tt = el('span', 't'); tt.appendChild(el('span', 'nome', a.nome));
+      tt.appendChild(a.erro ? el('span', 'erro-t', a.erro) : el('span', 'peq', (a.tipo === 'pdf' ? 'PDF' : 'Foto') + ' · ' + tamanhoTexto(a.blob.size)));
+      var x = el('button', 'icone'); x.type = 'button'; x.setAttribute('aria-label', 'Tirar ' + a.nome); x.innerHTML = icoX();
+      x.addEventListener('click', function () { t.arquivos.splice(i, 1); redesenharArquivos(t); });
+      li.appendChild(tt); li.appendChild(x); u.lista.appendChild(li);
     });
-    var cheio = estado.arquivos.length >= MAX_ARQ;
-    solta.hidden = cheio;
+    u.mais.hidden = t.arquivos.length >= MAX_ARQ;
+    u.mais.firstChild.textContent = t.arquivos.length ? '+ PDF ou foto' : 'Escolha o PDF ou a foto';
   }
   function reduzirFoto(file) {
     // Foto do celular passa por aqui: lado maior 1568 px, JPEG 85% (o tamanho em que a leitura foi medida).
@@ -307,21 +289,21 @@
     });
   }
   function nomeJpg(nome) { return nome.replace(/\.[^.]*$/, '') + '.jpg'; }
-  function adicionar(files) {
-    mostrarErro('e-arq', '');
+  function adicionarArquivos(t, files) {
+    mostrarErroTurma(t, '');
     var lista = Array.prototype.slice.call(files);
-    var livre = MAX_ARQ - estado.arquivos.length;
-    if (lista.length > livre) mostrarErro('e-arq', 'Até ' + MAX_ARQ + ' arquivos.');
+    var livre = MAX_ARQ - t.arquivos.length;
+    if (lista.length > livre) mostrarErroTurma(t, 'Até ' + MAX_ARQ + ' arquivos por turma.');
     lista.slice(0, Math.max(0, livre)).forEach(function (f) {
       var ehPdf = f.type === 'application/pdf' || /\.pdf$/i.test(f.name);
       var ehImg = /^image\//.test(f.type);
-      if (!ehPdf && !ehImg) { estado.arquivos.push({ nome: f.name, erro: 'Só PDF ou foto.', blob: { size: 0 } }); redesenharArquivos(); return; }
+      if (!ehPdf && !ehImg) { t.arquivos.push({ nome: f.name, erro: 'Só PDF ou foto.', blob: { size: 0 } }); redesenharArquivos(t); return; }
       if (ehPdf) {
-        if (f.size > MAX_BYTES) { estado.arquivos.push({ nome: f.name, erro: 'Maior que 10 MB.', blob: { size: 0 } }); redesenharArquivos(); return; }
-        estado.arquivos.push({ nome: f.name, tipo: 'pdf', blob: f }); redesenharArquivos(); return;
+        if (f.size > MAX_BYTES) { t.arquivos.push({ nome: f.name, erro: 'Maior que 10 MB.', blob: { size: 0 } }); redesenharArquivos(t); return; }
+        t.arquivos.push({ nome: f.name, tipo: 'pdf', blob: f }); redesenharArquivos(t); return;
       }
       var lugar = { nome: f.name, tipo: 'foto', blob: f, lendo: true };
-      estado.arquivos.push(lugar); redesenharArquivos();
+      t.arquivos.push(lugar); redesenharArquivos(t);
       reduzirFoto(f).then(function (b) {
         // Foto pequena que já era JPEG/PNG/WebP e ficou maior: manda a original.
         var original = /^image\/(jpeg|png|webp)$/.test(f.type);
@@ -333,17 +315,109 @@
       }).then(function () {
         lugar.lendo = false;
         if (!lugar.erro && lugar.blob.size > MAX_BYTES) { lugar.erro = 'Maior que 10 MB.'; lugar.blob = { size: 0 }; }
-        redesenharArquivos();
+        redesenharArquivos(t);
       });
     });
   }
-  inArq.addEventListener('change', function () { adicionar(inArq.files); inArq.value = ''; });
-  ['dragenter', 'dragover'].forEach(function (n) { solta.addEventListener(n, function (e) { e.preventDefault(); solta.classList.add('sobre'); }); });
-  ['dragleave', 'drop'].forEach(function (n) { solta.addEventListener(n, function (e) { e.preventDefault(); solta.classList.remove('sobre'); }); });
-  solta.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files) adicionar(e.dataTransfer.files); });
-  if (!window.matchMedia || !matchMedia('(hover: hover)').matches) $('arraste').hidden = true;
 
-  // ---- Turnstile (modo gerenciado: só aparece se a Cloudflare desconfiar) ----
+  // ---- turmas (um bloco por série) ----
+  var boxTurmas = $('turmas'), btnAdd = $('add-turma');
+  function rotuloTurma(t) {
+    var serie = t.ui.sel.value;
+    if (serie === 'outra') return t.ui.txt.value.replace(/\s+/g, ' ').trim() || 'Outra série';
+    if (serie) { for (var i = 0; i < SERIES.length; i++) if (SERIES[i][0] === serie) return SERIES[i][1]; }
+    return 'Turma ' + (estado.turmas.indexOf(t) + 1);
+  }
+  function chaveSerie(t) { var s = t.ui.sel.value; return s === 'outra' ? 'outra:' + chave(t.ui.txt.value) : s; }
+  function mostrarErroTurma(t, texto) { t.ui.erro.textContent = texto || ''; t.ui.erro.hidden = !texto; t.ui.bloco.classList.toggle('erro', !!texto); }
+
+  function novaTurma() {
+    if (estado.turmas.length >= MAX_TURMAS) return null;
+    var t = { id: ++estado.seq, arquivos: [], estado: 'pendente', envioId: '', pct: 0, ui: {} };
+    var u = t.ui;
+    u.bloco = el('section', 'turma');
+    var cab = el('div', 'turma-cab'); u.titulo = el('span', null, 'Turma');
+    u.remover = el('button', 'icone'); u.remover.type = 'button'; u.remover.innerHTML = icoX();
+    u.remover.addEventListener('click', function () { removerTurma(t); });
+    cab.appendChild(u.titulo); cab.appendChild(u.remover);
+    u.sel = document.createElement('select');
+    u.sel.appendChild(new Option('Escolha a série', ''));
+    SERIES.forEach(function (s) { u.sel.appendChild(new Option(s[1], s[0])); });
+    u.sel.appendChild(new Option('Outra (informar)', 'outra'));
+    u.txt = document.createElement('input'); u.txt.type = 'text'; u.txt.maxLength = 40; u.txt.placeholder = 'Qual série? Ex.: Maternal III'; u.txt.hidden = true;
+    u.lista = el('ul', 'arquivos');
+    u.mais = el('label', 'mais-arquivo'); u.mais.appendChild(el('span', null, 'Escolha o PDF ou a foto'));
+    u.input = document.createElement('input'); u.input.type = 'file'; u.input.accept = 'application/pdf,image/*'; u.input.multiple = true; u.mais.appendChild(u.input);
+    u.erro = el('span', 'erro-turma'); u.erro.hidden = true; u.erro.setAttribute('role', 'alert');
+    u.bloco.appendChild(cab); u.bloco.appendChild(u.sel); u.bloco.appendChild(u.txt); u.bloco.appendChild(u.lista); u.bloco.appendChild(u.mais); u.bloco.appendChild(u.erro);
+
+    u.sel.addEventListener('change', function () {
+      mostrarErroTurma(t, ''); u.txt.hidden = u.sel.value !== 'outra'; if (u.sel.value === 'outra') u.txt.focus();
+      atualizarSeries(); atualizarCabecalhos();
+    });
+    u.txt.addEventListener('input', function () { mostrarErroTurma(t, ''); atualizarCabecalhos(); });
+    u.input.addEventListener('change', function () { adicionarArquivos(t, u.input.files); u.input.value = ''; });
+    ['dragenter', 'dragover'].forEach(function (n) { u.mais.addEventListener(n, function (e) { e.preventDefault(); u.mais.classList.add('sobre'); }); });
+    ['dragleave', 'drop'].forEach(function (n) { u.mais.addEventListener(n, function (e) { e.preventDefault(); u.mais.classList.remove('sobre'); }); });
+    u.mais.addEventListener('drop', function (e) { if (e.dataTransfer && e.dataTransfer.files) adicionarArquivos(t, e.dataTransfer.files); });
+
+    estado.turmas.push(t); boxTurmas.appendChild(u.bloco);
+    redesenharArquivos(t); atualizarSeries(); atualizarCabecalhos();
+    return t;
+  }
+  function removerTurma(t) {
+    if (estado.turmas.length <= 1 || t.estado === 'enviada') return;
+    estado.turmas.splice(estado.turmas.indexOf(t), 1);
+    boxTurmas.removeChild(t.ui.bloco);
+    atualizarSeries(); atualizarCabecalhos();
+  }
+  // Uma série só pode estar em uma turma do pedido ("Outra" pode repetir, com textos diferentes).
+  function atualizarSeries() {
+    var usadas = {};
+    estado.turmas.forEach(function (t) { var v = t.ui.sel.value; if (v && v !== 'outra') usadas[v] = t; });
+    estado.turmas.forEach(function (t) {
+      Array.prototype.forEach.call(t.ui.sel.options, function (o) { o.disabled = !!(o.value && o.value !== 'outra' && usadas[o.value] && usadas[o.value] !== t); });
+    });
+  }
+  function pendentes() { return estado.turmas.filter(function (t) { return t.estado !== 'enviada'; }); }
+  function comErro() { return estado.turmas.filter(function (t) { return t.estado === 'erro'; }); }
+  function atualizarCabecalhos() {
+    estado.turmas.forEach(function (t, i) {
+      t.ui.titulo.textContent = 'Turma ' + (i + 1);
+      t.ui.remover.hidden = estado.turmas.length <= 1 || t.estado === 'enviada' || estado.enviando;
+    });
+    var n = estado.turmas.length;
+    $('conta-turmas').textContent = n + (n === 1 ? ' lista' : ' listas');
+    btnAdd.disabled = n >= MAX_TURMAS || estado.enviando;
+    atualizarBotao();
+  }
+  function atualizarBotao() {
+    var btn = $('enviar');
+    if (estado.enviando) return;
+    var erros = comErro();
+    var n = pendentes().length;
+    if (estado.faltaFinalizar && !n) btn.textContent = 'Terminar o envio';
+    else if (erros.length === 1) btn.textContent = 'Corrigir o ' + rotuloTurma(erros[0]);
+    else if (erros.length > 1) btn.textContent = 'Corrigir ' + erros.length + ' listas';
+    else btn.textContent = n <= 1 ? 'Enviar lista' : 'Enviar ' + n + ' listas';
+  }
+  btnAdd.addEventListener('click', function () { var t = novaTurma(); if (t) t.ui.sel.focus(); });
+
+  // Depois de enviada, a turma vira uma linha fechada ("✓ Jardim I enviada").
+  function fecharTurma(t) {
+    t.estado = 'enviada';
+    var u = t.ui; u.bloco.textContent = ''; u.bloco.className = 'turma-ok';
+    var b = el('span', 'bola ok', '✓'); var tt = el('span', 't', rotuloTurma(t)); var es = el('span', 'peq', 'enviada');
+    u.bloco.appendChild(b); u.bloco.appendChild(tt); u.bloco.appendChild(es);
+  }
+
+  // ---- travar escola e e-mail depois que o pedido começou ----
+  function travarCabecalho(travar) {
+    selUf.disabled = travar; inCidade.disabled = travar || !estado.uf; inEscola.disabled = travar || !estado.uf; $('email').disabled = travar;
+    $('trocar-escola').hidden = travar;
+  }
+
+  // ---- Turnstile (modo gerenciado: só aparece se a Cloudflare desconfiar; uma vez por pedido) ----
   function iniciarTurnstile() {
     if (estado.widget !== null || !window.turnstile || typeof turnstile.render !== 'function') return;
     estado.widget = turnstile.render('#turnstile', {
@@ -360,15 +434,21 @@
     if (estado.widget === null) iniciarTurnstile();
     else if (window.turnstile) turnstile.reset(estado.widget);
   }
+  function esperarToken(ms) {
+    return new Promise(function (ok) {
+      var t0 = Date.now();
+      (function olhar() { if (estado.tokenTurnstile || Date.now() - t0 > ms) ok(estado.tokenTurnstile); else setTimeout(olhar, 150); })();
+    });
+  }
 
   // ---- avisos ----
   var aviso = $('aviso');
-  function avisar(tipo, texto, comBotao) {
+  function avisar(tipo, texto, botao) {
     aviso.textContent = ''; aviso.className = 'aviso ' + tipo; aviso.hidden = false;
     aviso.appendChild(el('span', null, texto));
-    if (comBotao) {
-      var b = el('button', null, 'Tentar de novo'); b.type = 'button';
-      b.addEventListener('click', function () { aviso.hidden = true; renovarTurnstile(); enviarForm(); });
+    if (botao) {
+      var b = el('button', null, botao.texto); b.type = 'button';
+      b.addEventListener('click', function () { aviso.hidden = true; botao.acao(); });
       aviso.appendChild(b);
     }
   }
@@ -377,108 +457,223 @@
     var a = el('a', null, 'contato@shopnowapp.com.br'); a.href = 'mailto:contato@shopnowapp.com.br'; aviso.firstChild.appendChild(a); aviso.firstChild.appendChild(document.createTextNode('.'));
   }
 
-  // ---- envio ----
-  var btn = $('enviar'), form = $('form');
+  // ---- validação ----
   function validar() {
     var ok = true;
-    mostrarErro('e-uf', ''); mostrarErro('e-escola', ''); mostrarErro('e-serie', ''); mostrarErro('e-serie-texto', ''); mostrarErro('e-email', ''); mostrarErro('e-arq', '');
+    mostrarErro('e-uf', ''); mostrarErro('e-escola', ''); mostrarErro('e-email', ''); mostrarErro('e-turmas', '');
     var primeiro = null;
     function erro(id, texto, alvo) { mostrarErro(id, texto); ok = false; if (!primeiro) primeiro = alvo; }
     if (!estado.uf) erro('e-uf', 'Escolha o estado.', selUf);
     var nome = (estado.escolaEscolhida ? estado.escolaEscolhida.nome : inEscola.value).replace(/\s+/g, ' ').trim();
     if (nome.length < 3) erro('e-escola', 'Digite o nome da escola.', inEscola);
-    if (!selSerie.value) erro('e-serie', 'Escolha a série.', selSerie);
-    var serieTexto = $('serie-texto').value.replace(/\s+/g, ' ').trim();
-    if (selSerie.value === 'outra' && serieTexto.length < 2) erro('e-serie-texto', 'Digite a série.', $('serie-texto'));
     var email = $('email').value.trim();
     var mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     $('email').setAttribute('aria-invalid', String(!mail));
     if (!mail) erro('e-email', 'Confira o e-mail.', $('email'));
-    var bons = estado.arquivos.filter(function (a) { return !a.erro && !a.lendo; });
-    if (estado.arquivos.some(function (a) { return a.lendo; })) erro('e-arq', 'Aguarde a foto terminar de carregar.', inArq);
-    else if (!bons.length) erro('e-arq', 'Envie a lista em PDF ou foto.', solta);
-    else if (estado.arquivos.some(function (a) { return a.erro; })) erro('e-arq', 'Tire o arquivo com erro e tente de novo.', solta);
+    var vistas = {};
+    estado.turmas.forEach(function (t) {
+      if (t.estado === 'enviada') { vistas[chaveSerie(t)] = true; return; }
+      mostrarErroTurma(t, '');
+      var u = t.ui, msg = '', alvo = null;
+      if (!u.sel.value) { msg = 'Escolha a série.'; alvo = u.sel; }
+      else if (u.sel.value === 'outra' && u.txt.value.replace(/\s+/g, ' ').trim().length < 2) { msg = 'Digite a série.'; alvo = u.txt; }
+      else if (vistas[chaveSerie(t)]) { msg = 'Esta série já está neste envio.'; alvo = u.sel; }
+      else if (t.arquivos.some(function (a) { return a.lendo; })) { msg = 'Aguarde a foto terminar de carregar.'; alvo = u.input; }
+      else if (!t.arquivos.length || !t.arquivos.some(function (a) { return !a.erro; })) { msg = 'Envie a lista em PDF ou foto.'; alvo = u.input; }
+      else if (t.arquivos.some(function (a) { return a.erro; })) { msg = 'Tire o arquivo com erro e tente de novo.'; alvo = u.input; }
+      if (u.sel.value && !msg) vistas[chaveSerie(t)] = true;
+      if (msg) { mostrarErroTurma(t, msg); ok = false; if (!primeiro) primeiro = alvo; }
+    });
     if (primeiro && primeiro.focus) primeiro.focus();
-    return ok ? { nome: nome, email: email, arquivos: bons, serieTexto: serieTexto } : null;
+    return ok ? { nome: nome, email: email } : null;
   }
-  function esperarToken(ms) {
-    return new Promise(function (ok) {
-      var t0 = Date.now();
-      (function olhar() { if (estado.tokenTurnstile || Date.now() - t0 > ms) ok(estado.tokenTurnstile); else setTimeout(olhar, 150); })();
+
+  // ---- rede ----
+  function postar(fd, aoProgresso) {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', URL_ENVIO); xhr.timeout = 120000;
+      if (aoProgresso) xhr.upload.onprogress = function (e) { if (e.lengthComputable) aoProgresso(Math.min(99, Math.round(100 * e.loaded / e.total))); };
+      xhr.onerror = xhr.ontimeout = function () { reject(new Error('rede')); };
+      xhr.onload = function () {
+        var r = {}; try { r = JSON.parse(xhr.responseText); } catch (e) { r = {}; }
+        resolve({ status: xhr.status, json: r });
+      };
+      xhr.send(fd);
     });
   }
-  function enviarForm() {
-    if (estado.enviando) return;
-    aviso.hidden = true;
-    var v = validar(); if (!v) return;
-    if (!estado.tokenTurnstile) {
-      // O token pode ainda estar a caminho (primeira carga ou logo depois de um reinício do widget): espera até 8 s.
-      estado.enviando = true; btn.disabled = true; btn.textContent = 'Verificando…';
-      esperarToken(8000).then(function (t) {
-        estado.enviando = false; btn.disabled = false; btn.textContent = 'Enviar lista';
-        if (!t) return avisar('erro', 'Não conseguimos confirmar que é uma pessoa. Tente de novo.', true);
-        enviarForm();
-      });
-      return;
-    }
+
+  // ---- andamento (uma linha por turma) ----
+  function desenharAndamento(ativa, erros) {
+    var box = $('andamento'); box.textContent = '';
+    estado.turmas.forEach(function (t) {
+      var ativaAgora = t === ativa;
+      var linha = el('div', 'linha-and' + (ativaAgora ? ' ativa' : ''));
+      var bola = el('span', 'bola' + (t.estado === 'enviada' ? ' ok' : ativaAgora ? ' gira' : ''), t.estado === 'enviada' ? '✓' : '');
+      linha.appendChild(bola); linha.appendChild(el('span', 't', rotuloTurma(t)));
+      linha.appendChild(el('span', 'estado', t.estado === 'enviada' ? 'enviada' : ativaAgora ? t.pct + '%' : 'aguardando'));
+      box.appendChild(linha);
+    });
+  }
+
+  // ---- envio do pedido ----
+  var btn = $('enviar');
+  function emAndamento(sim) {
+    estado.enviando = sim;
+    btn.disabled = sim;
+    $('turmas').hidden = sim; btnAdd.hidden = sim; $('andamento').hidden = !sim;
+    if (!sim) atualizarCabecalhos();
+  }
+  function fimComFalha() { emAndamento(false); estado.turmas.forEach(function (t) { if (t.estado === 'erro') { t.ui.bloco.classList.add('erro'); } }); atualizarBotao(); }
+
+  function iniciarPedido(v) {
     var fd = new FormData();
+    fd.append('acao', 'iniciar');
     fd.append('escola_nome', v.nome);
     if (estado.escolaId) fd.append('escola_id', estado.escolaId);
     if (estado.municipio) fd.append('municipio', estado.municipio);
     fd.append('uf', estado.uf);
-    fd.append('serie_id', selSerie.value);
-    if (selSerie.value === 'outra') fd.append('serie_texto', v.serieTexto);
     fd.append('ano_letivo', String(estado.ano));
     fd.append('email', v.email);
     fd.append('site_escola', $('honey').value);
     fd.append('cf-turnstile-response', estado.tokenTurnstile);
-    v.arquivos.forEach(function (a) { fd.append('arquivos', a.blob, a.nome); });
-
-    estado.enviando = true; btn.disabled = true; btn.textContent = 'Enviando…';
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', URL_ENVIO); xhr.timeout = 120000;
-    xhr.upload.onprogress = function (e) { if (e.lengthComputable) btn.textContent = 'Enviando… ' + Math.min(99, Math.round(100 * e.loaded / e.total)) + '%'; };
-    function fim() { estado.enviando = false; btn.disabled = false; btn.textContent = 'Enviar lista'; }
-    xhr.onerror = xhr.ontimeout = function () { fim(); avisar('erro', 'Não foi possível enviar. Nada se perdeu: tente de novo.'); renovarTurnstile(); };
-    xhr.onload = function () {
-      var r = {}; try { r = JSON.parse(xhr.responseText); } catch (e) { r = {}; }
-      fim();
-      if (xhr.status === 200 && r.ok) return concluido(v.email);
-      renovarTurnstile();  // o token só vale uma vez
-      if (xhr.status === 503) { $('envio').hidden = true; $('fechado').hidden = false; return; }
-      if (xhr.status === 429) return avisarCota();
-      if (xhr.status === 403) return avisar('erro', 'Não conseguimos confirmar que é uma pessoa. Tente de novo.', true);
-      if (xhr.status === 413) return mostrarErro('e-arq', 'Arquivo grande demais (até 10 MB cada).');
-      if (xhr.status === 400 && r.erro === 'campos') {
-        var mapa = { escola: ['e-escola', 'Confira o nome da escola (sem links).'], serie: [selSerie.value === 'outra' ? 'e-serie-texto' : 'e-serie', selSerie.value === 'outra' ? 'Confira a série (sem links).' : 'Escolha a série.'], ano: ['e-serie', 'Confira o ano letivo.'], email: ['e-email', 'Confira o e-mail.'], municipio: ['e-uf', 'Confira o estado e a cidade.'] };
-        var m = mapa[r.campo] || ['e-escola', 'Confira os dados.']; return mostrarErro(m[0], m[1]);
+    return postar(fd).then(function (r) {
+      var j = r.json;
+      if (r.status === 200 && j.ok && j.pedido_id && j.pedido_token) {
+        estado.pedido = { id: j.pedido_id, token: j.pedido_token }; estado.emailEnviado = v.email; travarCabecalho(true); return true;
       }
-      if (xhr.status === 400 && r.erro === 'formato') return mostrarErro('e-arq', 'Só PDF ou foto (JPG, PNG ou WebP).');
-      avisar('erro', 'Não foi possível enviar. Nada se perdeu: tente de novo.');
-    };
-    xhr.send(fd);
+      renovarTurnstile();  // o token só vale uma vez
+      if (r.status === 503) { $('envio').hidden = true; $('fechado').hidden = false; return false; }
+      if (r.status === 429) { avisarCota(); return false; }
+      if (r.status === 403) { avisar('erro', 'Não conseguimos confirmar que é uma pessoa. Tente de novo.', { texto: 'Tentar de novo', acao: function () { renovarTurnstile(); enviar(); } }); return false; }
+      if (r.status === 400 && j.erro === 'campos') {
+        var mapa = { escola: ['e-escola', 'Confira o nome da escola (sem links).'], ano: ['e-turmas', 'Confira o ano letivo.'], email: ['e-email', 'Confira o e-mail.'], municipio: ['e-uf', 'Confira o estado e a cidade.'] };
+        var m = mapa[j.campo] || ['e-escola', 'Confira os dados.']; mostrarErro(m[0], m[1]); return false;
+      }
+      avisar('erro', 'Não foi possível enviar. Nada se perdeu: tente de novo.'); return false;
+    }, function () { renovarTurnstile(); avisar('erro', 'Não foi possível enviar. Nada se perdeu: tente de novo.'); return false; });
   }
-  form.addEventListener('submit', function (e) { e.preventDefault(); enviarForm(); });
-  // O erro de um campo some quando a pessoa mexe nele.
-  selUf.addEventListener('change', function () { mostrarErro('e-uf', ''); });
-  selSerie.addEventListener('change', function () {
-    mostrarErro('e-serie', ''); mostrarErro('e-serie-texto', '');
-    var outra = selSerie.value === 'outra';
-    $('serie-livre').hidden = !outra;
-    if (outra) $('serie-texto').focus();
-  });
-  $('serie-texto').addEventListener('input', function () { mostrarErro('e-serie-texto', ''); $('serie-texto').removeAttribute('aria-invalid'); });
-  $('email').addEventListener('input', function () { mostrarErro('e-email', ''); $('email').removeAttribute('aria-invalid'); });
 
-  function concluido(email) {
-    $('recebido-email').textContent = email;
-    $('envio').hidden = true; $('recebido').hidden = false;
+  // Devolve { ok } ou { fatal } (pedido perdido: recomeça do zero).
+  function enviarTurma(t) {
+    var u = t.ui;
+    var fd = new FormData();
+    fd.append('acao', 'turma');
+    fd.append('pedido_id', estado.pedido.id); fd.append('pedido_token', estado.pedido.token);
+    fd.append('serie_id', u.sel.value);
+    if (u.sel.value === 'outra') fd.append('serie_texto', u.txt.value.replace(/\s+/g, ' ').trim());
+    t.arquivos.filter(function (a) { return !a.erro; }).forEach(function (a) { fd.append('arquivos', a.blob, a.nome); });
+    t.pct = 0; desenharAndamento(t);
+    return postar(fd, function (p) { t.pct = p; desenharAndamento(t); }).then(function (r) {
+      var j = r.json;
+      if (r.status === 200 && j.ok) { t.envioId = j.envio_id || ''; fecharTurma(t); return { ok: true }; }
+      t.estado = 'erro';
+      if (r.status === 404 || (r.status === 403 && j.erro === 'pedido') || j.erro === 'pedido') return { fatal: true };
+      if (r.status === 413) { t.arquivos = []; redesenharArquivos(t); t.msg = 'Algum arquivo tem mais de 10 MB. Envie de novo.'; }
+      else if (r.status === 400 && j.erro === 'formato') { t.arquivos = []; redesenharArquivos(t); t.msg = 'Só PDF ou foto (JPG, PNG ou WebP). Envie de novo.'; }
+      else if (r.status === 400 && j.erro === 'campos') t.msg = 'Confira a série desta turma.';
+      else if (r.status === 400 && j.erro === 'limite_turmas') t.msg = 'Já são 10 turmas neste envio.';
+      else t.msg = 'Não foi possível enviar esta lista. Tente de novo.';
+      mostrarErroTurma(t, t.msg);
+      return { ok: false };
+    }, function () { t.estado = 'erro'; t.msg = 'Não foi possível enviar esta lista. Tente de novo.'; mostrarErroTurma(t, t.msg); return { ok: false }; });
+  }
+
+  function finalizar() {
+    var fd = new FormData();
+    fd.append('acao', 'finalizar'); fd.append('pedido_id', estado.pedido.id); fd.append('pedido_token', estado.pedido.token);
+    return postar(fd).then(function (r) {
+      if (r.status === 200 && r.json.ok) return true;
+      if (r.status === 404 || r.json.erro === 'pedido') { recomecar('O envio expirou. Envie de novo.'); return null; }
+      return false;
+    }, function () { return false; });
+  }
+
+  // O pedido se perdeu no servidor: recomeça sem lembrar das turmas já "enviadas".
+  function recomecar(msg) {
+    estado.pedido = null; estado.faltaFinalizar = false; travarCabecalho(false);
+    var ant = estado.turmas.slice(); estado.turmas = []; boxTurmas.textContent = '';
+    ant.forEach(function (t) {
+      var n = novaTurma(); if (!n) return;
+      n.ui.sel.value = t.ui.sel ? t.ui.sel.value : ''; n.ui.txt.value = t.ui.txt ? t.ui.txt.value : ''; n.ui.txt.hidden = n.ui.sel.value !== 'outra';
+      n.arquivos = t.arquivos.slice(); redesenharArquivos(n);
+    });
+    atualizarSeries(); emAndamento(false); atualizarCabecalhos(); avisar('erro', msg);
+  }
+
+  function enviar() {
+    if (estado.enviando) return;
+    aviso.hidden = true;
+    var faltam = pendentes();
+    // Só falta fechar o pedido (as turmas já foram): não precisa validar de novo.
+    if (estado.pedido && !faltam.length) return terminar();
+    var v = validar(); if (!v) return;
+    emAndamento(true); desenharAndamento(null); btn.textContent = 'Enviando…';
+    var passo;
+    if (estado.pedido) passo = Promise.resolve(true);
+    else if (estado.tokenTurnstile) passo = iniciarPedido(v);
+    else {
+      // O token pode ainda estar a caminho (primeira carga ou logo depois de um reinício do widget): espera até 8 s.
+      btn.textContent = 'Verificando…';
+      passo = esperarToken(8000).then(function (tk) {
+        if (!tk) { avisar('erro', 'Não conseguimos confirmar que é uma pessoa. Tente de novo.', { texto: 'Tentar de novo', acao: function () { renovarTurnstile(); enviar(); } }); return false; }
+        return iniciarPedido(v);
+      });
+    }
+    passo.then(function (ok) {
+      if (!ok) { emAndamento(false); return; }
+      var lista = pendentes(); var total = lista.length; var feitas = 0;
+      lista.forEach(function (t) { t.estado = 'pendente'; });
+      function rotulo() { btn.textContent = 'Enviando… ' + Math.min(total, feitas + 1) + ' de ' + total; }
+      rotulo();
+      // Cada turma sobe sozinha; as que derem erro não derrubam as outras.
+      return (function laco(i) {
+        if (i >= lista.length) return Promise.resolve({ fatal: false });
+        feitas = i; rotulo();
+        return enviarTurma(lista[i]).then(function (r) { if (r.fatal) return { fatal: true }; return laco(i + 1); });
+      })(0).then(function (r) {
+        if (r.fatal) { recomecar('O envio expirou. Envie de novo.'); return; }
+        var erros = comErro();
+        if (erros.length) {
+          emAndamento(false);
+          avisar('erro', erros.length === 1 ? 'Uma lista não foi enviada. ' + (estado.turmas.length > 1 ? 'As outras já chegaram.' : '') : erros.length + ' listas não foram enviadas. As outras já chegaram.');
+          return;
+        }
+        return terminar();
+      });
+    });
+  }
+  function terminar() {
+    emAndamento(true); desenharAndamento(null); btn.textContent = 'Finalizando…';
+    return finalizar().then(function (ok) {
+      if (ok === null) return;
+      if (ok) { estado.faltaFinalizar = false; concluido(); return; }
+      estado.faltaFinalizar = true; emAndamento(false); $('turmas').hidden = false; $('andamento').hidden = true; atualizarBotao();
+      avisar('erro', 'As listas chegaram, mas não conseguimos fechar o envio.', { texto: 'Tentar de novo', acao: terminar });
+    });
+  }
+  $('form').addEventListener('submit', function (e) { e.preventDefault(); enviar(); });
+  $('email').addEventListener('input', function () { mostrarErro('e-email', ''); $('email').removeAttribute('aria-invalid'); });
+  selUf.addEventListener('change', function () { mostrarErro('e-uf', ''); });
+
+  function concluido() {
+    var n = estado.turmas.length;
+    $('recebido-titulo').textContent = n === 1 ? 'Recebemos a lista' : 'Recebemos as ' + n + ' listas';
+    $('recebido-texto').textContent = 'Vamos conferir. Depois mandamos para ' + estado.emailEnviado + ' um link para você revisar e aprovar ' + (n === 1 ? 'a lista.' : 'cada lista.');
+    var box = $('recebido-lista'); box.textContent = '';
+    estado.turmas.forEach(function (t) { box.appendChild(el('span', null, rotuloTurma(t))); });
+    $('envio').hidden = true; $('recebido').hidden = false; emAndamento(false);
     window.scrollTo(0, 0);
   }
-  $('outra').addEventListener('click', function () {
-    estado.arquivos = []; redesenharArquivos(); selSerie.value = ''; $('serie-livre').hidden = true; $('serie-texto').value = ''; renovarTurnstile(); aviso.hidden = true;
-    $('recebido').hidden = true; $('envio').hidden = false; window.scrollTo(0, 0); selSerie.focus();
+  // "Enviar mais turmas": um pedido novo; escola e e-mail continuam preenchidos.
+  $('mais').addEventListener('click', function () {
+    estado.pedido = null; estado.faltaFinalizar = false; travarCabecalho(false);
+    estado.turmas = []; boxTurmas.textContent = ''; novaTurma(); atualizarCabecalhos(); renovarTurnstile(); aviso.hidden = true;
+    $('recebido').hidden = true; $('envio').hidden = false; window.scrollTo(0, 0);
+    estado.turmas[0].ui.sel.focus();
   });
+
+  novaTurma();
 })();
 </script>
 </body>
