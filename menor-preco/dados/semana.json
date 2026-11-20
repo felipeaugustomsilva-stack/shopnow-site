@@ -1,0 +1,41 @@
+{
+  "versao": 1,
+  "coleta": "2026-11-17",
+  "regiao": "Bela Vista/SP",
+  "frete": "sem frete",
+  "destaque": {
+    "item": "café Pilão 500 g",
+    "a": { "mercado": "Sonda", "preco": 21.98 },
+    "b": { "mercado": "Shopper", "preco": 35.90 }
+  },
+  "categorias": [
+    {
+      "nome": "Mercearia",
+      "itens": ["Arroz Camil 5 kg", "Feijão Camil 1 kg", "Açúcar União 1 kg", "Azeite Gallo 500 ml", "Óleo Soya 900 ml"],
+      "atacado": [{ "mercado": "Atacadão", "total": 72.68 }, { "mercado": "Spani", "total": 76.52 }],
+      "varejo": [{ "mercado": "Mercado Livre", "total": 84.12 }, { "mercado": "Pão de Açúcar", "total": 89.35 }, { "mercado": "Shopper", "total": 98.66 }]
+    },
+    {
+      "nome": "Limpeza",
+      "itens": ["Omo 3 L", "Veja Gold 500 ml", "Limpol 500 ml"],
+      "atacado": [],
+      "varejo": [{ "mercado": "Mercado Livre", "total": 41.80 }, { "mercado": "Carrefour", "total": 57.36 }, { "mercado": "Sonda", "total": 61.17 }, { "mercado": "Shopper", "total": 64.22 }]
+    },
+    {
+      "nome": "Higiene",
+      "itens": ["Papel higiênico Neve Toque da Seda 12 rolos", "Dove 90 g"],
+      "atacado": [{ "mercado": "Spani", "total": 24.19 }],
+      "varejo": [{ "mercado": "Pão de Açúcar", "total": 35.78 }, { "mercado": "Carrefour", "total": 39.28 }, { "mercado": "Shopper", "total": 40.89 }, { "mercado": "Sonda", "total": 41.52 }]
+    }
+  ],
+  "mercado_livre": {
+    "total_itens_cesta": 25,
+    "link": "https://meli.la/1vTcrqP",
+    "itens": [
+      { "nome": "Omo 3 L", "preco": 32.00 },
+      { "nome": "Azeite Gallo 500 ml", "preco": 27.19 },
+      { "nome": "Feijão Camil 1 kg", "preco": 7.59 },
+      { "nome": "Veja Gold 500 ml", "preco": 4.84 }
+    ]
+  }
+}
