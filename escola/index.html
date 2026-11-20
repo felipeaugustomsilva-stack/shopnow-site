@@ -27,7 +27,7 @@
       <span id="local" class="suave"></span>
       <span id="selo" class="selo" hidden>
         <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>
-        Enviada pela escola
+        <span id="selo-t">Enviada pela escola</span>
       </span>
       <div class="acoes">
         <a id="montar" class="btn cheio" href="/baixar/">Montar no app</a>
@@ -36,6 +36,7 @@
           <a id="loja-android" class="btn" href="#">Google Play</a>
         </div>
         <button id="copiar" type="button" class="btn curto">Copiar link</button>
+        <span id="nota-pc" class="nota-pc" hidden>Para montar a lista, abra este link no celular.</span>
       </div>
       <span id="versao" class="peq" style="margin-top:8px"></span>
     </aside>
@@ -43,6 +44,15 @@
       <span id="total" class="peq" style="font-size:13px"></span>
       <div id="grupos" style="display:flex;flex-direction:column;gap:18px"></div>
     </div>
+  </div>
+
+  <!-- Celular sem o app, com REDIRECIONAR_PARA_LOJA ligada. -->
+  <div id="celular" class="cel-link" hidden>
+    <span class="marca">ShopNow</span>
+    <div class="cab"><span id="cel-ano" class="peq"></span><strong id="cel-escola"></strong><span id="cel-sub" class="suave"></span></div>
+    <span id="cel-abrindo" class="suave" hidden>Abrindo a Google Play…</span>
+    <button id="cel-baixar" type="button" class="btn cheio">Baixar o ShopNow</button>
+    <button id="cel-ver" type="button" class="link-suave">Ver a lista no site</button>
   </div>
 
   <div id="nao" class="nao-achada" hidden>
@@ -76,24 +86,73 @@
   var ID = params.get('l') || '';
   var ID_OK = /^(\d{8}|x[0-9a-f]{12})_\d{4}_[a-z0-9_]{2,12}$/.test(ID);
 
+  // Celular sem o app: ligada, o link vai direto para a loja (Android) ou mostra o botão da App Store (iPhone).
+  // Fica DESLIGADA até a 1.5.0, com as listas escolares, estar nas duas lojas. Quem tem o app instalado nunca chega aqui:
+  // o Universal Link / App Link abre o app antes da página.
+  var REDIRECIONAR_PARA_LOJA = false;
+  // Só em localhost, para teste: ?loja=1|0 força a chave; ?ua=android|ios|desk força a plataforma; ?navegar=1 deixa a navegação acontecer.
+  var REDIRECIONAR = REDIRECIONAR_PARA_LOJA;
+  if (LOCAL && params.get('loja') !== null) REDIRECIONAR = params.get('loja') === '1';
+
   var IOS = 'https://apps.apple.com/app/apple-store/id6802871488?pt=129324162&ct=site&mt=8';
-  var ANDROID = 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dperfil';
+  // O referrer da Play leva o id da lista: o app, depois de instalado, abre direto nela.
+  var ANDROID = 'https://play.google.com/store/apps/details?id=com.felipeamsilva.meuappcompras&referrer=' +
+    (ID_OK ? 'l%3D' + ID + '%26' : '') + 'utm_source%3Dsite%26utm_medium%3Dsite%26utm_campaign%3Dperfil';
+  var LINK = 'https://shopnowapp.com.br/escola/?l=' + encodeURIComponent(ID);
+  var INTENT = 'intent://shopnowapp.com.br/escola/?l=' + encodeURIComponent(ID) +
+    '#Intent;scheme=https;package=com.felipeamsilva.meuappcompras;S.browser_fallback_url=' + encodeURIComponent(ANDROID) + ';end';
 
   function $(id) { return document.getElementById(id); }
   function el(tag, cls, texto) { var e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; }
   function mostrar(qual) {
-    ['carregando', 'lista', 'nao', 'erro'].forEach(function (n) { $(n).hidden = n !== qual; });
+    ['carregando', 'lista', 'celular', 'nao', 'erro'].forEach(function (n) { $(n).hidden = n !== qual; });
   }
   function dataBr(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; }
 
-  function lojas() {
+  function plataforma() {
+    var f = LOCAL ? params.get('ua') : null;
+    if (f === 'ios' || f === 'android' || f === 'desk') return f;
     var ua = navigator.userAgent || '';
     var ios = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
-    var android = !ios && /Android/.test(ua);
+    return ios ? 'ios' : /Android/.test(ua) ? 'android' : 'desk';
+  }
+  // Em localhost a navegação só é gravada (a menos que ?navegar=1), para poder testar sem sair da página.
+  function ir(url) {
+    if (LOCAL && params.get('navegar') !== '1') { window.__destino = url; return; }
+    location.href = url;
+  }
+
+  function lojas() {
+    var plat = plataforma();
     var btn = $('montar');
-    if (ios) { btn.href = IOS; }
-    else if (android) { btn.href = ANDROID; }
+    if (plat === 'ios') { btn.href = IOS; }
+    else if (plat === 'android') { btn.href = ANDROID; }
     else { btn.href = '/baixar/'; $('lojas').hidden = false; $('loja-ios').href = IOS; $('loja-android').href = ANDROID; }
+  }
+
+  // O celular sem o app não precisa da lista inteira: o botão leva à loja. "Ver a lista no site" mostra a lista mesmo assim.
+  function cartaoCelular(l, plat) {
+    $('cel-ano').textContent = 'Lista de material · ' + l.ano_letivo;
+    $('cel-escola').textContent = l.escola_nome;
+    $('cel-sub').textContent = l.serie_nome + ' · ' + l.itens.length + (l.itens.length === 1 ? ' item' : ' itens');
+    var b = $('cel-baixar');
+    if (plat === 'android') {
+      $('cel-abrindo').hidden = false; b.className = 'btn';
+      b.onclick = function () { ir(INTENT); };
+    } else {
+      $('cel-abrindo').hidden = true; b.className = 'btn cheio';
+      // O link é copiado antes de abrir a loja: depois de instalar, o app o lê e abre a lista.
+      b.onclick = function () {
+        var url = LINK, feito = false;
+        function abrir() { if (!feito) { feito = true; ir(IOS); } }
+        if (LOCAL) window.__ultimaCopia = url;
+        try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(abrir, abrir); else abrir(); } catch (e) { abrir(); }
+        setTimeout(abrir, 700);
+      };
+    }
+    $('cel-ver').onclick = function () { mostrar('lista'); };
+    mostrar('celular');
+    if (plat === 'android') setTimeout(function () { if (!$('celular').hidden) ir(INTENT); }, 300);
   }
 
   function desenhar(l) {
@@ -101,9 +160,13 @@
     $('ano').textContent = 'Lista de material · ' + l.ano_letivo;
     $('escola').textContent = l.escola_nome;
     $('local').textContent = l.serie_nome + (l.municipio_nome ? ' · ' + l.municipio_nome + (l.uf ? ', ' + l.uf : '') : (l.uf ? ' · ' + l.uf : ''));
-    $('selo').hidden = !l.verificada;
+    // `selo` diz quem garante a lista; sem ele (servidor antigo), `verificada` vale como "Enviada pela escola".
+    var selo = l.selo ? l.selo : (l.verificada ? 'escola' : '');
+    $('selo').hidden = !selo;
+    $('selo').className = 'selo' + (selo === 'shopnow' ? ' shopnow' : '');
+    $('selo-t').textContent = selo === 'shopnow' ? 'Conferida pelo ShopNow' : 'Enviada pela escola';
     var data = dataBr(l.atualizada_em);
-    $('versao').textContent = l.versao > 1 ? 'Versão ' + l.versao + (data ? ' · atualizada em ' + data : '') : (data ? 'Atualizada em ' + data : '');
+    $('versao').textContent = l.versao > 0 ? 'Versão ' + l.versao + (data ? ' · ' + (l.versao > 1 ? 'atualizada' : 'publicada') + ' em ' + data : '') : (data ? 'Atualizada em ' + data : '');
     $('total').textContent = l.itens.length + (l.itens.length === 1 ? ' item' : ' itens');
 
     // Itens agrupados pela matéria quando a lista a traz; os sem matéria vêm primeiro.
@@ -131,7 +194,10 @@
       sec.appendChild(ul); raiz.appendChild(sec);
     });
     lojas();
-    mostrar('lista');
+    var plat = plataforma();
+    $('nota-pc').hidden = !(REDIRECIONAR && plat === 'desk');
+    if (REDIRECIONAR && plat !== 'desk') cartaoCelular(l, plat);
+    else mostrar('lista');
   }
 
   function carregar() {
@@ -152,7 +218,7 @@
 
   $('de-novo').addEventListener('click', carregar);
   $('copiar').addEventListener('click', function () {
-    var b = $('copiar'), url = 'https://shopnowapp.com.br/escola/?l=' + encodeURIComponent(ID);
+    var b = $('copiar'), url = LINK;
     function ok() { b.textContent = 'Link copiado'; setTimeout(function () { b.textContent = 'Copiar link'; }, 2000); }
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(ok, function () { window.prompt('Copie o link:', url); });
     else window.prompt('Copie o link:', url);
