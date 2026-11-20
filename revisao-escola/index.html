@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revisão das listas de material · ShopNow</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<meta name="theme-color" content="#4F46E5">
+<link rel="stylesheet" href="/escolas/estilo.css">
+</head>
+<body>
+<header class="topo"><div class="in">
+  <a class="marca" href="/">ShopNow</a>
+  <a class="app" href="mailto:contato@shopnowapp.com.br">contato@shopnowapp.com.br</a>
+</div></header>
+
+<main id="principal"><div id="tela" class="rv"><p class="carregando">Carregando…</p></div></main>
+
+<footer class="rodape"><div class="in">
+  <span>contato@shopnowapp.com.br</span>
+  <a href="https://felipeaugustomsilva-stack.github.io/smartshop-privacy/">Privacidade</a>
+</div></footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // Em localhost, ?api=http://127.0.0.1:PORTA troca a função por um servidor de teste; em produção nunca.
+  var LOCAL = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+  var params = new URLSearchParams(location.search);
+  var api = LOCAL ? (params.get('api') || '') : '';
+  var URL_REV = api ? api + '/fn/revisaoEscola' : 'https://southamerica-east1-meu-app-compras.cloudfunctions.net/revisaoEscola';
+  var SITE = 'https://shopnowapp.com.br/';
+  var UNIDADES = ['unidade', 'caixa', 'pacote', 'tubo', 'pote', 'rolo', 'bloco', 'folha', 'conjunto', 'kit', 'jogo', 'estojo', 'livro', 'metro', 'kg'];
+  var CHIPS = {
+    para_revisar: ['Para revisar', 'rev'], aprovada: ['Publicada', 'ok'],
+    publicada_shopnow: ['Conferida pelo ShopNow', 'sn'], nao_publicar: ['Não publicar', 'nao']
+  };
+
+  var tela = document.getElementById('tela'), principal = document.getElementById('principal');
+  var DESK = window.matchMedia('(min-width: 900px)');
+
+  function el(tag, cls, texto) { var e = document.createElement(tag); if (cls) e.className = cls; if (texto != null) e.textContent = texto; return e; }
+  function botao(texto, cls, fn) { var b = el('button', cls, texto); b.type = 'button'; if (fn) b.addEventListener('click', fn); return b; }
+
+  var estado = {
+    p: params.get('p') || '', t: params.get('t') || '',
+    pedido: null, turmas: [], appUrl: SITE + 'baixar/',
+    view: '', envio: null, itens: [], base: {}, editId: 0, seq: 0, ocupado: false, salvo: ''
+  };
+  var refs = {};
+
+  // ---- rede ----
+  function chamar(metodo, extra, corpo) {
+    var url = URL_REV + (metodo === 'GET' ? '?p=' + encodeURIComponent(estado.p) + '&t=' + encodeURIComponent(estado.t) + (extra || '') : '');
+    var opts = { method: metodo, credentials: 'omit', cache: 'no-store' };
+    if (corpo) {
+      corpo.p = estado.p; corpo.t = estado.t;
+      opts.headers = { 'Content-Type': 'application/json' }; opts.body = JSON.stringify(corpo);
+    }
+    return fetch(url, opts).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, json: j || {} }; });
+    });
+  }
+  function aplicar(j) {
+    if (j.pedido) estado.pedido = j.pedido;
+    if (j.turmas) estado.turmas = j.turmas;
+    if (j.app_url && /^https:\/\/shopnowapp\.com\.br\//.test(j.app_url)) estado.appUrl = j.app_url;
+  }
+
+  // ---- utilidades ----
+  function dm(iso) {
+    try { return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: '2-digit', timeZone: 'America/Sao_Paulo' }).format(new Date(iso)); } catch (e) { return ''; }
+  }
+  function nItens(n) { return n + (n === 1 ? ' item' : ' itens'); }
+  function listaNomes(nomes) {
+    if (nomes.length < 2) return nomes.join('');
+    return nomes.slice(0, -1).join(', ') + ' e ' + nomes[nomes.length - 1];
+  }
+  function mostrar(no, larga) {
+    tela.textContent = ''; tela.className = 'rv' + (larga ? ' larga' : '');
+    principal.classList.toggle('larga', !!larga);
+    tela.appendChild(no); window.scrollTo(0, 0);
+  }
+  function achar(id) { for (var i = 0; i < estado.itens.length; i++) if (estado.itens[i]._id === id) return estado.itens[i]; return null; }
+  function turmaAtual() { for (var i = 0; i < estado.turmas.length; i++) if (estado.turmas[i].envio_id === estado.envio) return estado.turmas[i]; return null; }
+  function faltam() { return estado.turmas.filter(function (x) { return x.estado === 'para_revisar' || x.estado === 'publicada_shopnow'; }); }
+  function publicadas() { return estado.turmas.filter(function (x) { return x.lista_id && (x.estado === 'aprovada' || x.estado === 'publicada_shopnow'); }); }
+
+  // ---- mensagem única para os pais ----
+  function mensagem() {
+    var pub = publicadas();
+    if (!pub.length) return '';
+    var ano = estado.pedido.ano_letivo, esc = estado.pedido.escola_nome, L = [];
+    if (estado.turmas.length === 1) {
+      L.push('A lista de material ' + ano + ' do ' + esc + ' está no ShopNow.');
+      L.push(SITE + 'escola/?l=' + pub[0].lista_id);
+    } else {
+      L.push('Olá, famílias! As listas de material ' + ano + ' do ' + esc + ' estão no ShopNow.');
+      pub.forEach(function (x) { L.push(x.serie_nome + ': ' + SITE + 'escola/?l=' + x.lista_id); });
+    }
+    L.push('Para montar a lista e dividir a compra, baixe o app: ' + estado.appUrl);
+    return L.join('\n');
+  }
+  function copiarTexto(texto) {
+    if (LOCAL) window.__ultimaCopia = texto;
+    function antigo() {
+      var a = document.createElement('textarea'); a.value = texto; a.setAttribute('readonly', ''); a.style.position = 'fixed'; a.style.opacity = '0';
+      document.body.appendChild(a); a.select(); var r = false; try { r = document.execCommand('copy'); } catch (e) { r = false; }
+      document.body.removeChild(a); return r;
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(texto).then(function () { return true; }, function () { return antigo(); });
+    return Promise.resolve(antigo());
+  }
+  function cartaoMensagem(rotuloZap, nota) {
+    var msg = mensagem();
+    var c = el('div', 'cartao-msg');
+    c.appendChild(el('strong', null, 'Mensagem para os pais'));
+    c.appendChild(el('div', 'msg-box', msg));
+    var ac = el('div', 'msg-acoes');
+    var b = botao('Copiar mensagem', 'btn', function () {
+      copiarTexto(msg).then(function (ok) {
+        b.textContent = ok ? 'Copiado' : 'Selecione e copie';
+        setTimeout(function () { b.textContent = 'Copiar mensagem'; }, 2000);
+      });
+    });
+    var z = el('a', 'btn cheio', rotuloZap); z.href = 'https://wa.me/?text=' + encodeURIComponent(msg); z.target = '_blank'; z.rel = 'noopener';
+    z.style.fontSize = '15px';
+    ac.appendChild(b); ac.appendChild(z); c.appendChild(ac);
+    if (nota) c.appendChild(el('span', 'peq', nota));
+    return c;
+  }
+
+  // ---- telas simples ----
+  function viewCarregando() { var d = el('div'); d.appendChild(el('p', 'carregando', 'Carregando…')); return d; }
+  function viewInvalido() {
+    var d = el('div', 'centro');
+    d.appendChild(el('h1', null, 'Este link não vale mais'));
+    var p = el('p', 'suave', 'Peça um novo para '); var a = el('a', null, 'contato@shopnowapp.com.br'); a.href = 'mailto:contato@shopnowapp.com.br';
+    p.appendChild(a); p.appendChild(document.createTextNode('.')); d.appendChild(p);
+    return d;
+  }
+  function viewErro(tentar) {
+    var d = el('div', 'centro');
+    d.appendChild(el('h1', null, 'Não foi possível carregar'));
+    d.appendChild(el('p', 'suave', 'Confira a conexão e tente de novo.'));
+    d.appendChild(botao('Tentar de novo', 'btn cheio', tentar));
+    return d;
+  }
+  function viewNenhuma() {
+    var d = el('div', 'centro');
+    d.appendChild(el('div', 'ok-icone')).textContent = '✓';
+    d.appendChild(el('h1', null, 'Tudo certo'));
+    d.appendChild(el('p', 'suave', 'Não vamos publicar estas listas.'));
+    return d;
+  }
+
+  // ---- início: as turmas do pedido ----
+  function destino() {
+    var t = estado.turmas;
+    if (t.length && t.every(function (x) { return x.estado === 'nao_publicar'; })) return 'nenhuma';
+    if (!faltam().length && t.some(function (x) { return x.estado === 'aprovada'; })) return 'final';
+    return 'home';
+  }
+  function rotear(forcar) {
+    var d = forcar || destino();
+    estado.view = d;
+    if (d === 'nenhuma') return mostrar(viewNenhuma());
+    if (d === 'final') return mostrar(viewFinal());
+    mostrar(viewHome());
+  }
+
+  function viewHome() {
+    var d = el('div', 'rv'); d.style.maxWidth = 'none';
+    var cab = el('div', 'cab');
+    cab.appendChild(el('span', 'tag', 'Listas de material · ' + estado.pedido.ano_letivo));
+    cab.appendChild(el('h1', null, estado.pedido.escola_nome));
+    d.appendChild(cab);
+
+    var pendentes = faltam();
+    var auto = estado.pedido.publicado_automatico;
+    if (auto) {
+      var fa = el('div', 'faixa auto');
+      var data = dm(estado.pedido.prazo_em);
+      fa.appendChild(el('strong', null, 'Publicamos' + (data ? ' em ' + data : '')));
+      fa.appendChild(el('span', null, 'As listas estão no ar com o selo Conferida pelo ShopNow. Revise e aprove para trocar pelo selo da escola.'));
+      d.appendChild(fa);
+    } else if (estado.turmas.some(function (x) { return x.estado === 'para_revisar'; }) && estado.pedido.prazo_em && new Date(estado.pedido.prazo_em) > new Date()) {
+      var dd = dm(estado.pedido.prazo_em);
+      if (dd) d.appendChild(el('div', 'faixa prazo', 'Sem resposta até ' + dd + ', publicamos a versão conferida pelo ShopNow.'));
+    }
+    if (estado.salvo) { d.appendChild(el('span', 'salvo', estado.salvo)); estado.salvo = ''; }
+
+    var ul = el('ul', 'rv-cards');
+    estado.turmas.forEach(function (t) {
+      var li = el('li');
+      var c = el('button', 'rv-card'); c.type = 'button';
+      var tt = el('span', 't'); tt.appendChild(el('strong', null, t.serie_nome));
+      tt.appendChild(el('span', null, nItens(t.n_itens) + (t.estado === 'aprovada' ? ' · aprovada' : '')));
+      var ch = CHIPS[t.estado] || CHIPS.para_revisar;
+      c.appendChild(tt); c.appendChild(el('span', 'chip ' + ch[1], ch[0])); c.appendChild(el('span', null, '›')).setAttribute('aria-hidden', 'true');
+      if (t.estado === 'nao_publicar') c.disabled = true; else c.addEventListener('click', function () { abrirEditor(t.envio_id); });
+      li.appendChild(c); ul.appendChild(li);
+    });
+    d.appendChild(ul);
+
+    var areaAprovar = el('div', 'centro'); areaAprovar.style.alignItems = 'stretch';
+    if (pendentes.length) {
+      var n = pendentes.length;
+      areaAprovar.appendChild(botao(n === 1 ? 'Aprovar a que falta, sem alterar' : 'Aprovar as ' + n + ' que faltam, sem alterar', 'btn cheio', function () { pedirConfirmacao(areaAprovar, pendentes); }));
+    }
+    d.appendChild(areaAprovar);
+
+    if (publicadas().length) d.appendChild(cartaoMensagem('WhatsApp', 'Cada lista publicada entra na mensagem.'));
+    d.appendChild(botao('Não quero publicar estas listas', 'link-suave', function () { estado.view = 'nao'; mostrar(viewNao()); }));
+    return d;
+  }
+
+  function pedirConfirmacao(area, pendentes) {
+    area.textContent = '';
+    var c = el('div', 'confirma');
+    var n = pendentes.length;
+    c.appendChild(el('strong', null, n === 1 ? 'Aprovar a lista como está?' : 'Aprovar as ' + n + ' listas como estão?'));
+    c.appendChild(el('span', 'suave', 'Elas ficam publicadas com o selo Enviada pela escola.'));
+    var erro = el('span', 'erro-campo'); erro.hidden = true; erro.setAttribute('role', 'alert');
+    var ok = botao('Aprovar e publicar', 'btn cheio', function () { aprovarFaltantes(ok, erro, pendentes); });
+    c.appendChild(erro); c.appendChild(ok);
+    c.appendChild(botao('Voltar', 'btn texto', function () { rotear('home'); }));
+    area.appendChild(c);
+  }
+  function aprovarFaltantes(btn, erro, pendentes) {
+    if (estado.ocupado) return;
+    estado.ocupado = true; btn.disabled = true; btn.textContent = 'Publicando…'; erro.hidden = true;
+    var shop = pendentes.filter(function (x) { return x.estado === 'publicada_shopnow'; });
+    var primeiro = pendentes.length > shop.length ? chamar('POST', '', { acao: 'aprovar_todas' }) : Promise.resolve({ status: 200, json: { ok: true } });
+    primeiro.then(function (r) {
+      if (r.status !== 200 || !r.json.ok) return r;
+      aplicar(r.json);
+      // O `aprovar_todas` cobre só as para revisar; as já publicadas pelo ShopNow trocam o selo uma a uma, sem alterar os itens.
+      return shop.reduce(function (cadeia, t) {
+        return cadeia.then(function (rr) {
+          if (rr.status !== 200 || !rr.json.ok) return rr;
+          return chamar('POST', '', { acao: 'aprovar', envio: t.envio_id }).then(function (r2) { if (r2.status === 200 && r2.json.ok) aplicar(r2.json); return r2; });
+        });
+      }, Promise.resolve(r));
+    }).then(function (r) {
+      estado.ocupado = false;
+      if (r.status === 404) { estado.view = 'invalido'; return mostrar(viewInvalido()); }
+      if (r.status !== 200 || !r.json.ok) { btn.disabled = false; btn.textContent = 'Aprovar e publicar'; erro.textContent = 'Não foi possível aprovar agora. Tente de novo.'; erro.hidden = false; return; }
+      rotear();
+    }, function () { estado.ocupado = false; btn.disabled = false; btn.textContent = 'Aprovar e publicar'; erro.textContent = 'Sem conexão. Tente de novo.'; erro.hidden = false; });
+  }
+
+  // ---- depois de aprovar ----
+  function viewFinal() {
+    var d = el('div', 'centro'); d.style.alignItems = 'stretch'; d.style.gap = '18px';
+    var ic = el('div', 'ok-icone'); ic.textContent = '✓'; d.appendChild(ic);
+    d.appendChild(el('h1', null, publicadas().length === 1 ? 'Lista publicada' : 'Listas publicadas'));
+    var nomes = estado.turmas.filter(function (x) { return x.estado === 'aprovada'; }).map(function (x) { return x.serie_nome; });
+    d.appendChild(el('p', 'suave', listaNomes(nomes) + ', com o selo Enviada pela escola.'));
+    d.appendChild(cartaoMensagem('Enviar pelo WhatsApp'));
+    var v = el('a', 'link-suave', 'Voltar às listas'); v.href = '#'; v.addEventListener('click', function (e) { e.preventDefault(); rotear('home'); });
+    d.appendChild(v);
+    return d;
+  }
+
+  // ---- "Não quero publicar" ----
+  function viewNao() {
+    var d = el('div', 'centro'); d.style.alignItems = 'stretch';
+    var c = el('div', 'confirma');
+    c.appendChild(el('strong', null, 'Não publicar estas listas?'));
+    c.appendChild(el('span', 'suave', 'Se alguma já estiver no ar, nós a retiramos.'));
+    var erro = el('span', 'erro-campo'); erro.hidden = true; erro.setAttribute('role', 'alert');
+    var go = botao('Não publicar', 'btn perigo', function () {
+      if (estado.ocupado) return;
+      estado.ocupado = true; go.disabled = true; go.textContent = 'Enviando…'; erro.hidden = true;
+      chamar('POST', '', { acao: 'nao_publicar' }).then(function (r) {
+        estado.ocupado = false;
+        if (r.status === 404) { return mostrar(viewInvalido()); }
+        if (r.status !== 200 || !r.json.ok) { go.disabled = false; go.textContent = 'Não publicar'; erro.textContent = 'Não foi possível agora. Tente de novo.'; erro.hidden = false; return; }
+        aplicar(r.json); estado.view = 'nenhuma'; mostrar(viewNenhuma());
+      }, function () { estado.ocupado = false; go.disabled = false; go.textContent = 'Não publicar'; erro.textContent = 'Sem conexão. Tente de novo.'; erro.hidden = false; });
+    });
+    c.appendChild(erro); c.appendChild(go);
+    c.appendChild(botao('Voltar', 'btn', function () { if (estado.envio && estado.itens.length && estado.view === 'nao-editor') { reabrirEditor(); } else rotear(); }));
+    d.appendChild(c);
+    return d;
+  }
+
+  // ---- editor de uma lista ----
+  function chaveItem(it) {
+    return JSON.stringify([String(it.nome || '').trim(), it.quantidade, it.unidade, String(it.especificacao || '').trim(), it.materia || '', it.marca || '']);
+  }
+  function fixarBase() { estado.base = {}; estado.itens.forEach(function (it) { estado.base[it._id] = chaveItem(it); }); }
+  function contarMudancas() {
+    var n = 0, vistos = {};
+    estado.itens.forEach(function (it) { vistos[it._id] = true; if (estado.base[it._id] !== chaveItem(it)) n++; });
+    Object.keys(estado.base).forEach(function (id) { if (!vistos[id]) n++; });
+    return n;
+  }
+  function abrirEditor(envioId) {
+    mostrar(viewCarregando());
+    chamar('GET', '&envio=' + encodeURIComponent(envioId)).then(function (r) {
+      if (r.status === 404) return mostrar(viewInvalido());
+      if (r.status !== 200 || !r.json.itens) return mostrar(viewErro(function () { abrirEditor(envioId); }));
+      aplicar(r.json);
+      estado.envio = envioId; estado.editId = 0;
+      estado.itens = r.json.itens.map(function (it) {
+        return { _id: ++estado.seq, nome: it.nome, quantidade: it.quantidade, unidade: it.unidade, especificacao: it.especificacao || '', materia: it.materia || '', marca: it.marca || '' };
+      });
+      fixarBase(); reabrirEditor();
+    }, function () { mostrar(viewErro(function () { abrirEditor(envioId); })); });
+  }
+  function reabrirEditor() { estado.view = 'editor'; mostrar(viewEditor(), true); desenharItens(); atualizarCab(); }
+
+  function detalhe(it) {
+    var p = [];
+    if (it.unidade && it.unidade !== 'unidade') p.push(it.unidade);
+    if (it.especificacao) p.push(it.especificacao);
+    if (it.marca) p.push(it.marca);
+    return p.join(' · ');
+  }
+  function atualizarCab() {
+    var m = contarMudancas(), t = turmaAtual();
+    var txt = nItens(estado.itens.length) + (m ? ' · ' + (m === 1 ? '1 alteração ainda não salva' : m + ' alterações ainda não salvas') : '');
+    refs.status.textContent = m && !DESK.matches ? nItens(estado.itens.length) + ' · alterações ainda não salvas: ' + m : nItens(estado.itens.length);
+    refs.statusAside.textContent = txt;
+    if (t) { var ch = CHIPS[t.estado] || CHIPS.para_revisar; refs.chip.className = 'chip ' + ch[1]; refs.chip.textContent = ch[0]; }
+  }
+  function mostrarAvisoEd(texto) {
+    refs.aviso.textContent = texto || ''; refs.aviso.hidden = !texto;
+    if (texto) refs.aviso.scrollIntoView({ block: 'nearest' });
+  }
+
+  function validarUm(it) {
+    if (!String(it.nome || '').trim()) return 'Digite o nome do item.';
+    if (!(it.quantidade >= 1 && it.quantidade <= 999) || Math.floor(it.quantidade) !== it.quantidade) return 'A quantidade vai de 1 a 999.';
+    return '';
+  }
+  function validarTodos() {
+    for (var i = 0; i < estado.itens.length; i++) {
+      var m = validarUm(estado.itens[i]);
+      if (m) return { it: estado.itens[i], n: i + 1, msg: m };
+    }
+    if (!estado.itens.length) return { it: null, n: 0, msg: 'A lista precisa ter ao menos um item.' };
+    return null;
+  }
+  function serializar() {
+    return estado.itens.map(function (it) {
+      var o = { nome: String(it.nome).trim(), quantidade: it.quantidade, unidade: it.unidade };
+      if (String(it.especificacao || '').trim()) o.especificacao = String(it.especificacao).trim();
+      if (it.materia) o.materia = it.materia;
+      if (it.marca) o.marca = it.marca;
+      return o;
+    });
+  }
+
+  function viewEditor() {
+    var d = el('div', 'rv-wrap'); d.style.display = 'flex'; d.style.flexDirection = 'column'; d.style.gap = '16px';
+    var voltar = el('a', 'link-suave', '‹ Todas as listas'); voltar.href = '#'; voltar.style.justifyContent = 'flex-start';
+    voltar.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (contarMudancas() && !window.confirm('Há alterações não salvas. Sair mesmo assim?')) return;
+      estado.envio = null; rotear('home');
+    });
+    d.appendChild(voltar);
+
+    var ed = el('div', 'rv-ed');
+    var col = el('div', 'col');
+    var t = turmaAtual();
+    var cab = el('div', 'cab-ed');
+    cab.appendChild(el('span', 'tag', estado.pedido.escola_nome + ' · ' + estado.pedido.ano_letivo));
+    cab.appendChild(el('h1', null, t ? t.serie_nome : 'Lista'));
+    refs.status = el('span', 'peq'); refs.status.style.fontSize = '13px'; cab.appendChild(refs.status);
+    col.appendChild(cab);
+    refs.aviso = el('div', 'aviso erro'); refs.aviso.hidden = true; refs.aviso.setAttribute('role', 'alert'); col.appendChild(refs.aviso);
+
+    var box = el('div', 'itens-ed');
+    var ch = el('div', 'cab-tab');
+    ['Qtd', 'Item', 'Unidade', 'Detalhes', ''].forEach(function (x) { ch.appendChild(el('span', null, x)); });
+    box.appendChild(ch);
+    refs.lista = el('ul'); box.appendChild(refs.lista);
+    col.appendChild(box);
+    col.appendChild(botao('+ Adicionar item', 'btn tracejado', adicionarItem));
+    ed.appendChild(col);
+
+    var aside = el('aside');
+    var topo = el('div', 'so-desk aside-topo');
+    refs.chip = el('span', 'chip rev', 'Para revisar'); refs.chip.style.alignSelf = 'flex-start';
+    refs.statusAside = el('span', 'peq');
+    topo.appendChild(refs.chip); topo.appendChild(refs.statusAside); aside.appendChild(topo);
+    var barra = el('div', 'barra-acoes');
+    refs.aprovar = botao('Aprovar e publicar', 'btn cheio', function () { acaoEditor('aprovar'); });
+    refs.salvar = botao('Salvar e continuar depois', 'btn', function () { acaoEditor('salvar'); });
+    var par = el('div', 'par'); par.appendChild(refs.salvar);
+    par.appendChild(botao('Não quero publicar', 'btn so-cel', irNaoPublicar));
+    barra.appendChild(refs.aprovar); barra.appendChild(par); aside.appendChild(barra);
+    var dd = estado.pedido.prazo_em && !estado.pedido.publicado_automatico && t && t.estado === 'para_revisar' && new Date(estado.pedido.prazo_em) > new Date() ? dm(estado.pedido.prazo_em) : '';
+    if (dd) { var nt = el('span', 'peq so-desk', 'Sem resposta até ' + dd + ', publicamos a versão conferida pelo ShopNow.'); aside.appendChild(nt); }
+    var nao = botao('Não quero publicar', 'link-suave so-desk', irNaoPublicar); aside.appendChild(nao);
+    ed.appendChild(aside);
+    d.appendChild(ed);
+    return d;
+  }
+  function irNaoPublicar() {
+    estado.view = 'nao-editor';
+    mostrar(viewNao());
+  }
+
+  function adicionarItem() {
+    var it = { _id: ++estado.seq, nome: '', quantidade: 1, unidade: 'unidade', especificacao: '', materia: '', marca: '' };
+    estado.itens.push(it); estado.editId = it._id; mostrarAvisoEd('');
+    desenharItens(true); atualizarCab();
+  }
+
+  function entrada(tipo, valor, rotulo, max) {
+    var i = document.createElement('input'); i.type = tipo; i.value = valor; if (rotulo) i.setAttribute('aria-label', rotulo); if (max) i.maxLength = max;
+    return i;
+  }
+  function seletorUnidade(atual) {
+    var s = document.createElement('select'); s.setAttribute('aria-label', 'Unidade');
+    var lista = UNIDADES.slice(); if (atual && lista.indexOf(atual) < 0) lista.push(atual);
+    lista.forEach(function (u) { s.appendChild(new Option(u, u)); }); s.value = atual || 'unidade';
+    return s;
+  }
+  function numero(i) { var n = parseInt(i.value, 10); return isNaN(n) ? 0 : n; }
+
+  function fecharEdicao(erro) {
+    var it = achar(estado.editId); var m = it ? validarUm(it) : '';
+    if (m) { erro.textContent = m; erro.hidden = false; return; }
+    estado.editId = 0; desenharItens(); atualizarCab();
+  }
+  function apagar(it) {
+    estado.itens = estado.itens.filter(function (x) { return x._id !== it._id; });
+    if (estado.editId === it._id) estado.editId = 0;
+    desenharItens(); atualizarCab();
+  }
+
+  function linhaCelular(it) {
+    var li = el('li');
+    if (estado.editId === it._id) {
+      var e = el('div', 'it-edit');
+      var ti = el('span', null, 'Editando · ' + (it.nome || 'novo item')); ti.style.fontWeight = '600'; e.appendChild(ti);
+      var nome = entrada('text', it.nome, '', 200), lb = el('label', null, 'Item'); lb.appendChild(nome); e.appendChild(lb);
+      var g = el('div', 'grade');
+      var q = entrada('number', it.quantidade, '', 0); q.min = '1'; q.max = '999'; q.inputMode = 'numeric';
+      var lq = el('label', null, 'Quantidade'); lq.appendChild(q);
+      var u = seletorUnidade(it.unidade), lu = el('label', null, 'Unidade'); lu.appendChild(u);
+      g.appendChild(lq); g.appendChild(lu); e.appendChild(g);
+      var esp = entrada('text', it.especificacao, '', 200), le = el('label', null, 'Detalhes'); le.appendChild(esp); e.appendChild(le);
+      var erro = el('span', 'erro-campo'); erro.hidden = true; erro.setAttribute('role', 'alert'); e.appendChild(erro);
+      nome.addEventListener('input', function () { it.nome = nome.value; ti.textContent = 'Editando · ' + (nome.value || 'novo item'); erro.hidden = true; atualizarCab(); });
+      q.addEventListener('input', function () { it.quantidade = numero(q); erro.hidden = true; atualizarCab(); });
+      u.addEventListener('change', function () { it.unidade = u.value; atualizarCab(); });
+      esp.addEventListener('input', function () { it.especificacao = esp.value; atualizarCab(); });
+      var ac = el('div', 'acoes-ed');
+      var ap = botao('Apagar item', 'perigo-t', function () { apagar(it); });
+      var ok = botao('Pronto', 'pronto', function () { fecharEdicao(erro); });
+      ac.appendChild(ap); ac.appendChild(ok); e.appendChild(ac);
+      li.appendChild(e); li._foco = nome; return li;
+    }
+    var l = el('div', 'it-linha');
+    var st = el('span', 'stepper');
+    var menos = botao('−', null, function () { if (it.quantidade > 1) { it.quantidade--; desenharItens(); atualizarCab(); } }); menos.setAttribute('aria-label', 'Menos um');
+    var mais = botao('+', null, function () { if (it.quantidade < 999) { it.quantidade++; desenharItens(); atualizarCab(); } }); mais.setAttribute('aria-label', 'Mais um');
+    st.appendChild(menos); st.appendChild(el('b', null, String(it.quantidade))); st.appendChild(mais);
+    var tt = el('span', 't'); tt.appendChild(el('span', null, it.nome)); var dt = detalhe(it); if (dt) tt.appendChild(el('span', null, dt));
+    var ed = botao('✎', 'icone', function () { estado.editId = it._id; desenharItens(true); }); ed.setAttribute('aria-label', 'Editar ' + it.nome);
+    l.appendChild(st); l.appendChild(tt); l.appendChild(ed); li.appendChild(l);
+    return li;
+  }
+
+  function linhaComputador(it) {
+    var li = el('li'); var g = el('div', 'it-desk');
+    if (estado.editId === it._id) {
+      var erro = el('span', 'erro-campo'); erro.hidden = true; erro.setAttribute('role', 'alert');
+      var q = entrada('number', it.quantidade, 'Quantidade', 0); q.min = '1'; q.max = '999';
+      var nome = entrada('text', it.nome, 'Item', 200);
+      var u = seletorUnidade(it.unidade);
+      var esp = entrada('text', it.especificacao, 'Detalhes', 200);
+      nome.addEventListener('input', function () { it.nome = nome.value; erro.hidden = true; atualizarCab(); });
+      q.addEventListener('input', function () { it.quantidade = numero(q); erro.hidden = true; atualizarCab(); });
+      u.addEventListener('change', function () { it.unidade = u.value; atualizarCab(); });
+      esp.addEventListener('input', function () { it.especificacao = esp.value; atualizarCab(); });
+      [q, nome, esp].forEach(function (i) { i.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); fecharEdicao(erro); } }); });
+      var lx = botao('🗑', 'icone', function () { apagar(it); }); lx.setAttribute('aria-label', 'Apagar ' + (it.nome || 'item'));
+      [q, nome, u, esp, lx].forEach(function (x) { g.appendChild(x); });
+      li.appendChild(g); li.appendChild(erro);
+      var ok = botao('Pronto', 'btn', function () { fecharEdicao(erro); }); ok.style.minHeight = '36px'; ok.style.alignSelf = 'flex-start'; ok.style.marginTop = '6px'; ok.style.fontSize = '14px';
+      li.appendChild(ok);
+      li._foco = nome; return li;
+    }
+    g.appendChild(el('span', 'q', String(it.quantidade)));
+    g.appendChild(el('span', 'nome-c', it.nome));
+    g.appendChild(el('span', 'd', it.unidade));
+    var dt = [it.especificacao, it.marca].filter(Boolean).join(' · ');
+    g.appendChild(el('span', 'd', dt));
+    var ed = botao('✎', 'icone', function () { estado.editId = it._id; desenharItens(true); }); ed.setAttribute('aria-label', 'Editar ' + it.nome);
+    g.appendChild(ed); li.appendChild(g);
+    return li;
+  }
+
+  function desenharItens(focar) {
+    refs.lista.textContent = '';
+    var foco = null;
+    estado.itens.forEach(function (it) {
+      var li = DESK.matches ? linhaComputador(it) : linhaCelular(it);
+      if (li._foco) foco = li;
+      refs.lista.appendChild(li);
+    });
+    if (!estado.itens.length) refs.lista.appendChild(el('li', 'rv-vazio suave', 'Sem itens. Adicione ao menos um.'));
+    if (focar && foco) { foco._foco.focus(); foco.scrollIntoView({ block: 'center' }); }
+  }
+  function aoMudarLargura() { if (estado.view === 'editor' && refs.lista) { desenharItens(); atualizarCab(); } }
+  if (DESK.addEventListener) DESK.addEventListener('change', aoMudarLargura); else if (DESK.addListener) DESK.addListener(aoMudarLargura);
+
+  // Salvar (rascunho) ou aprovar e publicar. Itens mexidos entram sempre; o servidor decide se é versão nova.
+  function acaoEditor(acao) {
+    if (estado.ocupado) return;
+    mostrarAvisoEd('');
+    var prob = validarTodos();
+    if (prob) {
+      if (prob.it) { estado.editId = prob.it._id; desenharItens(true); }
+      mostrarAvisoEd(prob.n ? 'Item ' + prob.n + ': ' + prob.msg : prob.msg);
+      return;
+    }
+    estado.ocupado = true;
+    var rot = refs.aprovar.textContent, rotS = refs.salvar.textContent;
+    refs.aprovar.disabled = true; refs.salvar.disabled = true;
+    (acao === 'aprovar' ? refs.aprovar : refs.salvar).textContent = acao === 'aprovar' ? 'Publicando…' : 'Salvando…';
+    function volta() { estado.ocupado = false; refs.aprovar.disabled = false; refs.salvar.disabled = false; refs.aprovar.textContent = rot; refs.salvar.textContent = rotS; }
+    chamar('POST', '', { acao: acao, envio: estado.envio, itens: serializar() }).then(function (r) {
+      if (r.status === 404) { volta(); return mostrar(viewInvalido()); }
+      if (r.status === 400 && r.json.erro === 'itens') { volta(); return mostrarAvisoEd('Confira a lista. ' + (r.json.detalhe || '')); }
+      if (r.status !== 200 || !r.json.ok) { volta(); return mostrarAvisoEd('Não foi possível ' + (acao === 'aprovar' ? 'publicar' : 'salvar') + ' agora. Nada se perdeu: tente de novo.'); }
+      aplicar(r.json); fixarBase(); estado.ocupado = false;
+      if (acao === 'salvar') { estado.salvo = 'Alterações salvas.'; estado.envio = null; return rotear('home'); }
+      estado.envio = null; rotear();
+    }, function () { volta(); mostrarAvisoEd('Sem conexão. Nada se perdeu: tente de novo.'); });
+  }
+
+  // ---- início ----
+  function carregar() {
+    mostrar(viewCarregando());
+    chamar('GET').then(function (r) {
+      if (r.status === 404 || r.status === 403 || r.status === 400) return mostrar(viewInvalido());
+      if (r.status !== 200 || !r.json.pedido) return mostrar(viewErro(carregar));
+      aplicar(r.json); rotear();
+    }, function () { mostrar(viewErro(carregar)); });
+  }
+  if (!/^[A-Za-z0-9_-]{10,80}$/.test(estado.p) || !/^[A-Za-z0-9_-]{10,80}$/.test(estado.t)) mostrar(viewInvalido());
+  else carregar();
+})();
+</script>
+</body>
+</html>
