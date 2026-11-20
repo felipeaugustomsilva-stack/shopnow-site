@@ -87,9 +87,9 @@
   var ID_OK = /^(\d{8}|x[0-9a-f]{12})_\d{4}_[a-z0-9_]{2,12}$/.test(ID);
 
   // Celular sem o app: ligada, o link vai direto para a loja (Android) ou mostra o botão da App Store (iPhone).
-  // Fica DESLIGADA até a 1.5.0, com as listas escolares, estar nas duas lojas. Quem tem o app instalado nunca chega aqui:
+  // LIGADA em 2026-11-20 por decisão do Felipe, antes de a 1.5.0 (com as listas escolares) estar nas lojas: até lá a loja entrega a 1.4.3, sem a lista. Quem tem o app instalado nunca chega aqui:
   // o Universal Link / App Link abre o app antes da página.
-  var REDIRECIONAR_PARA_LOJA = false;
+  var REDIRECIONAR_PARA_LOJA = true;
   // Só em localhost, para teste: ?loja=1|0 força a chave; ?ua=android|ios|desk força a plataforma; ?navegar=1 deixa a navegação acontecer.
   var REDIRECIONAR = REDIRECIONAR_PARA_LOJA;
   if (LOCAL && params.get('loja') !== null) REDIRECIONAR = params.get('loja') === '1';
