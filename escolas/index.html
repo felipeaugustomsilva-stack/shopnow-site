@@ -322,13 +322,17 @@
 
   // ---- turmas (um bloco por série) ----
   var boxTurmas = $('turmas'), btnAdd = $('add-turma');
+  function programaDe(t) { return t.ui.prog.value.replace(/\s+/g, ' ').trim(); }
+  // Programa opcional ("Bilíngue", "Integral"): 2 a 40 caracteres, sem link (o servidor confere de novo).
+  function programaOk(p) { return !p || (p.length >= 2 && p.length <= 40 && !/https?|www|:\/\/|@/i.test(p)); }
   function rotuloTurma(t) {
-    var serie = t.ui.sel.value;
-    if (serie === 'outra') return t.ui.txt.value.replace(/\s+/g, ' ').trim() || 'Outra série';
-    if (serie) { for (var i = 0; i < SERIES.length; i++) if (SERIES[i][0] === serie) return SERIES[i][1]; }
+    var serie = t.ui.sel.value, p = programaDe(t), suf = p ? ' · ' + p : '';
+    if (serie === 'outra') return (t.ui.txt.value.replace(/\s+/g, ' ').trim() || 'Outra série') + suf;
+    if (serie) { for (var i = 0; i < SERIES.length; i++) if (SERIES[i][0] === serie) return SERIES[i][1] + suf; }
     return 'Turma ' + (estado.turmas.indexOf(t) + 1);
   }
-  function chaveSerie(t) { var s = t.ui.sel.value; return s === 'outra' ? 'outra:' + chave(t.ui.txt.value) : s; }
+  // A mesma série pode aparecer duas vezes se o programa for outro (1º ano regular e 1º ano bilíngue).
+  function chaveSerie(t) { var s = t.ui.sel.value; return (s === 'outra' ? 'outra:' + chave(t.ui.txt.value) : s) + '|' + chave(t.ui.prog.value); }
   function mostrarErroTurma(t, texto) { t.ui.erro.textContent = texto || ''; t.ui.erro.hidden = !texto; t.ui.bloco.classList.toggle('erro', !!texto); }
 
   function novaTurma() {
@@ -345,17 +349,19 @@
     SERIES.forEach(function (s) { u.sel.appendChild(new Option(s[1], s[0])); });
     u.sel.appendChild(new Option('Outra (informar)', 'outra'));
     u.txt = document.createElement('input'); u.txt.type = 'text'; u.txt.maxLength = 40; u.txt.placeholder = 'Qual série? Ex.: Maternal III'; u.txt.hidden = true;
+    u.prog = document.createElement('input'); u.prog.type = 'text'; u.prog.maxLength = 40; u.prog.placeholder = 'Programa (opcional). Ex.: Bilíngue'; u.prog.setAttribute('aria-label', 'Programa (opcional)'); u.prog.autocomplete = 'off';
     u.lista = el('ul', 'arquivos');
     u.mais = el('label', 'mais-arquivo'); u.mais.appendChild(el('span', null, 'Escolha o PDF ou a foto'));
     u.input = document.createElement('input'); u.input.type = 'file'; u.input.accept = 'application/pdf,image/*'; u.input.multiple = true; u.mais.appendChild(u.input);
     u.erro = el('span', 'erro-turma'); u.erro.hidden = true; u.erro.setAttribute('role', 'alert');
-    u.bloco.appendChild(cab); u.bloco.appendChild(u.sel); u.bloco.appendChild(u.txt); u.bloco.appendChild(u.lista); u.bloco.appendChild(u.mais); u.bloco.appendChild(u.erro);
+    u.bloco.appendChild(cab); u.bloco.appendChild(u.sel); u.bloco.appendChild(u.txt); u.bloco.appendChild(u.prog); u.bloco.appendChild(u.lista); u.bloco.appendChild(u.mais); u.bloco.appendChild(u.erro);
 
     u.sel.addEventListener('change', function () {
       mostrarErroTurma(t, ''); u.txt.hidden = u.sel.value !== 'outra'; if (u.sel.value === 'outra') u.txt.focus();
       atualizarSeries(); atualizarCabecalhos();
     });
     u.txt.addEventListener('input', function () { mostrarErroTurma(t, ''); atualizarCabecalhos(); });
+    u.prog.addEventListener('input', function () { mostrarErroTurma(t, ''); atualizarSeries(); atualizarCabecalhos(); });
     u.input.addEventListener('change', function () { adicionarArquivos(t, u.input.files); u.input.value = ''; });
     ['dragenter', 'dragover'].forEach(function (n) { u.mais.addEventListener(n, function (e) { e.preventDefault(); u.mais.classList.add('sobre'); }); });
     ['dragleave', 'drop'].forEach(function (n) { u.mais.addEventListener(n, function (e) { e.preventDefault(); u.mais.classList.remove('sobre'); }); });
@@ -371,12 +377,13 @@
     boxTurmas.removeChild(t.ui.bloco);
     atualizarSeries(); atualizarCabecalhos();
   }
-  // Uma série só pode estar em uma turma do pedido ("Outra" pode repetir, com textos diferentes).
+  // Uma série só pode estar em uma turma do pedido com o mesmo programa ("Outra" pode repetir, com textos diferentes).
   function atualizarSeries() {
-    var usadas = {};
-    estado.turmas.forEach(function (t) { var v = t.ui.sel.value; if (v && v !== 'outra') usadas[v] = t; });
     estado.turmas.forEach(function (t) {
-      Array.prototype.forEach.call(t.ui.sel.options, function (o) { o.disabled = !!(o.value && o.value !== 'outra' && usadas[o.value] && usadas[o.value] !== t); });
+      var pk = chave(t.ui.prog.value);
+      Array.prototype.forEach.call(t.ui.sel.options, function (o) {
+        o.disabled = !!(o.value && o.value !== 'outra' && estado.turmas.some(function (x) { return x !== t && x.ui.sel.value === o.value && chave(x.ui.prog.value) === pk; }));
+      });
     });
   }
   function pendentes() { return estado.turmas.filter(function (t) { return t.estado !== 'enviada'; }); }
@@ -477,6 +484,7 @@
       var u = t.ui, msg = '', alvo = null;
       if (!u.sel.value) { msg = 'Escolha a série.'; alvo = u.sel; }
       else if (u.sel.value === 'outra' && u.txt.value.replace(/\s+/g, ' ').trim().length < 2) { msg = 'Digite a série.'; alvo = u.txt; }
+      else if (!programaOk(programaDe(t))) { msg = 'Confira o programa.'; alvo = u.prog; }
       else if (vistas[chaveSerie(t)]) { msg = 'Esta série já está neste envio.'; alvo = u.sel; }
       else if (t.arquivos.some(function (a) { return a.lendo; })) { msg = 'Aguarde a foto terminar de carregar.'; alvo = u.input; }
       else if (!t.arquivos.length || !t.arquivos.some(function (a) { return !a.erro; })) { msg = 'Envie a lista em PDF ou foto.'; alvo = u.input; }
@@ -562,6 +570,7 @@
     fd.append('pedido_id', estado.pedido.id); fd.append('pedido_token', estado.pedido.token);
     fd.append('serie_id', u.sel.value);
     if (u.sel.value === 'outra') fd.append('serie_texto', u.txt.value.replace(/\s+/g, ' ').trim());
+    if (programaDe(t)) fd.append('programa', programaDe(t));
     t.arquivos.filter(function (a) { return !a.erro; }).forEach(function (a) { fd.append('arquivos', a.blob, a.nome); });
     t.pct = 0; desenharAndamento(t);
     return postar(fd, function (p) { t.pct = p; desenharAndamento(t); }).then(function (r) {
@@ -571,7 +580,7 @@
       if (r.status === 404 || (r.status === 403 && j.erro === 'pedido') || j.erro === 'pedido') return { fatal: true };
       if (r.status === 413) { t.arquivos = []; redesenharArquivos(t); t.msg = 'Algum arquivo tem mais de 10 MB. Envie de novo.'; }
       else if (r.status === 400 && j.erro === 'formato') { t.arquivos = []; redesenharArquivos(t); t.msg = 'Só PDF ou foto (JPG, PNG ou WebP). Envie de novo.'; }
-      else if (r.status === 400 && j.erro === 'campos') t.msg = 'Confira a série desta turma.';
+      else if (r.status === 400 && j.erro === 'campos') t.msg = j.campo === 'programa' ? 'Confira o programa desta turma.' : 'Confira a série desta turma.';
       else if (r.status === 400 && j.erro === 'limite_turmas') t.msg = 'Já são 10 turmas neste envio.';
       else t.msg = 'Não foi possível enviar esta lista. Tente de novo.';
       mostrarErroTurma(t, t.msg);
@@ -595,7 +604,7 @@
     var ant = estado.turmas.slice(); estado.turmas = []; boxTurmas.textContent = '';
     ant.forEach(function (t) {
       var n = novaTurma(); if (!n) return;
-      n.ui.sel.value = t.ui.sel ? t.ui.sel.value : ''; n.ui.txt.value = t.ui.txt ? t.ui.txt.value : ''; n.ui.txt.hidden = n.ui.sel.value !== 'outra';
+      n.ui.sel.value = t.ui.sel ? t.ui.sel.value : ''; n.ui.txt.value = t.ui.txt ? t.ui.txt.value : ''; n.ui.prog.value = t.ui.prog ? t.ui.prog.value : ''; n.ui.txt.hidden = n.ui.sel.value !== 'outra';
       n.arquivos = t.arquivos.slice(); redesenharArquivos(n);
     });
     atualizarSeries(); emAndamento(false); atualizarCabecalhos(); avisar('erro', msg);

@@ -82,9 +82,9 @@
   var params = new URLSearchParams(location.search);
   var api = LOCAL ? (params.get('api') || '') : '';
   var URL_API = api ? api + '/fn/obterListaOficial' : 'https://southamerica-east1-meu-app-compras.cloudfunctions.net/obterListaOficial';
-  // Mesmo id da função: código da escola (8 dígitos, ou "x" + 12 hex) _ ano _ série.
+  // Mesmo id da função: código da escola (8 dígitos, ou "x" + 12 hex) _ ano _ série, com "~programa" no fim se a turma tiver programa.
   var ID = params.get('l') || '';
-  var ID_OK = /^(\d{8}|x[0-9a-f]{12})_\d{4}_[a-z0-9_]{2,12}$/.test(ID);
+  var ID_OK = /^(\d{8}|x[0-9a-f]{12})_\d{4}_[a-z0-9_]{2,12}(~[a-z0-9-]{1,40})?$/.test(ID);
 
   // Celular sem o app: ligada, o link vai direto para a loja (Android) ou mostra o botão da App Store (iPhone).
   // LIGADA em 2026-11-20 por decisão do Felipe, antes de a 1.5.0 (com as listas escolares) estar nas lojas: até lá a loja entrega a 1.4.3, sem a lista. Quem tem o app instalado nunca chega aqui:
@@ -130,11 +130,14 @@
     else { btn.href = '/baixar/'; $('lojas').hidden = false; $('loja-ios').href = IOS; $('loja-android').href = ANDROID; }
   }
 
+  // "1º ano · Mack School": a série e, se houver, o programa (só texto, nunca HTML).
+  function serieComPrograma(l) { return l.serie_nome + (l.programa ? ' · ' + l.programa : ''); }
+
   // O celular sem o app não precisa da lista inteira: o botão leva à loja. "Ver a lista no site" mostra a lista mesmo assim.
   function cartaoCelular(l, plat) {
     $('cel-ano').textContent = 'Lista de material · ' + l.ano_letivo;
     $('cel-escola').textContent = l.escola_nome;
-    $('cel-sub').textContent = l.serie_nome + ' · ' + l.itens.length + (l.itens.length === 1 ? ' item' : ' itens');
+    $('cel-sub').textContent = serieComPrograma(l) + ' · ' + l.itens.length + (l.itens.length === 1 ? ' item' : ' itens');
     var b = $('cel-baixar');
     if (plat === 'android') {
       $('cel-abrindo').hidden = false; b.className = 'btn';
@@ -159,7 +162,7 @@
     document.title = l.escola_nome + ' · lista de material ' + l.ano_letivo + ' · ShopNow';
     $('ano').textContent = 'Lista de material · ' + l.ano_letivo;
     $('escola').textContent = l.escola_nome;
-    $('local').textContent = l.serie_nome + (l.municipio_nome ? ' · ' + l.municipio_nome + (l.uf ? ', ' + l.uf : '') : (l.uf ? ' · ' + l.uf : ''));
+    $('local').textContent = serieComPrograma(l) + (l.municipio_nome ? ' · ' + l.municipio_nome + (l.uf ? ', ' + l.uf : '') : (l.uf ? ' · ' + l.uf : ''));
     // `selo` diz quem garante a lista; sem ele (servidor antigo), `verificada` vale como "Enviada pela escola".
     var selo = l.selo ? l.selo : (l.verificada ? 'escola' : '');
     $('selo').hidden = !selo;
