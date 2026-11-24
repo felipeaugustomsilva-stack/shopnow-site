@@ -246,6 +246,15 @@ h1{font-size:clamp(38px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spac
 .sm-aviso{background:var(--am);color:var(--amt);border:1px solid var(--amb);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:700}
 #mercado-livre .mlbox>h2{font-size:26px;font-weight:800;letter-spacing:-.015em;line-height:1.15}
 #mercado-livre{scroll-margin-top:16px}
+.sm-col details{margin-top:4px}
+.mlbox .mllista a.sm-mli{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;background:none;color:inherit;min-height:44px;padding:0;border-radius:0;font-weight:inherit;text-decoration:none;width:100%;text-align:left}
+.mllista li:has(a.sm-mli){padding:0}
+.mllista a.sm-mli{padding:10px 0}
+.sm-caiu{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;background:#fff;border:1px solid var(--bd);border-radius:20px;padding:6px 20px}
+.sm-caiu li{display:flex;flex-direction:column;gap:2px;padding:12px 0;border-bottom:1px solid var(--track);font-size:16px;font-weight:700}
+.sm-caiu li:last-child{border-bottom:0}
+.sm-caiu small{font-size:15px;font-weight:600;color:var(--tx2);font-variant-numeric:tabular-nums}
+.sm-caiu small b{color:#166534;font-weight:800}
 @media (min-width:720px){.sm-cols{grid-template-columns:1fr 1fr;gap:32px}}
 @media (max-width:640px){#mercado-livre .mlbox>h2{font-size:22px}}
 footer.w a.arq{color:var(--tx3);font-weight:500}
@@ -268,6 +277,11 @@ footer.w a.arq{color:var(--tx3);font-weight:500}
 <section id="categorias" class="w sec" aria-labelledby="cat-t" hidden>
   <h2 id="cat-t" class="h2">Menor total por categoria</h2>
   <div class="sm-cats" id="sm-cats"></div>
+</section>
+
+<section id="caiu" class="w sec" aria-labelledby="caiu-t" hidden>
+  <h2 id="caiu-t" class="h2">Caiu de preço</h2>
+  <div id="sm-caiu"></div>
 </section>
 
 <section id="mercado-livre" class="w sec" aria-labelledby="mlb-t" hidden>
@@ -333,17 +347,10 @@ footer.w a.arq{color:var(--tx3);font-weight:500}
   function brl(v){ return v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' }); }
   function dm(iso){ var p = iso.split('-'); return p[2] + '/' + p[1]; }
 
-  function ranking(titulo, lista, vazio){
-    var h = '<div class="sm-col"><h4>' + titulo + '</h4>';
-    if (!lista.length) return h + '<p class="sm-nada">' + vazio + '</p></div>';
-    return h + '<ol class="sm-rk">' + lista.map(function(m, i){
-      return '<li' + (i === 0 ? ' class="top"' : '') + '><span>' + esc(m.mercado) + '</span><b>' + brl(m.total) + '</b></li>';
-    }).join('') + '</ol></div>';
-  }
-
+  var S = window.ShopNowSemana;
   function mostrar(d){
-    var q = dm(d.coleta);
-    $('sm-eyebrow').textContent = 'Coleta de ' + q + ' · ' + d.regiao + (d.frete ? ' · ' + d.frete : '');
+    var q = S.dm(d.coleta), esc = S.esc, brl = S.brl;
+    $('sm-eyebrow').textContent = 'Coleta de ' + q + ' · ' + d.regiao + (d.frete ? ' · ' + d.frete : '') + ' · preço de 1 unidade, à vista';
     var dias = Math.floor((Date.now() - Date.parse(d.coleta + 'T12:00:00Z')) / 86400000);
     var x = d.destaque;
     $('sm-destaque').innerHTML = (dias > 7 ? '<p class="sm-aviso">Esta coleta tem mais de 7 dias (de ' + q + '). Os preços podem ter mudado.</p>' : '') +
@@ -351,25 +358,23 @@ footer.w a.arq{color:var(--tx3);font-weight:500}
       '<div class="sm-par"><div><small>' + esc(x.a.mercado) + '</small><b>' + brl(x.a.preco) + '</b></div><span class="x" aria-hidden="true">×</span>' +
       '<div><small>' + esc(x.b.mercado) + '</small><b>' + brl(x.b.preco) + '</b></div></div>' +
       '<p class="cs-quando">Menor valor coletado em ' + q + ' em cada mercado</p>';
-    $('sm-cats').innerHTML = d.categorias.map(function(c){
-      return '<article class="sm-cat"><h3>' + esc(c.nome) + '</h3><div class="sm-cols">' +
-        ranking('Atacado', c.atacado || [], 'Nenhum atacado tinha os mesmos itens.') +
-        ranking('Varejo', c.varejo || [], 'Nenhum varejo tinha os mesmos itens.') + '</div>' +
-        '<details><summary>Ver os ' + c.itens.length + ' itens</summary><ul>' + c.itens.map(function(i){ return '<li>' + esc(i) + '</li>'; }).join('') + '</ul></details></article>';
-    }).join('');
+    $('sm-cats').innerHTML = S.categorias(d);
     $('categorias').hidden = false;
-    var ml = d.mercado_livre;
-    $('mlb-t').textContent = ml.itens.length + ' itens com menor valor no Mercado Livre (de ' + ml.total_itens_cesta + ' da cesta)';
-    $('sm-ml').innerHTML = ml.itens.map(function(i){ return '<li><span>' + esc(i.nome) + '</span><b>' + brl(i.preco) + '</b></li>'; }).join('');
-    $('sm-ml-link').href = ml.link;
+    var c = S.caiu(d);
+    if (c) { $('caiu-t').textContent = 'Caiu de preço (' + S.dm(d.caiu.de) + ' → ' + q + ')'; $('sm-caiu').innerHTML = c; $('caiu').hidden = false; }
+    var ml = S.ml(d);
+    $('mlb-t').textContent = ml.titulo;
+    $('sm-ml').innerHTML = ml.lista;
+    $('sm-ml-link').href = d.mercado_livre.link;
     $('mercado-livre').hidden = false;
-    $('sm-rodape').textContent = 'Menor valor entre os mercados que coletamos em ' + q + '. Só itens iguais nos mercados comparados. Mercado Livre: vendedor parceiro, à vista. Sem frete. Preços podem mudar.';
+    $('sm-rodape').textContent = S.rodape(d);
     $('sm-rodape-sec').hidden = false;
     /* âncora: a seção só existe depois do carregamento; se a URL já veio com #mercado-livre ou #ml-baratos, rola até ela */
     if (/^#(mercado-livre|ml-baratos)$/.test(location.hash)) setTimeout(function(){ $('mercado-livre').scrollIntoView({ behavior: 'auto', block: 'start' }); }, 50);
   }
 
   function falha(erros){
+    var esc = S.esc;
     $('sm-destaque').innerHTML = '<p class="cs-rot">Cesta de Sexta</p><p class="cs-nome">Conferindo os preços</p>' +
       '<p class="cs-frase">Estamos conferindo os preços desta coleta. Volte em instantes.</p>' +
       (LOCAL && erros && erros.length ? '<div class="cs-erro">' + erros.map(esc).join('<br>') + '</div>' : '');

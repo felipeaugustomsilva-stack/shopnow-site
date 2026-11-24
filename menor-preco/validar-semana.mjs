@@ -8,6 +8,7 @@ if (r.erros.length) { console.error('✗ REJEITADO (' + arq + '):'); r.erros.for
 const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 console.log(`✓ coleta ${r.dados.coleta}, ${r.dados.regiao}; destaque: ${r.dados.destaque.item}`);
 r.dados.categorias.forEach((c) => {
-  console.log(`  ${c.nome} (${c.itens.length} itens)`);
-  [['atacado', c.atacado], ['varejo', c.varejo]].forEach(([n, l]) => console.log(`    ${n}: ` + ((l || []).map((m) => `${m.mercado} ${brl(m.total)}`).join(' · ') || '—')));
+  console.log(`  ${c.nome}`);
+  [['varejo', c.varejo], ['atacado', c.atacado]].forEach(([n, l]) => console.log(`    ${n} (${l.itens.length} itens): ` + (l.mercados.map((m) => `${m.mercado} ${brl(m.total)}`).join(' · ') || '—')));
 });
+if (r.dados.caiu) console.log('  caiu desde ' + r.dados.caiu.de + ': ' + r.dados.caiu.itens.map((i) => `${i.item} (${i.mercado}) ${brl(i.de)} → ${brl(i.para)}`).join(' · '));

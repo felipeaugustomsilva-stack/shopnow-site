@@ -1,41 +1,85 @@
 {
-  "versao": 1,
-  "coleta": "2026-11-17",
-  "regiao": "Bela Vista/SP",
+  "versao": 2,
+  "coleta": "2026-11-24",
+  "regiao": "Bela Vista, São Paulo",
   "frete": "sem frete",
   "destaque": {
     "item": "café Pilão 500 g",
-    "a": { "mercado": "Sonda", "preco": 21.98 },
-    "b": { "mercado": "Shopper", "preco": 35.90 }
+    "a": { "mercado": "Atacadão", "preco": 21.90 },
+    "b": { "mercado": "Pão de Açúcar", "preco": 38.99 }
   },
   "categorias": [
     {
       "nome": "Mercearia",
-      "itens": ["Arroz Camil 5 kg", "Feijão Camil 1 kg", "Açúcar União 1 kg", "Azeite Gallo 500 ml", "Óleo Soya 900 ml"],
-      "atacado": [{ "mercado": "Atacadão", "total": 72.68 }, { "mercado": "Spani", "total": 76.52 }],
-      "varejo": [{ "mercado": "Mercado Livre", "total": 84.12 }, { "mercado": "Pão de Açúcar", "total": 89.35 }, { "mercado": "Shopper", "total": 98.66 }]
+      "varejo": {
+        "itens": ["Feijão Camil 1 kg", "Açúcar União 1 kg", "Azeite Gallo 500 ml", "Óleo Soya 900 ml"],
+        "mercados": [
+          { "mercado": "Carrefour", "total": 49.35 },
+          { "mercado": "Mercado Livre", "total": 54.25 },
+          { "mercado": "Pão de Açúcar", "total": 57.46 },
+          { "mercado": "Shopper", "total": 66.87 }
+        ]
+      },
+      "atacado": {
+        "itens": ["Arroz Camil 5 kg", "Feijão Camil 1 kg", "Café Pilão 500 g", "Ovos 12 un", "Açúcar União 1 kg", "Azeite Gallo 500 ml", "Óleo Soya 900 ml"],
+        "mercados": [
+          { "mercado": "Atacadão", "total": 102.87 },
+          { "mercado": "Spani", "total": 108.42 }
+        ]
+      }
     },
     {
       "nome": "Limpeza",
-      "itens": ["Omo 3 L", "Veja Gold 500 ml", "Limpol 500 ml"],
-      "atacado": [],
-      "varejo": [{ "mercado": "Mercado Livre", "total": 41.80 }, { "mercado": "Carrefour", "total": 57.36 }, { "mercado": "Sonda", "total": 61.17 }, { "mercado": "Shopper", "total": 64.22 }]
+      "varejo": {
+        "itens": ["Omo 3 L", "Veja 500 ml", "Limpol 500 ml"],
+        "mercados": [
+          { "mercado": "Mercado Livre", "total": 42.64 },
+          { "mercado": "Sonda", "total": 52.89 },
+          { "mercado": "Carrefour", "total": 61.07 },
+          { "mercado": "Shopper", "total": 65.37 }
+        ]
+      },
+      "atacado": {
+        "itens": ["Detergente Ypê", "Veja", "Água sanitária Ypê 2 L", "Limpol"],
+        "mercados": [
+          { "mercado": "Atacadão", "total": 17.71 },
+          { "mercado": "Spani", "total": 18.30 }
+        ]
+      }
     },
     {
       "nome": "Higiene",
-      "itens": ["Papel higiênico Neve Toque da Seda 12 rolos", "Dove 90 g"],
-      "atacado": [{ "mercado": "Spani", "total": 24.19 }],
-      "varejo": [{ "mercado": "Pão de Açúcar", "total": 35.78 }, { "mercado": "Carrefour", "total": 39.28 }, { "mercado": "Shopper", "total": 40.89 }, { "mercado": "Sonda", "total": 41.52 }]
+      "varejo": {
+        "itens": ["Papel higiênico Neve 12 rolos", "Sabonete Dove 90 g"],
+        "mercados": [
+          { "mercado": "Pão de Açúcar", "total": 35.78 },
+          { "mercado": "Shopper", "total": 42.69 }
+        ]
+      },
+      "atacado": {
+        "itens": ["Papel higiênico Neve 12 rolos", "Colgate Máxima Proteção 90 g"],
+        "mercados": [
+          { "mercado": "Spani", "total": 23.79 },
+          { "mercado": "Atacadão", "total": 30.38 }
+        ]
+      }
     }
   ],
   "mercado_livre": {
-    "total_itens_cesta": 25,
     "link": "https://meli.la/1vTcrqP",
     "itens": [
-      { "nome": "Omo 3 L", "preco": 32.00 },
-      { "nome": "Azeite Gallo 500 ml", "preco": 27.19 },
-      { "nome": "Feijão Camil 1 kg", "preco": 7.59 },
-      { "nome": "Veja Gold 500 ml", "preco": 4.84 }
+      { "nome": "Omo 3 L", "preco": 32.99, "link": "https://www.mercadolivre.com.br/sabao-liquido-omo-lavagem-perfeita-3l/p/MLB17001015" },
+      { "nome": "Azeite Gallo 500 ml", "preco": 27.19, "link": "https://www.mercadolivre.com.br/azeite-de-oliva-gallo-500-ml-extra-virgem/p/MLB18405766" },
+      { "nome": "Veja Multiuso 500 ml", "preco": 4.84, "link": "https://www.mercadolivre.com.br/limpador-multiuso-veja-o-original-classico-500ml-oferta/p/MLB28372883" },
+      { "nome": "Feijão Camil 1 kg", "preco": 7.59, "link": "https://www.mercadolivre.com.br/feijao-carioca-tipo-1-1kg-camil/p/MLB18390354" }
+    ]
+  },
+  "caiu": {
+    "de": "2026-11-17",
+    "itens": [
+      { "item": "Café Pilão 500 g", "mercado": "Atacadão", "de": 27.90, "para": 21.90 },
+      { "item": "Papel Neve 12 rolos", "mercado": "Carrefour", "de": 32.39, "para": 27.19 },
+      { "item": "Omo 3 L", "mercado": "Sonda", "de": 50.48, "para": 42.98 }
     ]
   }
 }
